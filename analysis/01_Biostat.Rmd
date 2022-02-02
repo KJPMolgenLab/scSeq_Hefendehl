@@ -54,7 +54,12 @@ Sample descriptive:
 Data  contains a total of `r nCells` Cells from `r nMice`. 
 
 Cells per Mouse
-`r table(Mouse_ID=samplemeta$Mouse_ID) %>% as.data.frame()`
+```{r}
+table(Mouse_ID=samplemeta$Mouse_ID) %>% as.data.frame()
 
+```
 Cells per Strain
-`r table(Strain=samplemeta$Genotype_corr, Treatment=samplemeta$Treatment) %>% as.data.frame()`
+```{r}
+table(Strain=samplemeta$Genotype_corr, Treatment=samplemeta$Treatment) %>% as.data.frame()
+
+```
