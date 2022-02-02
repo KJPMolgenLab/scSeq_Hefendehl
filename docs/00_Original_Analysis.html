@@ -467,16 +467,16 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreeddb63739581ad5617cc1e7ed6a5b994ff35b12e0targetblankddb6373a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/ddb63739581ad5617cc1e7ed6a5b994ff35b12e0" target="_blank">ddb6373</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltree636a117bc664038b113ef373a73ab1eabd0f5f40targetblank636a117a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/636a117bc664038b113ef373a73ab1eabd0f5f40" target="_blank">636a117</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreeddb63739581ad5617cc1e7ed6a5b994ff35b12e0targetblankddb6373a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltree636a117bc664038b113ef373a73ab1eabd0f5f40targetblank636a117a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/ddb63739581ad5617cc1e7ed6a5b994ff35b12e0" target="_blank">ddb6373</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/636a117bc664038b113ef373a73ab1eabd0f5f40" target="_blank">636a117</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -494,9 +494,6 @@ Ignored files:
 
 Untracked files:
     Untracked:  workflow_helper.R
-
-Unstaged changes:
-    Modified:   analysis/01_Biostat.Rmd
 
 </code></pre>
 <p>
@@ -516,58 +513,47 @@ There are no past versions. Publish this analysis with <code>wflow_publish()</co
 </div>
 </div>
 </div>
-<pre class="r"><code>library(Seurat)
-library(ggplot2)
-library(SingleR)
-library(EnhancedVolcano)
-library(pheatmap)
-library(enrichplot)
-
-knitr::opts_chunk$set(fig.height=8, fig.width=15)
-
-home=getwd()
-load(paste0(home,&quot;/data/ReloadAllData_Hefendehl_Stroke_Dec&#39;21.RData&quot;))</code></pre>
 <div id="preprocessing" class="section level1">
-<h1>Preprocessing</h1>
+<h1><strong>Preprocessing</strong></h1>
 <p><strong>QC metrics from AG Hefendehl (Stroke)</strong></p>
 <pre class="r"><code># Visualize QC metrics as a violin plot
 Idents(plates_hefendehl) &lt;- &quot;Plate&quot;
 VlnPlot(plates_hefendehl, features = c(&quot;nFeature_RNA&quot;, &quot;nCount_RNA&quot;, &quot;percent.mito&quot;,&quot;percent.ribo&quot;), 
         group.by = &quot;Plate&quot;, pt.size = 1, ncol = 4, )</code></pre>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-2-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-3-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot1 | plot2</code></pre>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-2-2.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-3-2.png" width="1440" style="display: block; margin: auto;" /></p>
 <p><strong>QC metrics from AG Neher (own additional WT control)</strong></p>
 <pre class="r"><code># plates_neher &lt;- subset(plates_neher, subset = Genotype == &quot;wt&quot;)
 # Visualize QC metrics as a violin plot
 Idents(plates_neher) &lt;- &quot;Plate&quot;
 VlnPlot(plates_neher, features = c(&quot;nFeature_RNA&quot;, &quot;nCount_RNA&quot;, &quot;percent.mito&quot;,&quot;percent.ribo&quot;), 
         group.by = &quot;Plate&quot;,pt.size =1, ncol = 4)</code></pre>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-3-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-4-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot1a | plot2a</code></pre>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-3-2.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-4-2.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>Combine both seurat objects and filter cells that have unique feature counts (gene number) over 7000 or less than 200 and cells with &gt;5% mitochondrial counts.</p>
 <p><strong>QC metrics after filtering</strong></p>
 <pre class="r"><code>plot3 | plot4</code></pre>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-4-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-5-1.png" width="1440" style="display: block; margin: auto;" /></p>
 </div>
 <div id="perform-integrated-analysis" class="section level1">
-<h1>Perform integrated analysis</h1>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-5-1.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-5-2.png" width="1440" style="display: block; margin: auto;" /></p>
+<h1><strong>Perform integrated analysis</strong></h1>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-6-1.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-6-2.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>PCA, tSNE and UMAP from the first 30 dimensions and with a resolution of 0.8</p>
 <pre class="r"><code># Visualization
 Idents(samples.integrated) &lt;- &quot;seurat_clusters&quot;
 
 DimPlot(samples.integrated, reduction = &quot;umap&quot;, split.by = &quot;Treatment&quot;)</code></pre>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-6-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-7-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>p1 + p1a +  p1b</code></pre>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-6-2.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-7-2.png" width="1440" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>DimPlot(samples.integrated, group.by = &quot;seurat_clusters&quot;, pt.size =1, label = T) + NoLegend()</code></pre>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-6-3.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-7-3.png" width="1440" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>DimPlot(samples.integrated, reduction = &quot;umap&quot;, split.by = &quot;Plate&quot;, pt.size = 1)</code></pre>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-6-4.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-7-4.png" width="1440" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>DimPlot(samples.integrated, reduction = &quot;umap&quot;, split.by = &quot;Genotype_Treatment&quot;, pt.size =1)</code></pre>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-6-5.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-7-5.png" width="1440" style="display: block; margin: auto;" /></p>
 <p><em>Cell cycle scoring</em></p>
 <p>First, a score is assigned to each cell (Tirosh et al. 2016), based on its expression of G2/M and S phase markers. These markers should be anticorrelated in their expression levels and cells expression neither are likely not cycling and in G1 phase. Note: For downstream cell cylce regression the quantitative scores for G2/M and S phase are used, not the dicrete classification.</p>
 <p><img src="figure/00_Original_Analysis.Rmd/cell%20cycle%20scoring-1.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/cell%20cycle%20scoring-2.png" width="1440" style="display: block; margin: auto;" /></p>
@@ -733,7 +719,8 @@ DoHeatmap(samples.integrated, features = top20$gene) + NoLegend() + ggtitle(&quo
 <h2><strong>SingleR</strong></h2>
 <p>SingleR is an automatic annotation method for (scRNAseq) data (Aran et al. 2019). Given a reference dataset of samples (single-cell or bulk) with known labels, it labels new cells from a test dataset based on similarity to the reference set. Here we use the built-in references “Immgen” (830 microarray samples of sorted hematopoetic and immune cell populations) and “Mouse RNA-Seq” (358 non-specific mouse RNA-seq samples).</p>
 <p><strong>Immgen reference</strong></p>
-<p><strong>MouseRNA-Seq reference</strong></p>
+<p>Section Skipped as pred.immgen object is not available</p>
+<p><strong>MouseRNA-Seq reference</strong> Section Skipped as pred.mouseRNA object is not available</p>
 <pre class="r"><code># number of cells in each cluster 
 cluster_nCell &lt;- data.frame(table(samples.integrated$MouseRNASeq_sc_labels,samples.integrated$Genotype_Treatment))
 colnames(cluster_nCell) &lt;- c(&quot;Genotype_Treatment&quot;, &quot;MouseRNASeq_sc_labels&quot;, &quot;Number&quot;)
@@ -791,7 +778,7 @@ ggplot(cluster_percent_Cell, aes(fill=Treatment, y=Frequency, x=Immgen_sc_labels
   xlab(&quot;&quot;)</code></pre>
 <p><img src="figure/00_Original_Analysis.Rmd/cell%20distribution%20immgen-2.png" width="1440" style="display: block; margin: auto;" /> Renaming Clusters</p>
 <pre class="r"><code>DimPlot(samples.integrated, reduction = &quot;umap&quot;, label=T) + NoLegend()</code></pre>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-7-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-8-1.png" width="1440" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="zoom-into-microglia-clusters" class="section level1">
@@ -808,8 +795,8 @@ ggplot(cluster_percent_Cell, aes(fill=Treatment, y=Frequency, x=Immgen_sc_labels
 instead.</code></pre>
 <pre><code>Warning: Use of `expr_df[[axes[2]]]` is discouraged. Use `.data[[axes[2]]]`
 instead.</code></pre>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-8-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-9-1.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-9-2.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-9-3.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-9-4.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-9-5.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-9-6.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-9-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-10-1.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-10-2.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-10-3.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-10-4.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-10-5.png" width="1440" style="display: block; margin: auto;" /><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-10-6.png" width="1440" style="display: block; margin: auto;" /></p>
 </div>
 <div id="renaming-clusters" class="section level2">
 <h2><strong>Renaming clusters</strong></h2>
@@ -847,17 +834,17 @@ DimPlot(microglia, reduction = &quot;umap&quot;, label = TRUE, pt.size = 1)+ NoL
 <div id="genotype-treatment-comparison-in-each-cluster" class="section level2">
 <h2>Genotype + Treatment comparison in each cluster</h2>
 <p><strong>Microglia_0</strong></p>
-<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-20-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<p><strong>Microglia_1</strong></p>
 <p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-21-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<p><strong>Microglia_2</strong></p>
+<p><strong>Microglia_1</strong></p>
 <p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-22-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<p><strong>DAM?</strong></p>
+<p><strong>Microglia_2</strong></p>
 <p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-23-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<p><strong>Microglia_4</strong></p>
+<p><strong>DAM?</strong></p>
 <p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-24-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<p><strong>Microglia_5</strong></p>
+<p><strong>Microglia_4</strong></p>
 <p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-25-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><strong>Microglia_5</strong></p>
+<p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-26-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -882,16 +869,15 @@ attached base packages:
 [8] base     
 
 other attached packages:
- [1] scales_1.1.1                enrichplot_1.14.1          
- [3] pheatmap_1.0.12             EnhancedVolcano_1.12.0     
- [5] ggrepel_0.9.1               SingleR_1.8.1              
- [7] SummarizedExperiment_1.24.0 Biobase_2.54.0             
- [9] GenomicRanges_1.46.1        GenomeInfoDb_1.30.1        
-[11] IRanges_2.28.0              S4Vectors_0.32.3           
-[13] BiocGenerics_0.40.0         MatrixGenerics_1.6.0       
-[15] matrixStats_0.61.0          ggplot2_3.3.5              
-[17] SeuratObject_4.0.4          Seurat_4.1.0               
-[19] workflowr_1.7.0            
+ [1] scales_1.1.1                pheatmap_1.0.12            
+ [3] EnhancedVolcano_1.12.0      ggrepel_0.9.1              
+ [5] SingleR_1.8.1               SummarizedExperiment_1.24.0
+ [7] Biobase_2.54.0              GenomicRanges_1.46.1       
+ [9] GenomeInfoDb_1.30.1         IRanges_2.28.0             
+[11] S4Vectors_0.32.3            BiocGenerics_0.40.0        
+[13] MatrixGenerics_1.6.0        matrixStats_0.61.0         
+[15] ggplot2_3.3.5               SeuratObject_4.0.4         
+[17] Seurat_4.1.0                workflowr_1.7.0            
 
 loaded via a namespace (and not attached):
   [1] scattermore_0.7           tidyr_1.1.4              
@@ -903,87 +889,88 @@ loaded via a namespace (and not attached):
  [13] callr_3.7.0               cowplot_1.1.1            
  [15] RSQLite_2.2.9             shadowtext_0.1.1         
  [17] RANN_2.6.1                future_1.23.0            
- [19] bit_4.0.4                 spatstat.data_2.1-2      
- [21] httpuv_1.6.5              assertthat_0.2.1         
- [23] viridis_0.6.2             xfun_0.29                
- [25] jquerylib_0.1.4           evaluate_0.14            
- [27] promises_1.2.0.1          fansi_1.0.2              
- [29] igraph_1.2.11             DBI_1.1.2                
- [31] htmlwidgets_1.5.4         spatstat.geom_2.3-1      
- [33] purrr_0.3.4               ellipsis_0.3.2           
- [35] dplyr_1.0.7               deldir_1.0-6             
- [37] sparseMatrixStats_1.6.0   vctrs_0.3.8              
- [39] Cairo_1.5-14              ROCR_1.0-11              
- [41] abind_1.4-5               cachem_1.0.6             
- [43] withr_2.4.3               ggforce_0.3.3            
- [45] sctransform_0.3.3         treeio_1.18.1            
- [47] goftest_1.2-3             cluster_2.1.2            
- [49] DOSE_3.20.1               ape_5.6-1                
- [51] lazyeval_0.2.2            crayon_1.4.2             
- [53] labeling_0.4.2            pkgconfig_2.0.3          
- [55] tweenr_1.0.2              nlme_3.1-155             
- [57] vipor_0.4.5               rlang_1.0.0              
- [59] globals_0.14.0            lifecycle_1.0.1          
- [61] miniUI_0.1.1.1            downloader_0.4           
- [63] extrafontdb_1.0           rsvd_1.0.5               
- [65] ggrastr_1.0.1             rprojroot_2.0.2          
- [67] polyclip_1.10-0           lmtest_0.9-39            
- [69] Matrix_1.4-0              aplot_0.1.2              
- [71] zoo_1.8-9                 beeswarm_0.4.0           
- [73] whisker_0.4               ggridges_0.5.3           
- [75] processx_3.5.2            png_0.1-7                
- [77] viridisLite_0.4.0         bitops_1.0-7             
- [79] getPass_0.2-2             KernSmooth_2.23-20       
- [81] Biostrings_2.62.0         blob_1.2.2               
- [83] DelayedMatrixStats_1.16.0 stringr_1.4.0            
- [85] qvalue_2.26.0             parallelly_1.30.0        
- [87] gridGraphics_0.5-1        beachmat_2.10.0          
- [89] memoise_2.0.1             magrittr_2.0.2           
- [91] plyr_1.8.6                ica_1.0-2                
- [93] zlibbioc_1.40.0           compiler_4.1.2           
- [95] scatterpie_0.1.7          RColorBrewer_1.1-2       
- [97] ash_1.0-15                fitdistrplus_1.1-6       
- [99] cli_3.1.1                 XVector_0.34.0           
-[101] listenv_0.8.0             patchwork_1.1.1          
-[103] pbapply_1.5-0             ps_1.6.0                 
-[105] MASS_7.3-55               mgcv_1.8-38              
-[107] tidyselect_1.1.1          stringi_1.7.6            
-[109] highr_0.9                 proj4_1.0-10.1           
-[111] yaml_2.2.2                GOSemSim_2.20.0          
-[113] BiocSingular_1.10.0       grid_4.1.2               
-[115] sass_0.4.0                fastmatch_1.1-3          
-[117] tools_4.1.2               future.apply_1.8.1       
-[119] parallel_4.1.2            rstudioapi_0.13          
-[121] git2r_0.29.0              gridExtra_2.3            
-[123] farver_2.1.0              Rtsne_0.15               
-[125] ggraph_2.0.5              digest_0.6.29            
-[127] shiny_1.7.1               Rcpp_1.0.8               
-[129] ggalt_0.4.0               later_1.3.0              
-[131] RcppAnnoy_0.0.19          httr_1.4.2               
-[133] AnnotationDbi_1.56.2      colorspace_2.0-2         
-[135] fs_1.5.2                  tensor_1.5               
-[137] reticulate_1.24           splines_4.1.2            
-[139] uwot_0.1.11               yulab.utils_0.0.4        
-[141] tidytree_0.3.7            spatstat.utils_2.3-0     
-[143] graphlayouts_0.8.0        ggplotify_0.1.0          
-[145] plotly_4.10.0             xtable_1.8-4             
-[147] jsonlite_1.7.3            ggtree_3.2.1             
-[149] tidygraph_1.2.0           ggfun_0.0.5              
-[151] R6_2.5.1                  pillar_1.7.0             
-[153] htmltools_0.5.2           mime_0.12                
-[155] glue_1.6.1                fastmap_1.1.0            
-[157] clusterProfiler_4.2.2     BiocParallel_1.28.3      
-[159] BiocNeighbors_1.12.0      codetools_0.2-18         
-[161] maps_3.4.0                fgsea_1.20.0             
-[163] utf8_1.2.2                lattice_0.20-45          
-[165] bslib_0.3.1               spatstat.sparse_2.1-0    
-[167] tibble_3.1.6              ggbeeswarm_0.6.0         
-[169] leiden_0.3.9              GO.db_3.14.0             
-[171] Rttf2pt1_1.3.9            survival_3.2-13          
-[173] rmarkdown_2.11            munsell_0.5.0            
-[175] DO.db_2.9                 GenomeInfoDbData_1.2.7   
-[177] reshape2_1.4.4            gtable_0.3.0             
-[179] spatstat.core_2.3-2       extrafont_0.17           </code></pre>
+ [19] bit_4.0.4                 enrichplot_1.14.1        
+ [21] spatstat.data_2.1-2       httpuv_1.6.5             
+ [23] assertthat_0.2.1          viridis_0.6.2            
+ [25] xfun_0.29                 jquerylib_0.1.4          
+ [27] evaluate_0.14             promises_1.2.0.1         
+ [29] fansi_1.0.2               igraph_1.2.11            
+ [31] DBI_1.1.2                 htmlwidgets_1.5.4        
+ [33] spatstat.geom_2.3-1       purrr_0.3.4              
+ [35] ellipsis_0.3.2            dplyr_1.0.7              
+ [37] deldir_1.0-6              sparseMatrixStats_1.6.0  
+ [39] vctrs_0.3.8               Cairo_1.5-14             
+ [41] ROCR_1.0-11               abind_1.4-5              
+ [43] cachem_1.0.6              withr_2.4.3              
+ [45] ggforce_0.3.3             sctransform_0.3.3        
+ [47] treeio_1.18.1             goftest_1.2-3            
+ [49] cluster_2.1.2             DOSE_3.20.1              
+ [51] ape_5.6-1                 lazyeval_0.2.2           
+ [53] crayon_1.4.2              pkgconfig_2.0.3          
+ [55] labeling_0.4.2            tweenr_1.0.2             
+ [57] nlme_3.1-155              vipor_0.4.5              
+ [59] rlang_1.0.0               globals_0.14.0           
+ [61] lifecycle_1.0.1           miniUI_0.1.1.1           
+ [63] downloader_0.4            extrafontdb_1.0          
+ [65] rsvd_1.0.5                ggrastr_1.0.1            
+ [67] rprojroot_2.0.2           polyclip_1.10-0          
+ [69] lmtest_0.9-39             Matrix_1.4-0             
+ [71] aplot_0.1.2               zoo_1.8-9                
+ [73] beeswarm_0.4.0            whisker_0.4              
+ [75] ggridges_0.5.3            processx_3.5.2           
+ [77] png_0.1-7                 viridisLite_0.4.0        
+ [79] bitops_1.0-7              getPass_0.2-2            
+ [81] KernSmooth_2.23-20        Biostrings_2.62.0        
+ [83] blob_1.2.2                DelayedMatrixStats_1.16.0
+ [85] stringr_1.4.0             qvalue_2.26.0            
+ [87] parallelly_1.30.0         gridGraphics_0.5-1       
+ [89] beachmat_2.10.0           memoise_2.0.1            
+ [91] magrittr_2.0.2            plyr_1.8.6               
+ [93] ica_1.0-2                 zlibbioc_1.40.0          
+ [95] compiler_4.1.2            scatterpie_0.1.7         
+ [97] RColorBrewer_1.1-2        ash_1.0-15               
+ [99] fitdistrplus_1.1-6        cli_3.1.1                
+[101] XVector_0.34.0            listenv_0.8.0            
+[103] patchwork_1.1.1           pbapply_1.5-0            
+[105] ps_1.6.0                  MASS_7.3-55              
+[107] mgcv_1.8-38               tidyselect_1.1.1         
+[109] stringi_1.7.6             highr_0.9                
+[111] proj4_1.0-10.1            yaml_2.2.2               
+[113] GOSemSim_2.20.0           BiocSingular_1.10.0      
+[115] grid_4.1.2                sass_0.4.0               
+[117] fastmatch_1.1-3           tools_4.1.2              
+[119] future.apply_1.8.1        parallel_4.1.2           
+[121] rstudioapi_0.13           git2r_0.29.0             
+[123] gridExtra_2.3             farver_2.1.0             
+[125] Rtsne_0.15                ggraph_2.0.5             
+[127] digest_0.6.29             shiny_1.7.1              
+[129] Rcpp_1.0.8                ggalt_0.4.0              
+[131] later_1.3.0               RcppAnnoy_0.0.19         
+[133] httr_1.4.2                AnnotationDbi_1.56.2     
+[135] colorspace_2.0-2          fs_1.5.2                 
+[137] tensor_1.5                reticulate_1.24          
+[139] splines_4.1.2             uwot_0.1.11              
+[141] yulab.utils_0.0.4         tidytree_0.3.7           
+[143] spatstat.utils_2.3-0      graphlayouts_0.8.0       
+[145] ggplotify_0.1.0           plotly_4.10.0            
+[147] xtable_1.8-4              jsonlite_1.7.3           
+[149] ggtree_3.2.1              tidygraph_1.2.0          
+[151] ggfun_0.0.5               R6_2.5.1                 
+[153] pillar_1.7.0              htmltools_0.5.2          
+[155] mime_0.12                 glue_1.6.1               
+[157] fastmap_1.1.0             clusterProfiler_4.2.2    
+[159] BiocParallel_1.28.3       BiocNeighbors_1.12.0     
+[161] codetools_0.2-18          maps_3.4.0               
+[163] fgsea_1.20.0              utf8_1.2.2               
+[165] lattice_0.20-45           bslib_0.3.1              
+[167] spatstat.sparse_2.1-0     tibble_3.1.6             
+[169] ggbeeswarm_0.6.0          leiden_0.3.9             
+[171] GO.db_3.14.0              Rttf2pt1_1.3.9           
+[173] survival_3.2-13           rmarkdown_2.11           
+[175] munsell_0.5.0             DO.db_2.9                
+[177] GenomeInfoDbData_1.2.7    reshape2_1.4.4           
+[179] gtable_0.3.0              spatstat.core_2.3-2      
+[181] extrafont_0.17           </code></pre>
 </div>
 </div>
 </div>
