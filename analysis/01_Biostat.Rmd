@@ -1,0 +1,34 @@
+---
+title: "Biostatistical analysis part 2"
+author: "AGC"
+date: "2 2 2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(limma)
+library(DESeq2)
+library(tidyverse)
+library(Seurat)
+library(SingleR)
+
+
+knitr::opts_chunk$set(fig.height=8, fig.width=15)
+
+home=getwd()
+load(paste0(home,"/data/ReloadAllData_Hefendehl_Stroke_Dec'21.RData"))
+
+```
+
+
+```{r}
+
+samples.integrated
+
+
+
+
+```
+

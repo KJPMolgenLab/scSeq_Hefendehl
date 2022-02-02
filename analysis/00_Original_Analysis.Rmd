@@ -1,0 +1,850 @@
+---
+title: 'SS2 (for AG Hefendehl): Integration'
+author: "Desirée Brösamle"
+date: "Dec 2021"
+output:
+  html_document:
+    toc: no
+---
+
+```{r message=FALSE, warning=FALSE}
+library(Seurat)
+library(ggplot2)
+library(SingleR)
+library(EnhancedVolcano)
+library(pheatmap)
+library(enrichplot)
+
+knitr::opts_chunk$set(fig.height=8, fig.width=15)
+
+home=getwd()
+load(paste0(home,"/data/ReloadAllData_Hefendehl_Stroke_Dec'21.RData"))
+
+
+```
+
+
+# Preprocessing
+
+**QC metrics from AG Hefendehl (Stroke)**
+
+```{r message=FALSE, warning=FALSE}
+
+# Visualize QC metrics as a violin plot
+Idents(plates_hefendehl) <- "Plate"
+VlnPlot(plates_hefendehl, features = c("nFeature_RNA", "nCount_RNA", "percent.mito","percent.ribo"), 
+        group.by = "Plate", pt.size = 1, ncol = 4, )
+
+plot1 | plot2
+
+```
+
+
+
+
+**QC metrics from AG Neher (own additional WT control)**
+
+```{r message=FALSE, warning=FALSE}
+# plates_neher <- subset(plates_neher, subset = Genotype == "wt")
+# Visualize QC metrics as a violin plot
+Idents(plates_neher) <- "Plate"
+VlnPlot(plates_neher, features = c("nFeature_RNA", "nCount_RNA", "percent.mito","percent.ribo"), 
+        group.by = "Plate",pt.size =1, ncol = 4)
+
+plot1a | plot2a
+
+```
+
+
+
+Combine both seurat objects and filter cells that have unique feature counts (gene number) over 7000 or less than 200 and cells with >5%  mitochondrial counts.
+
+**QC metrics after filtering**
+
+```{r message=FALSE, warning=FALSE}
+
+plot3 | plot4
+
+```
+
+# Perform integrated analysis
+
+```{r echo=FALSE, results='hide',message=FALSE,warning=FALSE}
+Idents(samples.integrated) <- "Plate"
+
+DimPlot(samples.integrated, reduction = "harmony", group.by = "Mouse_ID")
+DimHeatmap(samples.integrated, dims = 1:2, cells = 200, balanced = TRUE)
+
+```
+
+PCA, tSNE and UMAP from the first 30 dimensions and with a resolution of 0.8
+
+```{r message=FALSE, warning=FALSE}
+# Visualization
+Idents(samples.integrated) <- "seurat_clusters"
+
+DimPlot(samples.integrated, reduction = "umap", split.by = "Treatment")
+
+p1 + p1a +  p1b
+
+DimPlot(samples.integrated, group.by = "seurat_clusters", pt.size =1, label = T) + NoLegend()
+DimPlot(samples.integrated, reduction = "umap", split.by = "Plate", pt.size = 1)
+DimPlot(samples.integrated, reduction = "umap", split.by = "Genotype_Treatment", pt.size =1)
+
+```
+
+
+*Cell cycle scoring*
+
+First, a score is assigned to each cell (Tirosh et al. 2016), based on its expression of G2/M and S phase markers. These markers should be anticorrelated in their expression levels and cells expression neither are likely not cycling and in G1 phase.
+Note: For downstream cell cylce regression the quantitative scores for G2/M and S phase are used, not the dicrete classification.
+
+```{r cell cycle scoring, echo=FALSE, results='hide',message=FALSE,warning=FALSE}
+ Idents(samples.integrated) <- "Phase"
+# View cell cycle scores and phase assignment
+head(samples.integrated[[]])
+ 
+# visualize the distribution of cell cycle markers across
+RidgePlot(samples.integrated, features = c("Pcna", "Top2a", "Mcm6", "Mki67"), ncol = 2)
+DimPlot(samples.integrated)
+
+```
+
+
+**Cluster distribution**
+
+```{r cluster distribution, message=FALSE, warning=FALSE}
+ 
+DimPlot(object = samples.integrated, pt.size = 1,reduction = "umap", group.by="Age",label = F) +
+  ggtitle("Cluster distribution according to Age") | DimPlot(object = samples.integrated, pt.size = 1,reduction = "umap", group.by="Genotype_Treatment",label = F) +
+  ggtitle("Cluster distribution according to Genotype + Treatment")
+
+DimPlot(object = samples.integrated, pt.size = 1,reduction = "umap", group.by="Plate",label = F) +
+  ggtitle("Cluster distribution according to Plate") | DimPlot(object = samples.integrated, pt.size = 1,reduction = "umap", group.by = "seurat_clusters", label = T) +
+  ggtitle("Clustering")
+
+```
+
+
+```{r cell distribution per cluster, message=FALSE, warning=FALSE}
+
+Idents(samples.integrated) <- "seurat_clusters"
+
+# use same colors for clusters as in plots
+require(scales)
+identities <- levels(samples.integrated$seurat_clusters) # Create vector with levels of object@ident
+cluster_colors <- hue_pal()(length(identities)) # Create vector of default ggplot2 colors
+
+
+# number of cells in each cluster 
+cluster_nCell <- as.data.frame.matrix(table(samples.integrated$seurat_clusters,
+                                            samples.integrated$Genotype_Age))
+cluster_nCell["Total" ,] = colSums(cluster_nCell)
+cluster_nCell
+
+
+# % of cells in each cluster , grouped by genotype_Age
+cluster_percent_Cell <- data.frame(round((prop.table(x = table(samples.integrated$seurat_clusters, 
+                              samples.integrated$Genotype_Age), margin = 2)*100),2))
+colnames(cluster_percent_Cell) <- c("Genotype_Age", "Celltype", "Frequency")
+cluster_percent_Cell
+
+# Grouped barchart of cell proportions
+ggplot(cluster_percent_Cell, aes(fill=Genotype_Age, y=Frequency, x=Celltype)) + 
+  geom_bar(position="dodge", stat="identity")+
+  ggtitle("Cell distribution according to Genotype_Age [%]") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1)) +
+  xlab("")
+
+
+# % of cells in each cluster , grouped by genotype_treatment
+cluster_percent_Cell <- data.frame(round((prop.table(x = table(samples.integrated$seurat_clusters, 
+                              samples.integrated$Genotype_Treatment), margin = 2)*100),2))
+colnames(cluster_percent_Cell) <- c("Genotype_Treatment", "Celltype", "Frequency")
+cluster_percent_Cell
+
+# Grouped barchart of cell proportions
+ggplot(cluster_percent_Cell, aes(fill=Genotype_Treatment, y=Frequency, x=Celltype)) + 
+  geom_bar(position="dodge", stat="identity")+
+  ggtitle("Cell distribution according to Genotype_Treatment [%]") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1)) +
+  xlab("")
+```
+
+
+# **Cell type identification**
+
+## **Finding differentially expressed features (cluster biomarkers)**
+
+```{r Marker genes, message=FALSE, warning=FALSE}
+
+Idents(samples.integrated) <- samples.integrated$seurat_clusters
+
+DoHeatmap(samples.integrated, features = top20$gene) + NoLegend() + ggtitle("Top20 cluster marker genes")
+
+```
+
+
+## **SingleR**
+SingleR is an automatic annotation method for (scRNAseq) data (Aran et al. 2019). Given a reference dataset of samples (single-cell or bulk) with known labels, it labels new cells from a test dataset based on similarity to the reference set. Here we use the built-in references "Immgen" (830 microarray samples of sorted hematopoetic and immune cell populations) 	 and "Mouse RNA-Seq" (358 non-specific mouse RNA-seq samples). 
+
+**Immgen reference**
+
+```{r SingleR: Immgen, echo=FALSE, results='hide',message=FALSE,warning=FALSE, eval=FALSE}
+
+# Based on clusters
+
+table(pred.immgen$first.labels) #main cell types
+table(pred.immgen$labels) #fine tuned cell types
+#table(pred.immgen$pruned.labels) #cell type after pruning
+
+plotScoreHeatmap(pred.immgen, show.labels = TRUE,
+                 annotation_col=data.frame(cluster=unique(samples.integrated@meta.data$seurat_clusters),
+                                           row.names=rownames(pred.immgen)))
+
+# Based on single cells
+  
+table(pred.immgen.sc$first.labels)
+table(pred.immgen.sc$labels)
+
+plotScoreHeatmap(pred.immgen.sc)
+
+#Visualization
+DimPlot(samples.integrated,group.by ="Immgen_cluster_labels" ,label = F) + NoLegend() | DimPlot(samples.integrated, reduction = "umap",group.by = "seurat_clusters", label = T) + NoLegend() 
+DimPlot(samples.integrated,group.by ="Immgen_sc_labels", label = F ) + NoLegend() | DimPlot(samples.integrated, reduction = "umap",group.by = "seurat_clusters", label = T) + NoLegend() 
+
+
+```
+
+**MouseRNA-Seq reference**
+
+```{r SingleR: MouseRNA-Seq, echo=FALSE, results='hide',message=FALSE,warning=FALSE, eval=FALSE}
+
+# Based on clusters
+
+table(pred.mouseRNA$first.labels) #main cell types
+table(pred.mouseRNA$labels) #fine tuned cell types
+#table(pred.mouseRNA$pruned.labels) #cell type after pruning
+
+plotScoreHeatmap(pred.mouseRNA, show.labels = TRUE,
+                 annotation_col=data.frame(cluster=unique(samples.integrated$seurat_clusters),
+                                           row.names=rownames(pred.mouseRNA)))
+
+# Based on single cells
+  
+table(pred.mouseRNA.sc$first.labels)
+table(pred.mouseRNA.sc$labels)
+
+plotScoreHeatmap(pred.mouseRNA.sc)
+
+#Visualization
+
+DimPlot(samples.integrated,group.by ="MouseRNASeq_cluster_labels" ,label = T) + NoLegend() | DimPlot(samples.integrated, reduction = "umap",group.by = "seurat_clusters", label=T)+ NoLegend()
+DimPlot(samples.integrated,group.by ="MouseRNASeq_sc_labels", label=F) # + NoLegend() | DimPlot(samples.integrated, reduction = "umap",group.by = "seurat_clusters", label=T)+ NoLegend()
+
+```
+
+```{r cell distribution MouseRNASeq, message=FALSE, warning=FALSE}
+
+# number of cells in each cluster 
+cluster_nCell <- data.frame(table(samples.integrated$MouseRNASeq_sc_labels,samples.integrated$Genotype_Treatment))
+colnames(cluster_nCell) <- c("Genotype_Treatment", "MouseRNASeq_sc_labels", "Number")
+
+#cluster_nCell["Total" ,] = colSums(cluster_nCell)
+# cluster_nCell
+
+# % of cells in each cluster 
+cluster_percent_Cell <- data.frame(round((prop.table(x = table(samples.integrated$MouseRNASeq_sc_labels, 
+                              samples.integrated$Genotype_Treatment), margin = 2)*100),2))
+colnames(cluster_percent_Cell) <- c("Genotype_Treatment", "MouseRNASeq_sc_labels", "Frequency")
+# cluster_percent_Cell
+
+
+# Grouped barchart of absolute cell numbers
+ggplot(cluster_nCell, aes(fill=Genotype_Treatment, y=Number, x=MouseRNASeq_sc_labels)) + 
+  geom_bar(position="dodge", stat="identity") +
+  ggtitle("Cell distribution according to MouseRNASeq reference (absolut values)") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=0.5)) +
+  xlab("")
+
+# Grouped barchart of cell proportions
+ggplot(cluster_percent_Cell, aes(fill=Genotype_Treatment, y=Frequency, x=MouseRNASeq_sc_labels)) + 
+  geom_bar(position="dodge", stat="identity")+
+  ggtitle("Cell distribution according to MouseRNASeq reference [%]") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=0.5)) +
+  xlab("")
+
+```
+
+```{r cell distribution immgen, message=FALSE, warning=FALSE}
+
+# number of cells in each cluster 
+cluster_nCell <- data.frame(table(samples.integrated$Immgen_sc_labels,samples.integrated$Treatment))
+colnames(cluster_nCell) <- c("Treatment", "Immgen_sc_labels", "Number")
+
+#cluster_nCell["Total" ,] = colSums(cluster_nCell)
+# cluster_nCell
+
+# % of cells in each cluster 
+cluster_percent_Cell <- data.frame(round((prop.table(x = table(samples.integrated$Immgen_sc_labels, 
+                              samples.integrated$Treatment), margin = 2)*100),2))
+colnames(cluster_percent_Cell) <- c("Treatment", "Immgen_sc_labels", "Frequency")
+# cluster_percent_Cell
+
+
+# Grouped barchart of absolute cell numbers
+ggplot(cluster_nCell, aes(fill=Treatment, y=Number, x=Immgen_sc_labels)) + 
+  geom_bar(position="dodge", stat="identity") +
+  ggtitle("Cell distribution according to Immgen reference (absolut values)") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=0.5)) +
+  xlab("")
+
+# Grouped barchart of cell proportions
+ggplot(cluster_percent_Cell, aes(fill=Treatment, y=Frequency, x=Immgen_sc_labels)) + 
+  geom_bar(position="dodge", stat="identity")+
+  ggtitle("Cell distribution according to Immgen reference [%]") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=0.5)) +
+  xlab("")
+
+```
+Renaming Clusters
+
+```{r}
+DimPlot(samples.integrated, reduction = "umap", label=T) + NoLegend()
+```
+
+
+# **Zoom into Microglia clusters**
+
+A second Seurat cluster is generated, where all non-microglial immune cells are removed according to the mouseRNASeq_sc_labels.
+
+```{r subclustering microglia, message=FALSE, warning=FALSE}
+
+p3 + p3a
+
+```
+
+
+## **DAMs (Cell. 2017 Jun 15;169(7):1276-1290.e17. doi: 10.1016/j.cell.2017.05.018)**
+
+**DAM plotting**
+
+```{r Stage 2 DAMs, echo=FALSE, results='hide',message=FALSE,warning=FALSE}
+
+p4 | p4a
+
+```
+
+```{r}
+p5 | p5a
+```
+
+
+```{r echo=FALSE, message=FALSE,results='hide',warning=FALSE}
+Idents(microglia) <- "seurat_clusters"
+
+VlnPlot(microglia, features = DAM2_up_1) + ggtitle("Genes upregulated in Stage 2 DAMs")
+VlnPlot(microglia, features = DAM2_up_2) + ggtitle("Genes upregulated in Stage 2 DAMs")
+VlnPlot(microglia, features = DAM2_up_3) + ggtitle("Genes upregulated in Stage 2 DAMs")
+
+VlnPlot(microglia, features = DAM2_down_1) + ggtitle("Genes downregulated in Stage 2 DAMs")
+VlnPlot(microglia, features = DAM2_down_2) + ggtitle("Genes downregulated in Stage 2 DAMs")
+VlnPlot(microglia, features = DAM2_down_3) + ggtitle("Genes downregulated in Stage 2 DAMs")
+
+```
+
+
+## **Renaming clusters**
+
+```{r cluster renaming, message=FALSE,warning=FALSE}
+Idents(microglia) <- "Celltype"
+DimPlot(microglia, reduction = "umap", label = TRUE, pt.size = 1)+ NoLegend()
+
+```
+
+
+## **Signature enrichment**
+
+### **DEGs and GSEA between microglia of different genotypes**
+
+**WT vs App**
+
+```{r general DEGs, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE}
+
+Idents(microglia) <- "Genotype"
+
+# WT vs App
+
+EnhancedVolcano(markers_WtvsApp,
+                lab = rownames(markers_WtvsApp),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-1.5, 1.5), ylim=c(0,15), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Wt vs APPPS1+",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+GSEA_output_wtvsapp$GOdown_plot
+GSEA_output_wtvsapp$GOup_plot
+
+GSEA_output_wtvsapp$cannonicalPathwaysdown_plot
+GSEA_output_wtvsapp$cannonicalPathwaysup_plot
+
+GSEA_output_wtvsapp$Motifdown_plot
+GSEA_output_wtvsapp$Motifup_plot
+
+GSEA_output_wtvsapp$ImmSigdown_plot
+GSEA_output_wtvsapp$ImmSigup_plot
+```
+
+**WT vs MX04+**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE , eval=FALSE}
+
+EnhancedVolcano(markers_WtvsMe,
+                lab = rownames(markers_WtvsMe),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-2, 2), ylim=c(0,30), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Wt vs MX04+",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+GSEA_output_wtvsme$GOdown_plot
+GSEA_output_wtvsme$GOup_plot
+
+GSEA_output_wtvsme$KEGGdown_plot
+GSEA_output_wtvsme$KEGGup_plot
+
+GSEA_output_wtvsme$cannonicalPathwaysdown_plot
+GSEA_output_wtvsme$cannonicalPathwaysup_plot
+
+GSEA_output_wtvsme$Motifdown_plot
+GSEA_output_wtvsme$Motifup_plot
+
+GSEA_output_wtvsme$ImmSigdown_plot
+GSEA_output_wtvsme$ImmSigup_plot
+```
+
+**MX04+ vs App**
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE}
+
+EnhancedVolcano(markers_MevsAPP,
+                lab = rownames(markers_MevsAPP),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-2, 2), ylim=c(0,30), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "MX04+ vs APPPS1+",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+GSEA_output_mevsapp$GOdown_plot
+GSEA_output_mevsapp$GOup_plot
+
+GSEA_output_mevsapp$KEGGdown_plot
+GSEA_output_mevsapp$KEGGup_plot
+
+GSEA_output_mevsapp$cannonicalPathwaysdown_plot
+GSEA_output_mevsapp$cannonicalPathwaysup_plot
+
+GSEA_output_mevsapp$Motifdown_plot
+GSEA_output_mevsapp$Motifup_plot
+
+GSEA_output_mevsapp$ImmSigdown_plot
+GSEA_output_mevsapp$ImmSigup_plot
+```
+
+
+
+### **DEGs and GSEA of microglia of different genotype and treatment**
+
+**WT_Ctrl vs WT_Stroke**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE}
+
+Idents(microglia) <- "Genotype_Treatment"
+
+EnhancedVolcano(markers_WtCtrlvsStroke,
+                lab = rownames(markers_WtCtrlvsStroke),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-2, 2), ylim=c(0,20), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Wt_Ctrl vs Wt_Stroke",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+GSEA_output_wtCtrlvsStroke$GOdown_plot
+GSEA_output_wtCtrlvsStroke$GOup_plot
+
+GSEA_output_wtCtrlvsStroke$KEGGdown_plot
+GSEA_output_wtCtrlvsStroke$KEGGup_plot
+
+GSEA_output_wtCtrlvsStroke$cannonicalPathwaysdown_plot
+GSEA_output_wtCtrlvsStroke$cannonicalPathwaysup_plot
+
+GSEA_output_wtCtrlvsStroke$Motifdown_plot
+GSEA_output_wtCtrlvsStroke$Motifup_plot
+
+GSEA_output_wtCtrlvsStroke$ImmSigdown_plot
+GSEA_output_wtCtrlvsStroke$ImmSigup_plot
+```
+
+
+**APP_Ctrl vs APP_Stroke**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE}
+
+EnhancedVolcano(markers_AppCtrlvsStroke,
+                lab = rownames(markers_AppCtrlvsStroke),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-1.5, 1.5), ylim=c(0,17), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "APPPS1+_Ctrl vs APPPS1+_Stroke",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+GSEA_output_AppCtrlvsStroke$GOdown_plot
+GSEA_output_AppCtrlvsStroke$GOup_plot
+
+GSEA_output_AppCtrlvsStroke$KEGGdown_plot
+GSEA_output_AppCtrlvsStroke$KEGGup_plot
+
+GSEA_output_AppCtrlvsStroke$cannonicalPathwaysdown_plot
+GSEA_output_AppCtrlvsStroke$cannonicalPathwaysup_plot
+
+GSEA_output_AppCtrlvsStroke$Motifdown_plot
+GSEA_output_AppCtrlvsStroke$Motifup_plot
+
+GSEA_output_AppCtrlvsStroke$ImmSigdown_plot
+GSEA_output_AppCtrlvsStroke$ImmSigup_plot
+```
+
+
+**WT_Ctrl vs APP_Ctrl**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE}
+
+EnhancedVolcano(markers_Ctrl,
+                lab = rownames(markers_Ctrl),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-2.5, 2.5), ylim=c(0,40), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Wt_Ctrl vs APPPS1+_Ctrl",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+GSEA_output_ctrl$GOdown_plot
+GSEA_output_ctrl$GOup_plot
+
+GSEA_output_ctrl$KEGGdown_plot
+GSEA_output_ctrl$KEGGup_plot
+
+GSEA_output_ctrl$cannonicalPathwaysdown_plot
+GSEA_output_ctrl$cannonicalPathwaysup_plot
+
+GSEA_output_ctrl$Motifdown_plot
+GSEA_output_ctrl$Motifup_plot
+
+GSEA_output_ctrl$ImmSigdown_plot
+GSEA_output_ctrl$ImmSigup_plot
+```
+
+
+**WT_Stroke vs APP_Stroke**
+
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE} 
+
+EnhancedVolcano(markers_Stroke,
+                lab = rownames(markers_Stroke),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-2, 2), ylim=c(0,15), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Wt_Stroke vs APPPS1+_Stroke",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+GSEA_output_Stroke$GOdown_plot
+GSEA_output_Stroke$GOup_plot
+
+GSEA_output_Stroke$KEGGdown_plot
+GSEA_output_Stroke$KEGGup_plot
+
+GSEA_output_Stroke$cannonicalPathwaysdown_plot
+GSEA_output_Stroke$cannonicalPathwaysup_plot
+
+GSEA_output_Stroke$Motifdown_plot
+GSEA_output_Stroke$Motifup_plot
+
+GSEA_output_Stroke$ImmSigdown_plot
+GSEA_output_Stroke$ImmSigup_plot
+```
+
+
+### **DEGs and GSEA of each cluster**
+
+**Microglia_0**
+
+Only works if ReloadAllData_Harmony_Hefendehl_Stroke.RData is loaded.
+Otherwise, an error message will occur.
+
+```{r DEGs GSEA_output_ctrl cluster, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE}
+
+EnhancedVolcano(zero,
+                lab = rownames(zero),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-3, 3), ylim=c(0,55), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Microglia_0",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+GSEA_output_zero$GOdown_plot
+GSEA_output_zero$GOup_plot
+
+GSEA_output_zero$KEGGdown_plot
+GSEA_output_zero$KEGGup_plot
+
+GSEA_output_zero$cannonicalPathwaysdown_plot
+GSEA_output_zero$cannonicalPathwaysup_plot
+
+GSEA_output_zero$Motifdown_plot
+GSEA_output_zero$Motifup_plot
+
+GSEA_output_zero$ImmSigdown_plot
+GSEA_output_zero$ImmSigup_plot
+```
+
+
+**Microglia_1**
+
+```{r DEGs GSEA_output_ctrl cluster 2, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE}
+
+Idents(microglia) <- "Celltype"
+
+EnhancedVolcano(one,
+                lab = rownames(one),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-3, 3), ylim=c(0,75), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Microglia_1",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+GSEA_output_one$GOdown_plot
+GSEA_output_one$GOup_plot
+
+GSEA_output_one$KEGGdown_plot
+GSEA_output_one$KEGGup_plot
+
+GSEA_output_one$cannonicalPathwaysdown_plot
+GSEA_output_one$cannonicalPathwaysup_plot
+
+GSEA_output_one$Motifdown_plot
+GSEA_output_one$Motifup_plot
+
+GSEA_output_one$ImmSigdown_plot
+GSEA_output_one$ImmSigup_plot
+```
+
+
+**Microglia_2**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE}
+
+EnhancedVolcano(two,
+                lab = rownames(two),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-1.5, 1.5), ylim=c(0,20), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Microglia_2",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+GSEA_output_two$GOdown_plot
+GSEA_output_two$GOup_plot
+
+GSEA_output_two$KEGGdown_plot
+GSEA_output_two$KEGGup_plot
+
+GSEA_output_two$cannonicalPathwaysdown_plot
+GSEA_output_two$cannonicalPathwaysup_plot
+
+GSEA_output_two$Motifdown_plot
+GSEA_output_two$Motifup_plot
+
+GSEA_output_two$ImmSigdown_plot
+GSEA_output_two$ImmSigup_plot
+```
+
+
+**Microglia_4**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE}
+
+EnhancedVolcano(four,
+                lab = rownames(four),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-3, 3), ylim=c(0,15), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Microglia_4",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+GSEA_output_four$GOdown_plot
+GSEA_output_four$GOup_plot
+
+GSEA_output_four$KEGGdown_plot
+GSEA_output_four$KEGGup_plot
+
+GSEA_output_four$cannonicalPathwaysdown_plot
+GSEA_output_four$cannonicalPathwaysup_plot
+
+GSEA_output_four$Motifdown_plot
+GSEA_output_four$Motifup_plot
+
+GSEA_output_four$ImmSigdown_plot
+GSEA_output_four$ImmSigup_plot
+```
+
+**DAM**
+ 
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE}
+
+EnhancedVolcano(dam,
+                lab = rownames(dam),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-3, 3), ylim=c(0,60), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "DAM",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+GSEA_output_dam$GOdown_plot
+GSEA_output_dam$GOup_plot
+
+GSEA_output_dam$KEGGdown_plot
+GSEA_output_dam$KEGGup_plot
+
+GSEA_output_dam$cannonicalPathwaysdown_plot
+GSEA_output_dam$cannonicalPathwaysup_plot
+
+GSEA_output_dam$Motifdown_plot
+GSEA_output_dam$Motifup_plot
+
+GSEA_output_dam$ImmSigdown_plot
+GSEA_output_dam$ImmSigup_plot
+```
+
+
+
+
+**Microglia_5**
+
+Only works if ReloadAllData_Harmony_Hefendehl_Stroke.RData is loaded.
+Otherwise, an error message will occur.
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE}
+
+EnhancedVolcano(five,
+                lab = rownames(five),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-4.5, 4.5), ylim=c(0,45), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Microglia_5",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+GSEA_output_five$GOdown_plot
+GSEA_output_five$GOup_plot
+
+GSEA_output_five$KEGGdown_plot
+GSEA_output_five$KEGGup_plot
+
+GSEA_output_five$cannonicalPathwaysdown_plot
+GSEA_output_five$cannonicalPathwaysup_plot
+
+GSEA_output_five$Motifdown_plot
+GSEA_output_five$Motifup_plot
+
+GSEA_output_five$ImmSigdown_plot
+GSEA_output_five$ImmSigup_plot
+```
+
+## Genotype + Treatment comparison in each cluster
+
+**Microglia_0**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE}
+Idents(mg0) <- "Genotype_Treatment"
+
+DoHeatmap(mg0, features = mg0_top20$gene) + NoLegend() +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in Microglia_0")
+
+```
+
+**Microglia_1**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE}
+Idents(mg1) <- "Genotype_Treatment"
+
+DoHeatmap(mg1, features = mg1_top20$gene) + NoLegend() +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in Microglia_1")
+
+```
+
+**Microglia_2**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE}
+Idents(mg2) <- "Genotype_Treatment"
+
+DoHeatmap(mg2, features = mg2_top20$gene) + NoLegend() +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in Microglia_2")
+
+```
+
+**DAM?**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE}
+Idents(dams) <- "Genotype_Treatment"
+
+DoHeatmap(dams, features = dams_top20$gene) + NoLegend() +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in DAMs?")
+
+```
+
+**Microglia_4**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE}
+Idents(mg4) <- "Genotype_Treatment"
+
+DoHeatmap(mg4, features = mg4_top20$gene) + NoLegend() +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in Microglia_4")
+
+```
+
+
+**Microglia_5**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE}
+Idents(mg5) <- "Genotype_Treatment"
+
+DoHeatmap(mg5, features = mg5_top20$gene) + NoLegend() +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in Microglia_5")
+
+```
+
+
+
+
+
+
+
+
+
