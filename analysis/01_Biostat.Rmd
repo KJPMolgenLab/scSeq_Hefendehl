@@ -21,14 +21,40 @@ load(paste0(home,"/data/samples.integrated.RData"))
 ```
 
 
-```{r}
+```{r Cellproperties}
 
+#get sample data
 samples.integrated@meta.data %>% as.data.frame() -> samplemeta
 
-table(samplemeta$seurat_clusters, samplemeta$Genotype)
-table(samplemeta$Treatment, samplemeta$Genotype)
-table(samplemeta$Treatment, samplemeta$Genotype)
+# convert to correct data type 
+
+# define gentype as is
+samplemeta$Genotype_corr = factor(samplemeta$Genotype=="wt", levels=c(F,T), labels = c("APPPS1+", "WT"))
+samplemeta$Genotype_corr = relevel(samplemeta$Genotype_corr, ref="WT")
+
+samplemeta$methoxy = factor(samplemeta$Genotype=="MX04+", levels=c(T,F), labels = c("MX04+", "MX04-"))
+
+samplemeta$Treatment = as.factor(samplemeta$Treatment)
+samplemeta$Treatment = relevel(samplemeta$Treatment, ref="Ctrl")
+samplemeta$Mouse_ID = as.factor(samplemeta$Mouse_ID)
+samplemeta$Sex = as.factor(samplemeta$Sex)
+samplemeta$Brain_region = as.factor(samplemeta$Brain_region)
+samplemeta$Celltype = as.factor(samplemeta$Celltype)
+
+nCells=nrow(samplemeta)
+nMice=nlevels(samplemeta$Mouse_ID)
+nCelltypes=nlevels(samplemeta$Celltype)
+
+table(Mouse_ID=samplemeta$Mouse_ID) %>% as.data.frame()
 
 
 ```
 
+Sample descriptive: 
+Data  contains a total of `r nCells` Cells from `r nMice`. 
+
+Cells per Mouse
+`r table(Mouse_ID=samplemeta$Mouse_ID) %>% as.data.frame()`
+
+Cells per Strain
+`r table(Strain=samplemeta$Genotype_corr, Treatment=samplemeta$Treatment) %>% as.data.frame()`

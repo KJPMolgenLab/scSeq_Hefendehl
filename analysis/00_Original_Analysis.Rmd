@@ -7,24 +7,54 @@ output:
     toc: no
 ---
 
-```{r message=FALSE, warning=FALSE}
+```{r ,message=FALSE, warning=FALSE, include=FALSE}
+home=getwd()
+
+ep_str_wrap <- function(string, width) {
+    x <- gregexpr(' ', string)
+    vapply(seq_along(x),
+           FUN = function(i) {
+               y <- x[[i]]
+               n <- nchar(string[i])
+               len <- (c(y,n) - c(0, y)) ## length + 1
+               idx <- len > width
+               j <- which(!idx)
+               if (length(j) && max(j) == length(len)) {
+                   j <- j[-length(j)]
+               }
+               if (length(j)) {
+                   idx[j] <- len[j] + len[j+1] > width
+               }
+               idx <- idx[-length(idx)] ## length - 1
+               start <- c(1, y[idx] + 1)
+               end <- c(y[idx] - 1, n)
+               words <- substring(string[i], start, end)
+               paste0(words, collapse="\n")
+           },
+           FUN.VALUE = character(1)
+    )
+}
+
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
 library(Seurat)
 library(ggplot2)
 library(SingleR)
 library(EnhancedVolcano)
 library(pheatmap)
-library(enrichplot)
+
 
 knitr::opts_chunk$set(fig.height=8, fig.width=15)
 
-home=getwd()
 load(paste0(home,"/data/ReloadAllData_Hefendehl_Stroke_Dec'21.RData"))
 
 
 ```
 
 
-# Preprocessing
+# **Preprocessing**
 
 **QC metrics from AG Hefendehl (Stroke)**
 
@@ -67,7 +97,7 @@ plot3 | plot4
 
 ```
 
-# Perform integrated analysis
+# **Perform integrated analysis**
 
 ```{r echo=FALSE, results='hide',message=FALSE,warning=FALSE}
 Idents(samples.integrated) <- "Plate"
@@ -190,6 +220,8 @@ SingleR is an automatic annotation method for (scRNAseq) data (Aran et al. 2019)
 
 **Immgen reference**
 
+Section Skipped as pred.immgen object is not available 
+
 ```{r SingleR: Immgen, echo=FALSE, results='hide',message=FALSE,warning=FALSE, eval=FALSE}
 
 # Based on clusters
@@ -217,6 +249,7 @@ DimPlot(samples.integrated,group.by ="Immgen_sc_labels", label = F ) + NoLegend(
 ```
 
 **MouseRNA-Seq reference**
+Section Skipped as pred.mouseRNA object is not available 
 
 ```{r SingleR: MouseRNA-Seq, echo=FALSE, results='hide',message=FALSE,warning=FALSE, eval=FALSE}
 
@@ -243,6 +276,7 @@ DimPlot(samples.integrated,group.by ="MouseRNASeq_cluster_labels" ,label = T) + 
 DimPlot(samples.integrated,group.by ="MouseRNASeq_sc_labels", label=F) # + NoLegend() | DimPlot(samples.integrated, reduction = "umap",group.by = "seurat_clusters", label=T)+ NoLegend()
 
 ```
+
 
 ```{r cell distribution MouseRNASeq, message=FALSE, warning=FALSE}
 
