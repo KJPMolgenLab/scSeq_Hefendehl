@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, fig.height=8, fig.width=15)
 
 library(limma)
 library(DESeq2)
@@ -15,19 +15,19 @@ library(Seurat)
 library(SingleR)
 
 
-knitr::opts_chunk$set(fig.height=8, fig.width=15)
-
 home=getwd()
-load(paste0(home,"/data/ReloadAllData_Hefendehl_Stroke_Dec'21.RData"))
+load(paste0(home,"/data/samples.integrated.RData"))
 
 ```
 
 
 ```{r}
 
-samples.integrated
+samples.integrated@meta.data %>% as.data.frame() -> samplemeta
 
-
+table(samplemeta$seurat_clusters, samplemeta$Genotype)
+table(samplemeta$Treatment, samplemeta$Genotype)
+table(samplemeta$Treatment, samplemeta$Genotype)
 
 
 ```

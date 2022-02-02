@@ -11,6 +11,5 @@ editor_options:
 
 Here you find all analyses, results and visualizations
 
-
 * Original analysis provided by Bonn [view](00_Original_Analysis.html)
 
