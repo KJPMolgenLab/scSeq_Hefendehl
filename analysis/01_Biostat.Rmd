@@ -5,6 +5,11 @@ date: "2 2 2022"
 output: html_document
 ---
 
+
+```{r, include=F}
+home=getwd()
+```
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.height=8, fig.width=15)
 
@@ -15,15 +20,18 @@ library(Seurat)
 library(SingleR)
 library(data.table)
 library(compareGroups)
+library(brms)
+library(xlsx)
+library(viridis)
 
-home=getwd()
+
 load(paste0(home,"/data/samples.integrated.RData"))
 source(paste0(home, "/code/custom_functions.R"))
 
 ```
 
 
-```{r Cellproperties}
+```{r Load Cellproperties}
 
 #get sample data
 samples.integrated@meta.data %>% as.data.frame() -> samplemeta
@@ -57,25 +65,39 @@ Data  contains a total of `r nCells` Cells from `r nMice`.
 
 
 **Cells per Mouse**
-```{r}
+
+Cells per Strain
+
+```{r table strains}
 table(Mouse_ID=samplemeta$Mouse_ID) %>% as.data.frame() %>% display_tab()
 
 ```
-Cells per Strain
-```{r}
-table(Strain=samplemeta$Genotype_corr, Treatment=samplemeta$Treatment) %>% as.data.frame() %>% display_tab()
 
-table(Strain=samplemeta$Genotype_corr, Celltype=samplemeta$Celltype) %>% 
+Cells per Genotype
+
+```{r Cells per Strain}
+table(Genotype=samplemeta$Genotype_corr, Treatment=samplemeta$Treatment) %>% as.data.frame() %>% display_tab()
+
+table(Genotype=samplemeta$Genotype_corr, Celltype=samplemeta$Celltype) %>% 
   as.data.frame() %>% display_tab()
 
 variables=c("Celltype","Sex", "Genotype_corr", "Treatment","Phase", "Brain_region","nCount_RNA","pseudoaligned_reads", "percent.mito", "percent.ribo", "Mouse_ID")
+```
 
+Descriptive stats across Cell type
+```{r Compare Celltype}
 res = compareGroups(Celltype~., data = samplemeta[,variables], max.ylev = 10)
 #summary(res)
 export_table <- createTable(res)
-export_table
+options(width = 10000)
+print(export_table)
+export2xls(export_table,paste0(home,"/docs/Descriptives.xlsx"))
 
 ```
+
+download data as excel file [here](Descriptives.docx)
+
+
 ```{r read gene counts}
 
 #get normalized counts 
@@ -88,8 +110,8 @@ counts <- counts[apply(counts,1, sd) > 0, rownames(samplemeta)]
 # drop genes with low detection rate (more than 5 counts per cell)
 counts_per_celltype=apply(counts, 1, function(x){tapply(x, samplemeta$Celltype, function(z){sum(z>5,na.rm=T)})})
 
-# keep RNAs with at least 5 cells with goood expression
-idx=which(colSums(counts_per_celltype)>5)
+# keep RNAs with at least 10 cells with goood expression
+idx=which(colSums(counts_per_celltype)>10)
 
 counts = counts[idx,]
 
@@ -100,7 +122,7 @@ counts = counts[idx,]
 
 to check where the variance in the data comes from 
 
-```{r, fig.height=15, fig.width=15}
+```{r basic QC, fig.height=15, fig.width=15}
 log2_cpm = log2(counts+1)
 
 varsset=apply(log2_cpm, 1, var)
@@ -112,13 +134,18 @@ distance = dist(cpm.sel.trans)
 sampleDistMatrix <- as.matrix(distance)
 
 #colors for plotting heatmap
-colors <- colorRampPalette(brewer.pal(9, "Spectral"))(255)
+colors <- rev(colorRampPalette(brewer.pal(9, "Spectral"))(255))
+colors=jetcolors(255)
+colors=viridis(255)
 
 cellcol = Dark8[1:nlevels(samplemeta$Celltype)]
 names(cellcol) = levels(samplemeta$Celltype)
 
 genotypecol = brewer.pal(4,"Accent")[c(1:nlevels(samplemeta$Genotype_corr))]
 names(genotypecol) = levels(samplemeta$Genotype_corr)
+
+strokecol = brewer.pal(5,"Set2")[1:nlevels(samplemeta$Treatment)+2]
+names(strokecol) = levels(samplemeta$Treatment)
 
 mousecol = brewer.pal(9,"Set1")[1:nlevels(samplemeta$Mouse_ID)]
 names(mousecol) = levels(samplemeta$Mouse_ID)
@@ -130,10 +157,11 @@ ann_colors = list(
   Genotype_corr = genotypecol, 
   Mouse_ID = mousecol,
   Brain_region = braincol,
-  Celltype=cellcol
-  )
+  Celltype=cellcol,
+  Treatment=strokecol
+)
 
-labels = samplemeta[,c("Genotype_corr","Mouse_ID", "Brain_region", "Celltype")] %>%  
+labels = samplemeta[,c("Genotype_corr","Mouse_ID", "Brain_region", "Celltype", "Treatment")] %>%  
   mutate_all(as.character) %>% as.data.frame()
 
 rownames(labels)=rownames(samplemeta)
@@ -142,7 +170,7 @@ pheatmap(sampleDistMatrix,
          clustering_distance_rows = distance,
          clustering_distance_cols = distance,
          clustering_method = "ward.D2",
-         scale ="row",
+         scale ="none",
          show_rownames=F, show_colnames = F,
          legend=T,
          border_color = NA, 
@@ -154,3 +182,170 @@ pheatmap(sampleDistMatrix,
 
 ```
 
+## Genotype X Treatment Statistical modelling
+
+```{r define LMER function}
+
+getres=function(Celltype="Specify", 
+                Hypothesis="~1+Sex+Genotype_corr*Treatment", 
+                Target="Genotype_corrAPPPS1+:TreatmentStroke",
+                Randomeffect="Mouse_ID"){
+  
+  res= comparison_rand(designform =Hypothesis, 
+                       randomeffect = Randomeffect, 
+                       Samples = samplemeta$Celltype==Celltype, 
+                       log_cpm = log2_cpm, 
+                       samplesdata = samplemeta,
+                       target=Target)
+  
+  
+  
+  labels = samplemeta[samplemeta$Celltype==Celltype,c("Treatment", "Genotype_corr","Mouse_ID", "Brain_region", "Celltype")] %>%  
+    mutate_all(as.character) %>% as.data.frame()
+  
+  labels=labels %>% arrange(Treatment,Genotype_corr)
+  plotdata=log2_cpm[res$adj.P.Val<0.05,rownames(labels)]
+  
+  pheatmap(plotdata,
+           #clustering_method = "ward.D2",
+           cluster_cols = F,
+           cluster_rows  = T,
+           scale ="column",
+           show_rownames=F, show_colnames = F,
+           legend=T,
+           border_color = NA, 
+           #annotation_row = labels,
+           annotation_col = labels,
+           annotation_colors = ann_colors,
+           col = colors, 
+           main = "D62 Distances normalized log2 counts")
+  return(res)
+  
+}
+
+generate_output=function(CT="Celltype", ...){
+  respath=paste0(home, "/docs/LMER_",CT,".xlsx")
+  
+  analysis = getres(Celltype = CT)
+  analysis_sig = analysis[analysis$adj.P.Val<0.05,]
+  analysis_sig %>% display_tab()
+  
+  write.xlsx2(analysis_sig, file =respath , sheetName = "significant genes")
+  
+  ResGO = getGOresults(rownames(analysis_sig),
+                       rownames(analysis),
+                       "mmusculus")
+  
+  if(length(ResGO)>0){
+    p=gostplot(ResGO)
+  } else{
+    ResGO=data.frame(result="no significant enrichment identified")
+    p="no significant enrichment identified"
+  }
+  
+  write.xlsx2(ResGO$result, file = respath, sheetName = "GO_enrichment", append=T)
+  return(list(results=analysis,results_sig=analysis_sig, plot=p))
+}
+
+
+```
+
+### Microglia_0
+```{r Microglia_0, message=F, warning=FALSE}
+res_output=generate_output("Microglia_0")
+res_output[["results_sig"]] %>% display_tab()
+res_output[["plot"]]
+
+```
+
+get results table [here](LMER_Microglia_0.xlsx)
+
+
+### Microglia_1
+```{r Microglia_1, message=F, warning=FALSE}
+res_output=generate_output("Microglia_1")
+res_output[["results_sig"]] %>% display_tab()
+res_output[["plot"]]
+```
+
+get results table [here](LMER_Microglia_1.xlsx)
+
+
+### Microglia_2
+```{r Microglia_2, message=F, warning=FALSE}
+res_output=generate_output("Microglia_2")
+res_output[["results_sig"]] %>% display_tab()
+res_output[["plot"]]
+```
+
+get results table [here](LMER_Microglia_2.xlsx)
+
+### Microglia_3
+```{r Microglia_3, message=F, warning=FALSE}
+res_output=generate_output("Microglia_3")
+res_output[["results_sig"]] %>% display_tab()
+res_output[["plot"]]
+```
+
+get results table [here](LMER_Microglia_3.xlsx)
+
+### Microglia_4
+calculation not converging as Celltype not identified in all conditions 
+however also rare in other conditions, no significant difference 
+
+```{r Microglia_4, message=F, warning=FALSE}
+idx=samplemeta$Celltype=="Microglia_4"
+table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx])
+
+table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %>% fisher.test()
+
+#res_output=generate_output("Microglia_4")
+#res_output[["results_sig"]] %>% display_tab()
+#res_output[["plot"]]
+
+```
+
+get results table [here](LMER_Microglia_4.xlsx)
+
+### Microglia_5
+```{r Microglia_5, message=F, warning=FALSE}
+res_output=generate_output("Microglia_5")
+res_output[["results_sig"]] %>% display_tab()
+res_output[["plot"]]
+
+```
+
+get results table [here](LMER_Microglia_5.xlsx)
+
+
+### Granulozytes
+calculation not converging as Celltype not identified in all conditions 
+however also rare in other conditions, no significant difference 
+```{r Granulozytes, message=F, warning=FALSE}
+
+idx=samplemeta$Celltype=="Granulocytes"
+table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx])
+table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %>% fisher.test()
+
+# res_output=generate_output("Granulocytes ")
+# res_output[["results_sig"]] %>% display_tab()
+# res_output[["plot"]]
+
+```
+
+get results table [here](LMER_Granulozytes.xlsx)
+
+### T_NK
+
+```{r T_NK, message=F, warning=FALSE}
+
+idx=samplemeta$Celltype=="T/NK"
+table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx])
+table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %>% fisher.test()
+# res_output=generate_output("T/NK")
+# res_output[["results_sig"]] %>% display_tab()
+# res_output[["plot"]]
+
+```
+
+get results table [here](LMER_T_NK.xlsx)

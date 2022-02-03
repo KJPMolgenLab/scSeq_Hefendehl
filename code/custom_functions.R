@@ -5,7 +5,8 @@ require("RColorBrewer")
 require("stringr")
 require("pheatmap")
 require("DESeq2")
-
+require("lm.beta")
+require("viridis")
 
 
 Dark8 = brewer.pal(8, "Dark2")
@@ -33,10 +34,6 @@ table_sumstat_grp = function(DF, columns, groupfactor){
 }
 
 
-PCAplot=function(PCA_res, Sampledf, label){
-  plot(PCA_res[,])
-
-}
 
 
 # comparison fucntion of target
@@ -70,22 +67,53 @@ comparison <- function(dds_object, samples, target, randomeffect){
   }
 }
 
+
+
+comparison_rand <- function(designform, randomeffect,
+                            Samples, log_cpm, samplesdata,
+                            target){
+  require(limma)
+
+  if(length(Samples)==0){
+    print("Sample length is 0 all samples included")
+    Samples = colnames(log_cpm)
+  }
+
+  log_cpm_filt = log_cpm[,Samples]
+  samplesfilt=samplesdata[Samples,]
+  ## no random effect
+  ## with random effects
+  if(length(randomeffect)==1){
+    design = model.matrix(as.formula(designform), samplesfilt)
+    rande = samplesfilt[,randomeffect]
+    dupcor <- duplicateCorrelation(log_cpm_filt, design, block=rande)
+    fitDupCor <- lmFit(log_cpm_filt, design, block=rande, correlation=dupcor$consensus)
+    fit<- eBayes(fitDupCor)
+    A = topTable(fit,n=dim(fit)[1], coef=target)
+  }
+  return(A)
+}
+
+
 # go profiler function
-getGOresults = function(geneset, genereference){
+getGOresults = function(geneset, genereference, organism = "mmusculus",
+                        sources=c("GO:BP", "GO:MF", "GO:CC", "KEGG", "TF",
+                                  "MIRNA","CORUM", "HP", "HPA")){
   require(gprofiler2)
-  resgo = gost(geneset, organism = "hsapiens",
+  resgo = gost(geneset, organism =organism,
                correction_method = "gSCS",
                domain_scope = "custom",
-               sources = c("GO:BP", "GO:MF", "GO:CC", "KEGG", "TF", "HP", "HPA"),
+               sources = sources,
                custom_bg = genereference,
                numeric_ns = "ENTREZGENE_ACC")
   if(length(resgo) != 0){
     return(resgo)
   } else {
-    print("no significant results")
+    print("no significant GO terms identified")
     return(NULL)
   }
 }
+
 
 
 GOplot = function(GOtable, N, Title="GO plot"){
@@ -233,5 +261,13 @@ EigengenePlot=function(data, Sampledata, samplesincl){
     legend(0,0.25, legend = names(ann_colors[["DIFF"]]),fill = ann_colors[["DIFF"]], xpd=T,bty = "n")
     legend(0,0.125, legend = names(ann_colors[["CellLine"]]),fill = ann_colors[["CellLine"]], xpd=T,bty = "n")
   }
+}
+
+
+lm.beta.lmer <- function(mod) {
+  b <- fixef(mod)[-1]
+  sd.x <- apply(getME(mod,"X")[,-1],2,sd)
+  sd.y <- sd(getME(mod,"y"))
+  b*sd.x/sd.y
 }
 

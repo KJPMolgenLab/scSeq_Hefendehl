@@ -360,7 +360,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -369,7 +369,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -381,7 +381,7 @@ div.tocify {
 <strong>Last updated:</strong> 2022-02-03
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>S:/KJP_Biolabor/Projects/scSeq_Hefendehl/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -397,12 +397,12 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -469,16 +469,16 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltree64cd37cb31ab6bb8935fdf508d12232202b9de90targetblank64cd37ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/64cd37cb31ab6bb8935fdf508d12232202b9de90" target="_blank">64cd37c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltree50fe2116353a2ca9be2cfa503a99e7bd36282598targetblank50fe211a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/50fe2116353a2ca9be2cfa503a99e7bd36282598" target="_blank">50fe211</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltree64cd37cb31ab6bb8935fdf508d12232202b9de90targetblank64cd37ca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltree50fe2116353a2ca9be2cfa503a99e7bd36282598targetblank50fe211a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/64cd37cb31ab6bb8935fdf508d12232202b9de90" target="_blank">64cd37c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/50fe2116353a2ca9be2cfa503a99e7bd36282598" target="_blank">50fe211</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -486,6 +486,7 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
     Ignored:    data/ReloadAllData_Hefendehl_Stroke_Dec'21.RData
     Ignored:    data/Sample_Tables/
     Ignored:    data/counts.csv
@@ -493,9 +494,15 @@ Ignored files:
     Ignored:    data/microglia_protein.rds
     Ignored:    data/samples.integrated.RData
     Ignored:    data/tx2genes.csv
+    Ignored:    output/Descriptives.Rmd
+    Ignored:    output/Descriptives.docx
 
 Untracked files:
     Untracked:  workflow_helper.R
+
+Unstaged changes:
+    Modified:   analysis/01_Biostat.Rmd
+    Modified:   code/custom_functions.R
 
 </code></pre>
 <p>
@@ -540,6 +547,7 @@ nCelltypes=nlevels(samplemeta$Celltype)</code></pre>
 <h2>Sample descriptive:</h2>
 <p>Data contains a total of 649 Cells from 9. <em>Q:</em> Original raw datset containing only frankfurt data included 1149 cells. What were the filter criteria in the primary cell type analysis</p>
 <p><strong>Cells per Mouse</strong></p>
+<p>Cells per Strain</p>
 <pre class="r"><code>table(Mouse_ID=samplemeta$Mouse_ID) %&gt;% as.data.frame() %&gt;% display_tab()</code></pre>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:900px; ">
 <table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; ">
@@ -629,14 +637,14 @@ Freq
 </tbody>
 </table>
 </div>
-<p>Cells per Strain</p>
-<pre class="r"><code>table(Strain=samplemeta$Genotype_corr, Treatment=samplemeta$Treatment) %&gt;% as.data.frame() %&gt;% display_tab()</code></pre>
+<p>Cells per Genotype</p>
+<pre class="r"><code>table(Genotype=samplemeta$Genotype_corr, Treatment=samplemeta$Treatment) %&gt;% as.data.frame() %&gt;% display_tab()</code></pre>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:900px; ">
 <table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; ">
 <thead>
 <tr>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Strain
+Genotype
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
 Treatment
@@ -694,14 +702,14 @@ Stroke
 </tbody>
 </table>
 </div>
-<pre class="r"><code>table(Strain=samplemeta$Genotype_corr, Celltype=samplemeta$Celltype) %&gt;% 
+<pre class="r"><code>table(Genotype=samplemeta$Genotype_corr, Celltype=samplemeta$Celltype) %&gt;% 
   as.data.frame() %&gt;% display_tab()</code></pre>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:900px; ">
 <table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; ">
 <thead>
 <tr>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Strain
+Genotype
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
 Celltype
@@ -891,12 +899,13 @@ Granulocytes
 </tbody>
 </table>
 </div>
-<pre class="r"><code>variables=c(&quot;Celltype&quot;,&quot;Sex&quot;, &quot;Genotype_corr&quot;, &quot;Treatment&quot;,&quot;Phase&quot;, &quot;Brain_region&quot;,&quot;nCount_RNA&quot;,&quot;pseudoaligned_reads&quot;, &quot;percent.mito&quot;, &quot;percent.ribo&quot;, &quot;Mouse_ID&quot;)
-
-res = compareGroups(Celltype~., data = samplemeta[,variables], max.ylev = 10)
+<pre class="r"><code>variables=c(&quot;Celltype&quot;,&quot;Sex&quot;, &quot;Genotype_corr&quot;, &quot;Treatment&quot;,&quot;Phase&quot;, &quot;Brain_region&quot;,&quot;nCount_RNA&quot;,&quot;pseudoaligned_reads&quot;, &quot;percent.mito&quot;, &quot;percent.ribo&quot;, &quot;Mouse_ID&quot;)</code></pre>
+<p>Descriptive stats across Cell type</p>
+<pre class="r"><code>res = compareGroups(Celltype~., data = samplemeta[,variables], max.ylev = 10)
 #summary(res)
 export_table &lt;- createTable(res)
-export_table</code></pre>
+options(width = 10000)
+print(export_table)</code></pre>
 <pre><code>
 --------Summary descriptives table by &#39;Celltype&#39;---------
 
@@ -935,6 +944,8 @@ Mouse_ID:                                                                       
     457               1 (4.55%)      41 (22.0%)     24 (14.6%)     21 (19.6%)     18 (18.2%)     5 (19.2%)      3 (13.0%)      2 (9.09%)              
     461               6 (27.3%)      28 (15.1%)     21 (12.8%)     11 (10.3%)     11 (11.1%)     1 (3.85%)      2 (8.70%)      8 (36.4%)              
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯ </code></pre>
+<pre class="r"><code>export2xls(export_table,paste0(home,&quot;/docs/Descriptives.xlsx&quot;))</code></pre>
+<p>download data as excel file <a href="Descriptives.docx">here</a></p>
 <pre class="r"><code>#get normalized counts 
 # question to Desiree hat the Seurat object been initialized with normalized data?
 counts &lt;- samples.integrated@assays$RNA@counts %&gt;% as.data.frame()
@@ -945,8 +956,8 @@ counts &lt;- counts[apply(counts,1, sd) &gt; 0, rownames(samplemeta)]
 # drop genes with low detection rate (more than 5 counts per cell)
 counts_per_celltype=apply(counts, 1, function(x){tapply(x, samplemeta$Celltype, function(z){sum(z&gt;5,na.rm=T)})})
 
-# keep RNAs with at least 5 cells with goood expression
-idx=which(colSums(counts_per_celltype)&gt;5)
+# keep RNAs with at least 10 cells with goood expression
+idx=which(colSums(counts_per_celltype)&gt;10)
 
 counts = counts[idx,]</code></pre>
 </div>
@@ -964,13 +975,18 @@ distance = dist(cpm.sel.trans)
 sampleDistMatrix &lt;- as.matrix(distance)
 
 #colors for plotting heatmap
-colors &lt;- colorRampPalette(brewer.pal(9, &quot;Spectral&quot;))(255)
+colors &lt;- rev(colorRampPalette(brewer.pal(9, &quot;Spectral&quot;))(255))
+colors=jetcolors(255)
+colors=viridis(255)
 
 cellcol = Dark8[1:nlevels(samplemeta$Celltype)]
 names(cellcol) = levels(samplemeta$Celltype)
 
 genotypecol = brewer.pal(4,&quot;Accent&quot;)[c(1:nlevels(samplemeta$Genotype_corr))]
 names(genotypecol) = levels(samplemeta$Genotype_corr)
+
+strokecol = brewer.pal(5,&quot;Set2&quot;)[1:nlevels(samplemeta$Treatment)+2]
+names(strokecol) = levels(samplemeta$Treatment)
 
 mousecol = brewer.pal(9,&quot;Set1&quot;)[1:nlevels(samplemeta$Mouse_ID)]
 names(mousecol) = levels(samplemeta$Mouse_ID)
@@ -982,10 +998,11 @@ ann_colors = list(
   Genotype_corr = genotypecol, 
   Mouse_ID = mousecol,
   Brain_region = braincol,
-  Celltype=cellcol
-  )
+  Celltype=cellcol,
+  Treatment=strokecol
+)
 
-labels = samplemeta[,c(&quot;Genotype_corr&quot;,&quot;Mouse_ID&quot;, &quot;Brain_region&quot;, &quot;Celltype&quot;)] %&gt;%  
+labels = samplemeta[,c(&quot;Genotype_corr&quot;,&quot;Mouse_ID&quot;, &quot;Brain_region&quot;, &quot;Celltype&quot;, &quot;Treatment&quot;)] %&gt;%  
   mutate_all(as.character) %&gt;% as.data.frame()
 
 rownames(labels)=rownames(samplemeta)
@@ -994,7 +1011,7 @@ pheatmap(sampleDistMatrix,
          clustering_distance_rows = distance,
          clustering_distance_cols = distance,
          clustering_method = &quot;ward.D2&quot;,
-         scale =&quot;row&quot;,
+         scale =&quot;none&quot;,
          show_rownames=F, show_colnames = F,
          legend=T,
          border_color = NA, 
@@ -1003,7 +1020,9680 @@ pheatmap(sampleDistMatrix,
          annotation_colors = ann_colors,
          col = colors, 
          main = &quot;D62 Distances normalized log2 counts&quot;)</code></pre>
-<p><img src="figure/01_Biostat.Rmd/unnamed-chunk-3-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/01_Biostat.Rmd/basic%20QC-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+<div id="genotype-x-treatment-statistical-modelling" class="section level2">
+<h2>Genotype X Treatment Statistical modelling</h2>
+<pre class="r"><code>getres=function(Celltype=&quot;Specify&quot;, 
+                Hypothesis=&quot;~1+Sex+Genotype_corr*Treatment&quot;, 
+                Target=&quot;Genotype_corrAPPPS1+:TreatmentStroke&quot;,
+                Randomeffect=&quot;Mouse_ID&quot;){
+  
+  res= comparison_rand(designform =Hypothesis, 
+                       randomeffect = Randomeffect, 
+                       Samples = samplemeta$Celltype==Celltype, 
+                       log_cpm = log2_cpm, 
+                       samplesdata = samplemeta,
+                       target=Target)
+  
+  
+  
+  labels = samplemeta[samplemeta$Celltype==Celltype,c(&quot;Treatment&quot;, &quot;Genotype_corr&quot;,&quot;Mouse_ID&quot;, &quot;Brain_region&quot;, &quot;Celltype&quot;)] %&gt;%  
+    mutate_all(as.character) %&gt;% as.data.frame()
+  
+  labels=labels %&gt;% arrange(Treatment,Genotype_corr)
+  plotdata=log2_cpm[res$adj.P.Val&lt;0.05,rownames(labels)]
+  
+  pheatmap(plotdata,
+           #clustering_method = &quot;ward.D2&quot;,
+           cluster_cols = F,
+           cluster_rows  = T,
+           scale =&quot;column&quot;,
+           show_rownames=F, show_colnames = F,
+           legend=T,
+           border_color = NA, 
+           #annotation_row = labels,
+           annotation_col = labels,
+           annotation_colors = ann_colors,
+           col = colors, 
+           main = &quot;D62 Distances normalized log2 counts&quot;)
+  return(res)
+  
+}
+
+generate_output=function(CT=&quot;Celltype&quot;, ...){
+  respath=paste0(home, &quot;/docs/LMER_&quot;,CT,&quot;.xlsx&quot;)
+  
+  analysis = getres(Celltype = CT)
+  analysis_sig = analysis[analysis$adj.P.Val&lt;0.05,]
+  analysis_sig %&gt;% display_tab()
+  
+  write.xlsx2(analysis_sig, file =respath , sheetName = &quot;significant genes&quot;)
+  
+  ResGO = getGOresults(rownames(analysis_sig),
+                       rownames(analysis),
+                       &quot;mmusculus&quot;)
+  
+  if(length(ResGO)&gt;0){
+    p=gostplot(ResGO)
+  } else{
+    ResGO=data.frame(result=&quot;no significant enrichment identified&quot;)
+    p=&quot;no significant enrichment identified&quot;
+  }
+  
+  write.xlsx2(ResGO$result, file = respath, sheetName = &quot;GO_enrichment&quot;, append=T)
+  return(list(results=analysis,results_sig=analysis_sig, plot=p))
+}</code></pre>
+<div id="microglia_0" class="section level3">
+<h3>Microglia_0</h3>
+<pre class="r"><code>res_output=generate_output(&quot;Microglia_0&quot;)</code></pre>
+<p><img src="figure/01_Biostat.Rmd/Microglia_0-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>res_output[[&quot;results_sig&quot;]] %&gt;% display_tab()</code></pre>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:900px; ">
+<table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+logFC
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+AveExpr
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+t
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+P.Value
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+adj.P.Val
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+B
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Tbata
+</td>
+<td style="text-align:left;">
+3.585
+</td>
+<td style="text-align:left;">
+0.454
+</td>
+<td style="text-align:left;">
+12.282
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+45.438
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AC099934.1
+</td>
+<td style="text-align:left;">
+2.089
+</td>
+<td style="text-align:left;">
+0.223
+</td>
+<td style="text-align:left;">
+11.040
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+37.798
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rn7s1
+</td>
+<td style="text-align:left;">
+4.776
+</td>
+<td style="text-align:left;">
+0.932
+</td>
+<td style="text-align:left;">
+10.655
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+35.451
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AY036118
+</td>
+<td style="text-align:left;">
+-11.081
+</td>
+<td style="text-align:left;">
+6.541
+</td>
+<td style="text-align:left;">
+-9.191
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+26.688
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Prrx1
+</td>
+<td style="text-align:left;">
+2.430
+</td>
+<td style="text-align:left;">
+0.394
+</td>
+<td style="text-align:left;">
+8.393
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+22.080
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tmem170
+</td>
+<td style="text-align:left;">
+2.181
+</td>
+<td style="text-align:left;">
+0.349
+</td>
+<td style="text-align:left;">
+7.389
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+16.541
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rn7s2
+</td>
+<td style="text-align:left;">
+3.690
+</td>
+<td style="text-align:left;">
+0.821
+</td>
+<td style="text-align:left;">
+7.361
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+16.391
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Olfr907
+</td>
+<td style="text-align:left;">
+2.682
+</td>
+<td style="text-align:left;">
+0.908
+</td>
+<td style="text-align:left;">
+6.890
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+13.921
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dock10
+</td>
+<td style="text-align:left;">
+4.005
+</td>
+<td style="text-align:left;">
+5.039
+</td>
+<td style="text-align:left;">
+6.134
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+10.154
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mgmt
+</td>
+<td style="text-align:left;">
+2.582
+</td>
+<td style="text-align:left;">
+0.444
+</td>
+<td style="text-align:left;">
+6.078
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+9.889
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AW822252
+</td>
+<td style="text-align:left;">
+2.123
+</td>
+<td style="text-align:left;">
+0.732
+</td>
+<td style="text-align:left;">
+6.022
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+9.622
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Apoe
+</td>
+<td style="text-align:left;">
+-11.355
+</td>
+<td style="text-align:left;">
+7.561
+</td>
+<td style="text-align:left;">
+-5.777
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+8.474
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Trem2
+</td>
+<td style="text-align:left;">
+-5.762
+</td>
+<td style="text-align:left;">
+6.733
+</td>
+<td style="text-align:left;">
+-5.673
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.996
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D10Wsu102e
+</td>
+<td style="text-align:left;">
+-2.591
+</td>
+<td style="text-align:left;">
+7.009
+</td>
+<td style="text-align:left;">
+-5.633
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.816
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lgals3bp
+</td>
+<td style="text-align:left;">
+-7.870
+</td>
+<td style="text-align:left;">
+3.952
+</td>
+<td style="text-align:left;">
+-5.603
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.678
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hexb
+</td>
+<td style="text-align:left;">
+-5.725
+</td>
+<td style="text-align:left;">
+8.947
+</td>
+<td style="text-align:left;">
+-5.549
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.437
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fcer1g
+</td>
+<td style="text-align:left;">
+-5.665
+</td>
+<td style="text-align:left;">
+6.858
+</td>
+<td style="text-align:left;">
+-5.511
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.266
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ctsd
+</td>
+<td style="text-align:left;">
+-6.140
+</td>
+<td style="text-align:left;">
+9.513
+</td>
+<td style="text-align:left;">
+-5.411
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+6.823
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2m
+</td>
+<td style="text-align:left;">
+-5.699
+</td>
+<td style="text-align:left;">
+7.942
+</td>
+<td style="text-align:left;">
+-5.382
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+6.695
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm44215
+</td>
+<td style="text-align:left;">
+-4.526
+</td>
+<td style="text-align:left;">
+3.605
+</td>
+<td style="text-align:left;">
+-5.328
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+6.459
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gnaz
+</td>
+<td style="text-align:left;">
+2.329
+</td>
+<td style="text-align:left;">
+0.780
+</td>
+<td style="text-align:left;">
+5.316
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+6.405
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C1qb
+</td>
+<td style="text-align:left;">
+-6.427
+</td>
+<td style="text-align:left;">
+8.397
+</td>
+<td style="text-align:left;">
+-5.302
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+6.345
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lipe
+</td>
+<td style="text-align:left;">
+2.874
+</td>
+<td style="text-align:left;">
+1.789
+</td>
+<td style="text-align:left;">
+5.275
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+6.229
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CT010467.1
+</td>
+<td style="text-align:left;">
+-4.628
+</td>
+<td style="text-align:left;">
+10.638
+</td>
+<td style="text-align:left;">
+-5.247
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+6.109
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C1qa
+</td>
+<td style="text-align:left;">
+-6.016
+</td>
+<td style="text-align:left;">
+8.093
+</td>
+<td style="text-align:left;">
+-5.171
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+5.783
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lyz2
+</td>
+<td style="text-align:left;">
+-8.389
+</td>
+<td style="text-align:left;">
+5.945
+</td>
+<td style="text-align:left;">
+-5.164
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+5.750
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Itm2b
+</td>
+<td style="text-align:left;">
+-5.448
+</td>
+<td style="text-align:left;">
+8.165
+</td>
+<td style="text-align:left;">
+-5.106
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+5.506
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cst3
+</td>
+<td style="text-align:left;">
+-5.520
+</td>
+<td style="text-align:left;">
+10.468
+</td>
+<td style="text-align:left;">
+-5.093
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+5.451
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm37144
+</td>
+<td style="text-align:left;">
+2.615
+</td>
+<td style="text-align:left;">
+1.609
+</td>
+<td style="text-align:left;">
+5.088
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+5.426
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm44645
+</td>
+<td style="text-align:left;">
+1.755
+</td>
+<td style="text-align:left;">
+0.462
+</td>
+<td style="text-align:left;">
+5.048
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+5.260
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ctsb
+</td>
+<td style="text-align:left;">
+-5.775
+</td>
+<td style="text-align:left;">
+8.220
+</td>
+<td style="text-align:left;">
+-4.989
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.014
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Myl2
+</td>
+<td style="text-align:left;">
+1.632
+</td>
+<td style="text-align:left;">
+0.203
+</td>
+<td style="text-align:left;">
+4.907
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+4.676
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C1qc
+</td>
+<td style="text-align:left;">
+-5.524
+</td>
+<td style="text-align:left;">
+8.304
+</td>
+<td style="text-align:left;">
+-4.903
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+4.659
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cst7
+</td>
+<td style="text-align:left;">
+-7.498
+</td>
+<td style="text-align:left;">
+3.339
+</td>
+<td style="text-align:left;">
+-4.821
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+4.325
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Grn
+</td>
+<td style="text-align:left;">
+-5.003
+</td>
+<td style="text-align:left;">
+6.427
+</td>
+<td style="text-align:left;">
+-4.692
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+3.806
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Plac8
+</td>
+<td style="text-align:left;">
+1.718
+</td>
+<td style="text-align:left;">
+0.166
+</td>
+<td style="text-align:left;">
+4.631
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+3.565
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ctss
+</td>
+<td style="text-align:left;">
+-4.862
+</td>
+<td style="text-align:left;">
+9.414
+</td>
+<td style="text-align:left;">
+-4.602
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+3.454
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ctsz
+</td>
+<td style="text-align:left;">
+-5.238
+</td>
+<td style="text-align:left;">
+7.907
+</td>
+<td style="text-align:left;">
+-4.580
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+3.367
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pola2
+</td>
+<td style="text-align:left;">
+-2.571
+</td>
+<td style="text-align:left;">
+2.264
+</td>
+<td style="text-align:left;">
+-4.573
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+3.340
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hexa
+</td>
+<td style="text-align:left;">
+-5.506
+</td>
+<td style="text-align:left;">
+6.097
+</td>
+<td style="text-align:left;">
+-4.559
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+3.284
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cd52
+</td>
+<td style="text-align:left;">
+-5.180
+</td>
+<td style="text-align:left;">
+3.497
+</td>
+<td style="text-align:left;">
+-4.551
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+3.252
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AC127302.3
+</td>
+<td style="text-align:left;">
+-2.871
+</td>
+<td style="text-align:left;">
+2.889
+</td>
+<td style="text-align:left;">
+-4.520
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+3.132
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm37716
+</td>
+<td style="text-align:left;">
+1.458
+</td>
+<td style="text-align:left;">
+0.498
+</td>
+<td style="text-align:left;">
+4.502
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+3.063
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm26905
+</td>
+<td style="text-align:left;">
+-3.426
+</td>
+<td style="text-align:left;">
+6.505
+</td>
+<td style="text-align:left;">
+-4.491
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+3.021
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cyba
+</td>
+<td style="text-align:left;">
+-4.779
+</td>
+<td style="text-align:left;">
+5.245
+</td>
+<td style="text-align:left;">
+-4.486
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+3.004
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gpr171
+</td>
+<td style="text-align:left;">
+1.223
+</td>
+<td style="text-align:left;">
+0.095
+</td>
+<td style="text-align:left;">
+4.380
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.006
+</td>
+<td style="text-align:left;">
+2.602
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fhl3
+</td>
+<td style="text-align:left;">
+1.950
+</td>
+<td style="text-align:left;">
+0.607
+</td>
+<td style="text-align:left;">
+4.340
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.007
+</td>
+<td style="text-align:left;">
+2.451
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Col6a3
+</td>
+<td style="text-align:left;">
+2.169
+</td>
+<td style="text-align:left;">
+0.420
+</td>
+<td style="text-align:left;">
+4.322
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.007
+</td>
+<td style="text-align:left;">
+2.385
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Axl
+</td>
+<td style="text-align:left;">
+-5.288
+</td>
+<td style="text-align:left;">
+2.164
+</td>
+<td style="text-align:left;">
+-4.302
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+<td style="text-align:left;">
+2.311
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm15500
+</td>
+<td style="text-align:left;">
+-5.146
+</td>
+<td style="text-align:left;">
+4.285
+</td>
+<td style="text-align:left;">
+-4.298
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+<td style="text-align:left;">
+2.294
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fth1
+</td>
+<td style="text-align:left;">
+-4.811
+</td>
+<td style="text-align:left;">
+7.555
+</td>
+<td style="text-align:left;">
+-4.295
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+<td style="text-align:left;">
+2.284
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+H2-D1
+</td>
+<td style="text-align:left;">
+-5.238
+</td>
+<td style="text-align:left;">
+6.578
+</td>
+<td style="text-align:left;">
+-4.277
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+<td style="text-align:left;">
+2.219
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm10076
+</td>
+<td style="text-align:left;">
+-3.694
+</td>
+<td style="text-align:left;">
+2.856
+</td>
+<td style="text-align:left;">
+-4.270
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+<td style="text-align:left;">
+2.193
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cd81
+</td>
+<td style="text-align:left;">
+-5.151
+</td>
+<td style="text-align:left;">
+7.456
+</td>
+<td style="text-align:left;">
+-4.249
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.009
+</td>
+<td style="text-align:left;">
+2.115
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tyrobp
+</td>
+<td style="text-align:left;">
+-4.344
+</td>
+<td style="text-align:left;">
+7.358
+</td>
+<td style="text-align:left;">
+-4.231
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.009
+</td>
+<td style="text-align:left;">
+2.050
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Upk1b
+</td>
+<td style="text-align:left;">
+3.244
+</td>
+<td style="text-align:left;">
+1.015
+</td>
+<td style="text-align:left;">
+4.210
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.010
+</td>
+<td style="text-align:left;">
+1.971
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atp6v0c
+</td>
+<td style="text-align:left;">
+-5.076
+</td>
+<td style="text-align:left;">
+4.998
+</td>
+<td style="text-align:left;">
+-4.200
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.010
+</td>
+<td style="text-align:left;">
+1.935
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clec7a
+</td>
+<td style="text-align:left;">
+-5.541
+</td>
+<td style="text-align:left;">
+2.762
+</td>
+<td style="text-align:left;">
+-4.165
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+1.807
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm26870
+</td>
+<td style="text-align:left;">
+-3.534
+</td>
+<td style="text-align:left;">
+9.134
+</td>
+<td style="text-align:left;">
+-4.160
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+1.791
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Selenop
+</td>
+<td style="text-align:left;">
+-5.025
+</td>
+<td style="text-align:left;">
+6.801
+</td>
+<td style="text-align:left;">
+-4.098
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.014
+</td>
+<td style="text-align:left;">
+1.568
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm15564
+</td>
+<td style="text-align:left;">
+1.507
+</td>
+<td style="text-align:left;">
+0.765
+</td>
+<td style="text-align:left;">
+4.090
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.014
+</td>
+<td style="text-align:left;">
+1.542
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Serinc3
+</td>
+<td style="text-align:left;">
+-3.698
+</td>
+<td style="text-align:left;">
+6.433
+</td>
+<td style="text-align:left;">
+-4.079
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.015
+</td>
+<td style="text-align:left;">
+1.502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Eef1a1
+</td>
+<td style="text-align:left;">
+-4.585
+</td>
+<td style="text-align:left;">
+7.535
+</td>
+<td style="text-align:left;">
+-4.069
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.015
+</td>
+<td style="text-align:left;">
+1.465
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fcgr3
+</td>
+<td style="text-align:left;">
+-4.245
+</td>
+<td style="text-align:left;">
+7.279
+</td>
+<td style="text-align:left;">
+-4.032
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.017
+</td>
+<td style="text-align:left;">
+1.335
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Soat1
+</td>
+<td style="text-align:left;">
+-3.697
+</td>
+<td style="text-align:left;">
+2.004
+</td>
+<td style="text-align:left;">
+-4.022
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.018
+</td>
+<td style="text-align:left;">
+1.300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm14303
+</td>
+<td style="text-align:left;">
+-2.839
+</td>
+<td style="text-align:left;">
+2.264
+</td>
+<td style="text-align:left;">
+-3.998
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.019
+</td>
+<td style="text-align:left;">
+1.215
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ppp2r5a
+</td>
+<td style="text-align:left;">
+-3.151
+</td>
+<td style="text-align:left;">
+4.146
+</td>
+<td style="text-align:left;">
+-3.969
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.021
+</td>
+<td style="text-align:left;">
+1.117
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm10719
+</td>
+<td style="text-align:left;">
+-3.157
+</td>
+<td style="text-align:left;">
+6.711
+</td>
+<td style="text-align:left;">
+-3.940
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.023
+</td>
+<td style="text-align:left;">
+1.017
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lamp2
+</td>
+<td style="text-align:left;">
+-4.702
+</td>
+<td style="text-align:left;">
+4.178
+</td>
+<td style="text-align:left;">
+-3.928
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.024
+</td>
+<td style="text-align:left;">
+0.973
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rpl13a
+</td>
+<td style="text-align:left;">
+-4.190
+</td>
+<td style="text-align:left;">
+4.835
+</td>
+<td style="text-align:left;">
+-3.927
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.024
+</td>
+<td style="text-align:left;">
+0.970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rnaset2b
+</td>
+<td style="text-align:left;">
+-4.084
+</td>
+<td style="text-align:left;">
+6.400
+</td>
+<td style="text-align:left;">
+-3.917
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.024
+</td>
+<td style="text-align:left;">
+0.935
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fcgr2b
+</td>
+<td style="text-align:left;">
+-4.894
+</td>
+<td style="text-align:left;">
+4.773
+</td>
+<td style="text-align:left;">
+-3.915
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.024
+</td>
+<td style="text-align:left;">
+0.930
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mpeg1
+</td>
+<td style="text-align:left;">
+-4.315
+</td>
+<td style="text-align:left;">
+6.028
+</td>
+<td style="text-align:left;">
+-3.861
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.029
+</td>
+<td style="text-align:left;">
+0.747
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm43652
+</td>
+<td style="text-align:left;">
+1.435
+</td>
+<td style="text-align:left;">
+0.726
+</td>
+<td style="text-align:left;">
+3.858
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.029
+</td>
+<td style="text-align:left;">
+0.734
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rab3gap1
+</td>
+<td style="text-align:left;">
+-2.808
+</td>
+<td style="text-align:left;">
+3.206
+</td>
+<td style="text-align:left;">
+-3.847
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+0.697
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Thy1
+</td>
+<td style="text-align:left;">
+1.353
+</td>
+<td style="text-align:left;">
+0.317
+</td>
+<td style="text-align:left;">
+3.839
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+0.672
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mt1
+</td>
+<td style="text-align:left;">
+-3.813
+</td>
+<td style="text-align:left;">
+2.286
+</td>
+<td style="text-align:left;">
+-3.828
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.031
+</td>
+<td style="text-align:left;">
+0.635
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cry1
+</td>
+<td style="text-align:left;">
+1.188
+</td>
+<td style="text-align:left;">
+0.121
+</td>
+<td style="text-align:left;">
+3.795
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.035
+</td>
+<td style="text-align:left;">
+0.524
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Acbd5
+</td>
+<td style="text-align:left;">
+-2.554
+</td>
+<td style="text-align:left;">
+1.954
+</td>
+<td style="text-align:left;">
+-3.786
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.036
+</td>
+<td style="text-align:left;">
+0.495
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bicd1
+</td>
+<td style="text-align:left;">
+-2.198
+</td>
+<td style="text-align:left;">
+2.661
+</td>
+<td style="text-align:left;">
+-3.767
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.038
+</td>
+<td style="text-align:left;">
+0.429
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lgmn
+</td>
+<td style="text-align:left;">
+-4.127
+</td>
+<td style="text-align:left;">
+7.604
+</td>
+<td style="text-align:left;">
+-3.763
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.038
+</td>
+<td style="text-align:left;">
+0.418
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cd9
+</td>
+<td style="text-align:left;">
+-4.193
+</td>
+<td style="text-align:left;">
+6.255
+</td>
+<td style="text-align:left;">
+-3.724
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.043
+</td>
+<td style="text-align:left;">
+0.290
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code>print(res_output[[&quot;plot&quot;]])</code></pre>
+<p>get results table <a href="LMER_Microglia_0.xlsx">here</a></p>
+</div>
+<div id="microglia_1" class="section level3">
+<h3>Microglia_1</h3>
+<pre class="r"><code>res_output=generate_output(&quot;Microglia_1&quot;)</code></pre>
+<p><img src="figure/01_Biostat.Rmd/Microglia_1-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre><code>[1] &quot;no significant GO terms identified&quot;</code></pre>
+<pre class="r"><code>res_output[[&quot;results_sig&quot;]] %&gt;% display_tab()</code></pre>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:900px; ">
+<table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+logFC
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+AveExpr
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+t
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+P.Value
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+adj.P.Val
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+B
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Rn7s1
+</td>
+<td style="text-align:left;">
+4.840
+</td>
+<td style="text-align:left;">
+2.251
+</td>
+<td style="text-align:left;">
+9.842
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+28.568
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AB124611
+</td>
+<td style="text-align:left;">
+2.674
+</td>
+<td style="text-align:left;">
+0.089
+</td>
+<td style="text-align:left;">
+7.844
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+17.964
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hexb
+</td>
+<td style="text-align:left;">
+-4.018
+</td>
+<td style="text-align:left;">
+10.455
+</td>
+<td style="text-align:left;">
+-6.164
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+9.816
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pola2
+</td>
+<td style="text-align:left;">
+-4.177
+</td>
+<td style="text-align:left;">
+1.551
+</td>
+<td style="text-align:left;">
+-6.144
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+9.723
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gbp2
+</td>
+<td style="text-align:left;">
+2.735
+</td>
+<td style="text-align:left;">
+0.131
+</td>
+<td style="text-align:left;">
+6.096
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+9.507
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gbp8
+</td>
+<td style="text-align:left;">
+2.376
+</td>
+<td style="text-align:left;">
+0.120
+</td>
+<td style="text-align:left;">
+5.729
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.881
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ogfod2
+</td>
+<td style="text-align:left;">
+2.770
+</td>
+<td style="text-align:left;">
+0.186
+</td>
+<td style="text-align:left;">
+5.531
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.028
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AY036118
+</td>
+<td style="text-align:left;">
+-7.320
+</td>
+<td style="text-align:left;">
+4.063
+</td>
+<td style="text-align:left;">
+-5.282
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.987
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adgre5
+</td>
+<td style="text-align:left;">
+1.340
+</td>
+<td style="text-align:left;">
+0.041
+</td>
+<td style="text-align:left;">
+5.246
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.837
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lzic
+</td>
+<td style="text-align:left;">
+2.339
+</td>
+<td style="text-align:left;">
+0.160
+</td>
+<td style="text-align:left;">
+5.200
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.652
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Trdmt1
+</td>
+<td style="text-align:left;">
+1.439
+</td>
+<td style="text-align:left;">
+0.094
+</td>
+<td style="text-align:left;">
+5.190
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.610
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gbp4
+</td>
+<td style="text-align:left;">
+1.865
+</td>
+<td style="text-align:left;">
+0.187
+</td>
+<td style="text-align:left;">
+5.151
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.450
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vav3
+</td>
+<td style="text-align:left;">
+0.781
+</td>
+<td style="text-align:left;">
+0.024
+</td>
+<td style="text-align:left;">
+5.085
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.187
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Psmd10
+</td>
+<td style="text-align:left;">
+3.468
+</td>
+<td style="text-align:left;">
+0.411
+</td>
+<td style="text-align:left;">
+4.906
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+4.476
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C3
+</td>
+<td style="text-align:left;">
+3.067
+</td>
+<td style="text-align:left;">
+0.263
+</td>
+<td style="text-align:left;">
+4.786
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+4.009
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dck
+</td>
+<td style="text-align:left;">
+2.402
+</td>
+<td style="text-align:left;">
+0.210
+</td>
+<td style="text-align:left;">
+4.758
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+3.903
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1700003F12Rik
+</td>
+<td style="text-align:left;">
+0.918
+</td>
+<td style="text-align:left;">
+0.044
+</td>
+<td style="text-align:left;">
+4.725
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+3.776
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mndal
+</td>
+<td style="text-align:left;">
+0.867
+</td>
+<td style="text-align:left;">
+0.045
+</td>
+<td style="text-align:left;">
+4.620
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.006
+</td>
+<td style="text-align:left;">
+3.378
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Eif1b
+</td>
+<td style="text-align:left;">
+4.259
+</td>
+<td style="text-align:left;">
+0.868
+</td>
+<td style="text-align:left;">
+4.539
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+<td style="text-align:left;">
+3.078
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Galt
+</td>
+<td style="text-align:left;">
+2.814
+</td>
+<td style="text-align:left;">
+0.377
+</td>
+<td style="text-align:left;">
+4.514
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+<td style="text-align:left;">
+2.988
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sparc
+</td>
+<td style="text-align:left;">
+-3.764
+</td>
+<td style="text-align:left;">
+7.598
+</td>
+<td style="text-align:left;">
+-4.449
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.010
+</td>
+<td style="text-align:left;">
+2.748
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bicdl1
+</td>
+<td style="text-align:left;">
+1.325
+</td>
+<td style="text-align:left;">
+0.080
+</td>
+<td style="text-align:left;">
+4.431
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+2.684
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cers6
+</td>
+<td style="text-align:left;">
+2.076
+</td>
+<td style="text-align:left;">
+0.193
+</td>
+<td style="text-align:left;">
+4.414
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+2.623
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm15952
+</td>
+<td style="text-align:left;">
+1.267
+</td>
+<td style="text-align:left;">
+0.159
+</td>
+<td style="text-align:left;">
+4.404
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+2.584
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mrps5
+</td>
+<td style="text-align:left;">
+2.606
+</td>
+<td style="text-align:left;">
+0.350
+</td>
+<td style="text-align:left;">
+4.360
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.013
+</td>
+<td style="text-align:left;">
+2.425
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AC099934.1
+</td>
+<td style="text-align:left;">
+1.433
+</td>
+<td style="text-align:left;">
+0.595
+</td>
+<td style="text-align:left;">
+4.251
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.019
+</td>
+<td style="text-align:left;">
+2.040
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lilrb4a
+</td>
+<td style="text-align:left;">
+2.909
+</td>
+<td style="text-align:left;">
+0.332
+</td>
+<td style="text-align:left;">
+4.221
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.020
+</td>
+<td style="text-align:left;">
+1.934
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zbtb41
+</td>
+<td style="text-align:left;">
+1.103
+</td>
+<td style="text-align:left;">
+0.076
+</td>
+<td style="text-align:left;">
+4.216
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.020
+</td>
+<td style="text-align:left;">
+1.916
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rn7s2
+</td>
+<td style="text-align:left;">
+3.411
+</td>
+<td style="text-align:left;">
+1.658
+</td>
+<td style="text-align:left;">
+4.143
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.026
+</td>
+<td style="text-align:left;">
+1.664
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2810414N06Rik
+</td>
+<td style="text-align:left;">
+1.849
+</td>
+<td style="text-align:left;">
+0.206
+</td>
+<td style="text-align:left;">
+4.127
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.027
+</td>
+<td style="text-align:left;">
+1.609
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mapkbp1
+</td>
+<td style="text-align:left;">
+2.387
+</td>
+<td style="text-align:left;">
+0.252
+</td>
+<td style="text-align:left;">
+4.108
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.028
+</td>
+<td style="text-align:left;">
+1.545
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aplf
+</td>
+<td style="text-align:left;">
+1.966
+</td>
+<td style="text-align:left;">
+0.206
+</td>
+<td style="text-align:left;">
+4.081
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+1.452
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chchd10
+</td>
+<td style="text-align:left;">
+1.846
+</td>
+<td style="text-align:left;">
+0.165
+</td>
+<td style="text-align:left;">
+4.077
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+1.439
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B4galt6
+</td>
+<td style="text-align:left;">
+3.479
+</td>
+<td style="text-align:left;">
+0.769
+</td>
+<td style="text-align:left;">
+4.031
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.034
+</td>
+<td style="text-align:left;">
+1.284
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cited4
+</td>
+<td style="text-align:left;">
+0.792
+</td>
+<td style="text-align:left;">
+0.042
+</td>
+<td style="text-align:left;">
+4.011
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.035
+</td>
+<td style="text-align:left;">
+1.215
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cd9
+</td>
+<td style="text-align:left;">
+-5.293
+</td>
+<td style="text-align:left;">
+6.392
+</td>
+<td style="text-align:left;">
+-4.011
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.035
+</td>
+<td style="text-align:left;">
+1.214
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Trmt112
+</td>
+<td style="text-align:left;">
+4.680
+</td>
+<td style="text-align:left;">
+1.995
+</td>
+<td style="text-align:left;">
+4.003
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.035
+</td>
+<td style="text-align:left;">
+1.190
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Stt3a
+</td>
+<td style="text-align:left;">
+5.160
+</td>
+<td style="text-align:left;">
+2.125
+</td>
+<td style="text-align:left;">
+3.979
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.037
+</td>
+<td style="text-align:left;">
+1.108
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mgmt
+</td>
+<td style="text-align:left;">
+2.321
+</td>
+<td style="text-align:left;">
+1.070
+</td>
+<td style="text-align:left;">
+3.976
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.037
+</td>
+<td style="text-align:left;">
+1.098
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sh3pxd2b
+</td>
+<td style="text-align:left;">
+1.437
+</td>
+<td style="text-align:left;">
+0.108
+</td>
+<td style="text-align:left;">
+3.970
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.037
+</td>
+<td style="text-align:left;">
+1.077
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aars2
+</td>
+<td style="text-align:left;">
+1.447
+</td>
+<td style="text-align:left;">
+0.127
+</td>
+<td style="text-align:left;">
+3.928
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.042
+</td>
+<td style="text-align:left;">
+0.939
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Itgal
+</td>
+<td style="text-align:left;">
+1.063
+</td>
+<td style="text-align:left;">
+0.069
+</td>
+<td style="text-align:left;">
+3.885
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.049
+</td>
+<td style="text-align:left;">
+0.797
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm29474
+</td>
+<td style="text-align:left;">
+0.931
+</td>
+<td style="text-align:left;">
+0.060
+</td>
+<td style="text-align:left;">
+3.873
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.050
+</td>
+<td style="text-align:left;">
+0.758
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Homer3
+</td>
+<td style="text-align:left;">
+1.961
+</td>
+<td style="text-align:left;">
+0.288
+</td>
+<td style="text-align:left;">
+3.866
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.050
+</td>
+<td style="text-align:left;">
+0.735
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code>print(res_output[[&quot;plot&quot;]])</code></pre>
+<pre><code>[1] &quot;no significant enrichment identified&quot;</code></pre>
+<p>get results table <a href="LMER_Microglia_1.xlsx">here</a></p>
+</div>
+<div id="microglia_2" class="section level3">
+<h3>Microglia_2</h3>
+<pre class="r"><code>res_output=generate_output(&quot;Microglia_2&quot;)</code></pre>
+<p><img src="figure/01_Biostat.Rmd/Microglia_2-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>res_output[[&quot;results_sig&quot;]] %&gt;% display_tab()</code></pre>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:900px; ">
+<table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+logFC
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+AveExpr
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+t
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+P.Value
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+adj.P.Val
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+B
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AY036118
+</td>
+<td style="text-align:left;">
+-12.456
+</td>
+<td style="text-align:left;">
+5.877
+</td>
+<td style="text-align:left;">
+-15.019
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+45.596
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rn7s1
+</td>
+<td style="text-align:left;">
+6.385
+</td>
+<td style="text-align:left;">
+2.015
+</td>
+<td style="text-align:left;">
+11.188
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+30.400
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AC099934.1
+</td>
+<td style="text-align:left;">
+2.241
+</td>
+<td style="text-align:left;">
+0.649
+</td>
+<td style="text-align:left;">
+10.570
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+27.765
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gab3
+</td>
+<td style="text-align:left;">
+6.340
+</td>
+<td style="text-align:left;">
+1.369
+</td>
+<td style="text-align:left;">
+8.543
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+18.964
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tbata
+</td>
+<td style="text-align:left;">
+3.179
+</td>
+<td style="text-align:left;">
+1.094
+</td>
+<td style="text-align:left;">
+7.387
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+13.974
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tmem170
+</td>
+<td style="text-align:left;">
+2.548
+</td>
+<td style="text-align:left;">
+0.931
+</td>
+<td style="text-align:left;">
+6.722
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+11.166
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mgmt
+</td>
+<td style="text-align:left;">
+2.922
+</td>
+<td style="text-align:left;">
+1.015
+</td>
+<td style="text-align:left;">
+5.878
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.742
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Katnb1
+</td>
+<td style="text-align:left;">
+2.102
+</td>
+<td style="text-align:left;">
+0.162
+</td>
+<td style="text-align:left;">
+5.265
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.382
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm10719
+</td>
+<td style="text-align:left;">
+-4.777
+</td>
+<td style="text-align:left;">
+4.443
+</td>
+<td style="text-align:left;">
+-5.147
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+4.943
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm15564
+</td>
+<td style="text-align:left;">
+2.543
+</td>
+<td style="text-align:left;">
+1.222
+</td>
+<td style="text-align:left;">
+5.077
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+4.684
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm26870
+</td>
+<td style="text-align:left;">
+-5.882
+</td>
+<td style="text-align:left;">
+6.156
+</td>
+<td style="text-align:left;">
+-4.978
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+4.322
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sorbs2
+</td>
+<td style="text-align:left;">
+2.075
+</td>
+<td style="text-align:left;">
+0.168
+</td>
+<td style="text-align:left;">
+4.975
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+4.313
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rn7s2
+</td>
+<td style="text-align:left;">
+4.114
+</td>
+<td style="text-align:left;">
+1.358
+</td>
+<td style="text-align:left;">
+4.975
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+4.313
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Actr3b
+</td>
+<td style="text-align:left;">
+2.047
+</td>
+<td style="text-align:left;">
+0.143
+</td>
+<td style="text-align:left;">
+4.951
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+4.224
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm10800
+</td>
+<td style="text-align:left;">
+-6.145
+</td>
+<td style="text-align:left;">
+7.447
+</td>
+<td style="text-align:left;">
+-4.929
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+4.147
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zbp1
+</td>
+<td style="text-align:left;">
+1.537
+</td>
+<td style="text-align:left;">
+0.157
+</td>
+<td style="text-align:left;">
+4.887
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+3.994
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm10801
+</td>
+<td style="text-align:left;">
+-4.772
+</td>
+<td style="text-align:left;">
+5.022
+</td>
+<td style="text-align:left;">
+-4.744
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.005
+</td>
+<td style="text-align:left;">
+3.486
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chchd5
+</td>
+<td style="text-align:left;">
+1.940
+</td>
+<td style="text-align:left;">
+0.189
+</td>
+<td style="text-align:left;">
+4.477
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.014
+</td>
+<td style="text-align:left;">
+2.562
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm37401
+</td>
+<td style="text-align:left;">
+3.759
+</td>
+<td style="text-align:left;">
+1.196
+</td>
+<td style="text-align:left;">
+4.474
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.014
+</td>
+<td style="text-align:left;">
+2.550
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm10717
+</td>
+<td style="text-align:left;">
+-3.987
+</td>
+<td style="text-align:left;">
+4.416
+</td>
+<td style="text-align:left;">
+-4.376
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.020
+</td>
+<td style="text-align:left;">
+2.220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm37411
+</td>
+<td style="text-align:left;">
+1.616
+</td>
+<td style="text-align:left;">
+0.409
+</td>
+<td style="text-align:left;">
+4.363
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.020
+</td>
+<td style="text-align:left;">
+2.176
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pola2
+</td>
+<td style="text-align:left;">
+-2.875
+</td>
+<td style="text-align:left;">
+2.295
+</td>
+<td style="text-align:left;">
+-4.244
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+1.783
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cd209g
+</td>
+<td style="text-align:left;">
+1.589
+</td>
+<td style="text-align:left;">
+0.134
+</td>
+<td style="text-align:left;">
+4.214
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.032
+</td>
+<td style="text-align:left;">
+1.685
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bola1
+</td>
+<td style="text-align:left;">
+2.986
+</td>
+<td style="text-align:left;">
+0.571
+</td>
+<td style="text-align:left;">
+4.187
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.034
+</td>
+<td style="text-align:left;">
+1.596
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Olfr986
+</td>
+<td style="text-align:left;">
+-3.227
+</td>
+<td style="text-align:left;">
+1.697
+</td>
+<td style="text-align:left;">
+-4.129
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.039
+</td>
+<td style="text-align:left;">
+1.407
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm14399
+</td>
+<td style="text-align:left;">
+1.217
+</td>
+<td style="text-align:left;">
+0.131
+</td>
+<td style="text-align:left;">
+4.118
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.039
+</td>
+<td style="text-align:left;">
+1.374
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tmem18
+</td>
+<td style="text-align:left;">
+2.653
+</td>
+<td style="text-align:left;">
+0.386
+</td>
+<td style="text-align:left;">
+4.110
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.039
+</td>
+<td style="text-align:left;">
+1.349
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Prrx1
+</td>
+<td style="text-align:left;">
+1.567
+</td>
+<td style="text-align:left;">
+0.589
+</td>
+<td style="text-align:left;">
+4.097
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.039
+</td>
+<td style="text-align:left;">
+1.307
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A930024E05Rik
+</td>
+<td style="text-align:left;">
+2.016
+</td>
+<td style="text-align:left;">
+0.166
+</td>
+<td style="text-align:left;">
+4.083
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.039
+</td>
+<td style="text-align:left;">
+1.262
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm29423
+</td>
+<td style="text-align:left;">
+1.341
+</td>
+<td style="text-align:left;">
+0.133
+</td>
+<td style="text-align:left;">
+4.080
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.039
+</td>
+<td style="text-align:left;">
+1.252
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Arl5c
+</td>
+<td style="text-align:left;">
+3.191
+</td>
+<td style="text-align:left;">
+0.740
+</td>
+<td style="text-align:left;">
+4.079
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.039
+</td>
+<td style="text-align:left;">
+1.249
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mfsd11
+</td>
+<td style="text-align:left;">
+5.329
+</td>
+<td style="text-align:left;">
+2.007
+</td>
+<td style="text-align:left;">
+4.037
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.043
+</td>
+<td style="text-align:left;">
+1.113
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rsad2
+</td>
+<td style="text-align:left;">
+1.152
+</td>
+<td style="text-align:left;">
+0.075
+</td>
+<td style="text-align:left;">
+4.035
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.043
+</td>
+<td style="text-align:left;">
+1.108
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ift122
+</td>
+<td style="text-align:left;">
+1.905
+</td>
+<td style="text-align:left;">
+0.398
+</td>
+<td style="text-align:left;">
+4.012
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.046
+</td>
+<td style="text-align:left;">
+1.035
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cpq
+</td>
+<td style="text-align:left;">
+3.335
+</td>
+<td style="text-align:left;">
+0.724
+</td>
+<td style="text-align:left;">
+3.996
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.047
+</td>
+<td style="text-align:left;">
+0.985
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code>print(res_output[[&quot;plot&quot;]])</code></pre>
+<p>get results table <a href="LMER_Microglia_2.xlsx">here</a></p>
+</div>
+<div id="microglia_3" class="section level3">
+<h3>Microglia_3</h3>
+<pre class="r"><code>res_output=generate_output(&quot;Microglia_3&quot;)</code></pre>
+<p><img src="figure/01_Biostat.Rmd/Microglia_3-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre><code>[1] &quot;no significant GO terms identified&quot;</code></pre>
+<pre class="r"><code>res_output[[&quot;results_sig&quot;]] %&gt;% display_tab()</code></pre>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:900px; ">
+<table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+logFC
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+AveExpr
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+t
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+P.Value
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+adj.P.Val
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+B
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Apoe
+</td>
+<td style="text-align:left;">
+-10.430
+</td>
+<td style="text-align:left;">
+8.936
+</td>
+<td style="text-align:left;">
+-8.947
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+20.625
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rn7s1
+</td>
+<td style="text-align:left;">
+4.769
+</td>
+<td style="text-align:left;">
+1.890
+</td>
+<td style="text-align:left;">
+8.267
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+17.702
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tmem170
+</td>
+<td style="text-align:left;">
+2.312
+</td>
+<td style="text-align:left;">
+0.742
+</td>
+<td style="text-align:left;">
+7.906
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+16.152
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pcid2
+</td>
+<td style="text-align:left;">
+2.823
+</td>
+<td style="text-align:left;">
+0.185
+</td>
+<td style="text-align:left;">
+6.034
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+8.365
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pigq
+</td>
+<td style="text-align:left;">
+5.880
+</td>
+<td style="text-align:left;">
+0.990
+</td>
+<td style="text-align:left;">
+5.999
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+8.222
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rnf14
+</td>
+<td style="text-align:left;">
+3.795
+</td>
+<td style="text-align:left;">
+0.386
+</td>
+<td style="text-align:left;">
+5.864
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.691
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tbata
+</td>
+<td style="text-align:left;">
+2.878
+</td>
+<td style="text-align:left;">
+0.831
+</td>
+<td style="text-align:left;">
+5.857
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.663
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AY036118
+</td>
+<td style="text-align:left;">
+-8.712
+</td>
+<td style="text-align:left;">
+5.396
+</td>
+<td style="text-align:left;">
+-5.382
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.825
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BC026585
+</td>
+<td style="text-align:left;">
+4.418
+</td>
+<td style="text-align:left;">
+0.909
+</td>
+<td style="text-align:left;">
+5.347
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.693
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C1galt1
+</td>
+<td style="text-align:left;">
+1.556
+</td>
+<td style="text-align:left;">
+0.079
+</td>
+<td style="text-align:left;">
+5.322
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.598
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rbmx2
+</td>
+<td style="text-align:left;">
+1.261
+</td>
+<td style="text-align:left;">
+0.064
+</td>
+<td style="text-align:left;">
+5.303
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.529
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ppil1
+</td>
+<td style="text-align:left;">
+2.138
+</td>
+<td style="text-align:left;">
+0.194
+</td>
+<td style="text-align:left;">
+5.195
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+5.124
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vmn1r208
+</td>
+<td style="text-align:left;">
+0.664
+</td>
+<td style="text-align:left;">
+0.034
+</td>
+<td style="text-align:left;">
+5.102
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+4.780
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cnnm4
+</td>
+<td style="text-align:left;">
+3.537
+</td>
+<td style="text-align:left;">
+0.429
+</td>
+<td style="text-align:left;">
+4.880
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+3.970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mgmt
+</td>
+<td style="text-align:left;">
+2.960
+</td>
+<td style="text-align:left;">
+0.931
+</td>
+<td style="text-align:left;">
+4.847
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+3.854
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Alad
+</td>
+<td style="text-align:left;">
+2.420
+</td>
+<td style="text-align:left;">
+0.203
+</td>
+<td style="text-align:left;">
+4.796
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.005
+</td>
+<td style="text-align:left;">
+3.672
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tpst2
+</td>
+<td style="text-align:left;">
+6.203
+</td>
+<td style="text-align:left;">
+2.268
+</td>
+<td style="text-align:left;">
+4.723
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.006
+</td>
+<td style="text-align:left;">
+3.413
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gt(ROSA)26Sor
+</td>
+<td style="text-align:left;">
+3.426
+</td>
+<td style="text-align:left;">
+0.561
+</td>
+<td style="text-align:left;">
+4.723
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.006
+</td>
+<td style="text-align:left;">
+3.411
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fkbp14
+</td>
+<td style="text-align:left;">
+2.454
+</td>
+<td style="text-align:left;">
+0.221
+</td>
+<td style="text-align:left;">
+4.558
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+2.836
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm15564
+</td>
+<td style="text-align:left;">
+2.301
+</td>
+<td style="text-align:left;">
+1.137
+</td>
+<td style="text-align:left;">
+4.550
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+2.809
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clec7a
+</td>
+<td style="text-align:left;">
+-7.087
+</td>
+<td style="text-align:left;">
+3.980
+</td>
+<td style="text-align:left;">
+-4.520
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.012
+</td>
+<td style="text-align:left;">
+2.704
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zfp712
+</td>
+<td style="text-align:left;">
+1.488
+</td>
+<td style="text-align:left;">
+0.117
+</td>
+<td style="text-align:left;">
+4.479
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.013
+</td>
+<td style="text-align:left;">
+2.564
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm21092
+</td>
+<td style="text-align:left;">
+1.788
+</td>
+<td style="text-align:left;">
+0.267
+</td>
+<td style="text-align:left;">
+4.420
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.015
+</td>
+<td style="text-align:left;">
+2.364
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Alg14
+</td>
+<td style="text-align:left;">
+3.917
+</td>
+<td style="text-align:left;">
+0.756
+</td>
+<td style="text-align:left;">
+4.364
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.018
+</td>
+<td style="text-align:left;">
+2.174
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm10774
+</td>
+<td style="text-align:left;">
+1.334
+</td>
+<td style="text-align:left;">
+0.288
+</td>
+<td style="text-align:left;">
+4.340
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.019
+</td>
+<td style="text-align:left;">
+2.093
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cox18
+</td>
+<td style="text-align:left;">
+1.842
+</td>
+<td style="text-align:left;">
+0.189
+</td>
+<td style="text-align:left;">
+4.318
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.019
+</td>
+<td style="text-align:left;">
+2.021
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AC210924.1
+</td>
+<td style="text-align:left;">
+1.675
+</td>
+<td style="text-align:left;">
+0.222
+</td>
+<td style="text-align:left;">
+4.310
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.019
+</td>
+<td style="text-align:left;">
+1.994
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Acot8
+</td>
+<td style="text-align:left;">
+2.048
+</td>
+<td style="text-align:left;">
+0.175
+</td>
+<td style="text-align:left;">
+4.306
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.019
+</td>
+<td style="text-align:left;">
+1.981
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm15417
+</td>
+<td style="text-align:left;">
+0.943
+</td>
+<td style="text-align:left;">
+0.079
+</td>
+<td style="text-align:left;">
+4.301
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.019
+</td>
+<td style="text-align:left;">
+1.964
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wsb2
+</td>
+<td style="text-align:left;">
+4.868
+</td>
+<td style="text-align:left;">
+1.184
+</td>
+<td style="text-align:left;">
+4.239
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.024
+</td>
+<td style="text-align:left;">
+1.758
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Smim8
+</td>
+<td style="text-align:left;">
+2.822
+</td>
+<td style="text-align:left;">
+0.443
+</td>
+<td style="text-align:left;">
+4.212
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.025
+</td>
+<td style="text-align:left;">
+1.669
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm43328
+</td>
+<td style="text-align:left;">
+0.672
+</td>
+<td style="text-align:left;">
+0.064
+</td>
+<td style="text-align:left;">
+4.148
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+1.460
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ano4
+</td>
+<td style="text-align:left;">
+1.287
+</td>
+<td style="text-align:left;">
+0.214
+</td>
+<td style="text-align:left;">
+4.148
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+1.460
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Stam
+</td>
+<td style="text-align:left;">
+3.019
+</td>
+<td style="text-align:left;">
+0.485
+</td>
+<td style="text-align:left;">
+4.129
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+1.399
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zfp513
+</td>
+<td style="text-align:left;">
+3.072
+</td>
+<td style="text-align:left;">
+0.452
+</td>
+<td style="text-align:left;">
+4.121
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+1.373
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rn7s2
+</td>
+<td style="text-align:left;">
+3.370
+</td>
+<td style="text-align:left;">
+1.489
+</td>
+<td style="text-align:left;">
+4.119
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+1.367
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bin2
+</td>
+<td style="text-align:left;">
+6.349
+</td>
+<td style="text-align:left;">
+4.050
+</td>
+<td style="text-align:left;">
+4.116
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+1.355
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Eif3d
+</td>
+<td style="text-align:left;">
+4.381
+</td>
+<td style="text-align:left;">
+0.900
+</td>
+<td style="text-align:left;">
+4.091
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.032
+</td>
+<td style="text-align:left;">
+1.274
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dand5
+</td>
+<td style="text-align:left;">
+2.063
+</td>
+<td style="text-align:left;">
+0.195
+</td>
+<td style="text-align:left;">
+4.085
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.032
+</td>
+<td style="text-align:left;">
+1.258
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Syncrip
+</td>
+<td style="text-align:left;">
+4.081
+</td>
+<td style="text-align:left;">
+1.144
+</td>
+<td style="text-align:left;">
+4.054
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.035
+</td>
+<td style="text-align:left;">
+1.157
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zfp37
+</td>
+<td style="text-align:left;">
+1.796
+</td>
+<td style="text-align:left;">
+0.242
+</td>
+<td style="text-align:left;">
+4.039
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.036
+</td>
+<td style="text-align:left;">
+1.107
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zbed3
+</td>
+<td style="text-align:left;">
+3.190
+</td>
+<td style="text-align:left;">
+0.550
+</td>
+<td style="text-align:left;">
+3.969
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.045
+</td>
+<td style="text-align:left;">
+0.888
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tpcn1
+</td>
+<td style="text-align:left;">
+3.983
+</td>
+<td style="text-align:left;">
+1.227
+</td>
+<td style="text-align:left;">
+3.949
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.048
+</td>
+<td style="text-align:left;">
+0.824
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nexn
+</td>
+<td style="text-align:left;">
+1.263
+</td>
+<td style="text-align:left;">
+0.145
+</td>
+<td style="text-align:left;">
+3.943
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.048
+</td>
+<td style="text-align:left;">
+0.804
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ewsr1
+</td>
+<td style="text-align:left;">
+5.605
+</td>
+<td style="text-align:left;">
+2.675
+</td>
+<td style="text-align:left;">
+3.935
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.048
+</td>
+<td style="text-align:left;">
+0.781
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code>print(res_output[[&quot;plot&quot;]])</code></pre>
+<pre><code>[1] &quot;no significant enrichment identified&quot;</code></pre>
+<p>get results table <a href="LMER_Microglia_3.xlsx">here</a></p>
+</div>
+<div id="microglia_4" class="section level3">
+<h3>Microglia_4</h3>
+<p>calculation not converging as Celltype not identified in all conditions however also rare in other conditions, no significant difference</p>
+<pre class="r"><code>idx=samplemeta$Celltype==&quot;Microglia_4&quot;
+table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx])</code></pre>
+<pre><code>        
+         WT APPPS1+
+  Ctrl   11      10
+  Stroke  4       1</code></pre>
+<pre class="r"><code>table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %&gt;% fisher.test()</code></pre>
+<pre><code>
+    Fisher&#39;s Exact Test for Count Data
+
+data:  .
+p-value = 0.3562
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.005090941 3.588141911
+sample estimates:
+odds ratio 
+ 0.2877466 </code></pre>
+<pre class="r"><code>#res_output=generate_output(&quot;Microglia_4&quot;)
+#res_output[[&quot;results_sig&quot;]] %&gt;% display_tab()
+#print(res_output[[&quot;plot&quot;]])</code></pre>
+<p>get results table <a href="LMER_Microglia_4.xlsx">here</a></p>
+</div>
+<div id="microglia_5" class="section level3">
+<h3>Microglia_5</h3>
+<pre class="r"><code>res_output=generate_output(&quot;Microglia_5&quot;)</code></pre>
+<p><img src="figure/01_Biostat.Rmd/Microglia_5-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre><code>[1] &quot;no significant GO terms identified&quot;</code></pre>
+<pre class="r"><code>res_output[[&quot;results_sig&quot;]] %&gt;% display_tab()</code></pre>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:900px; ">
+<table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+logFC
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+AveExpr
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+t
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+P.Value
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+adj.P.Val
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+B
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Sirpb1c
+</td>
+<td style="text-align:left;">
+8.788
+</td>
+<td style="text-align:left;">
+0.382
+</td>
+<td style="text-align:left;">
+104.854
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+35.615
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+S100a4
+</td>
+<td style="text-align:left;">
+8.061
+</td>
+<td style="text-align:left;">
+0.350
+</td>
+<td style="text-align:left;">
+96.181
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+35.386
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cenpt
+</td>
+<td style="text-align:left;">
+7.209
+</td>
+<td style="text-align:left;">
+0.313
+</td>
+<td style="text-align:left;">
+86.024
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+35.037
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pilra
+</td>
+<td style="text-align:left;">
+7.095
+</td>
+<td style="text-align:left;">
+0.308
+</td>
+<td style="text-align:left;">
+84.655
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+34.981
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fbxl8
+</td>
+<td style="text-align:left;">
+6.966
+</td>
+<td style="text-align:left;">
+0.303
+</td>
+<td style="text-align:left;">
+83.116
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+34.915
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Taf5l
+</td>
+<td style="text-align:left;">
+6.826
+</td>
+<td style="text-align:left;">
+0.297
+</td>
+<td style="text-align:left;">
+81.447
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+34.840
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zgrf1
+</td>
+<td style="text-align:left;">
+6.820
+</td>
+<td style="text-align:left;">
+0.297
+</td>
+<td style="text-align:left;">
+81.379
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+34.837
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sptan1
+</td>
+<td style="text-align:left;">
+6.714
+</td>
+<td style="text-align:left;">
+0.292
+</td>
+<td style="text-align:left;">
+80.115
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+34.778
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cytip
+</td>
+<td style="text-align:left;">
+6.569
+</td>
+<td style="text-align:left;">
+0.286
+</td>
+<td style="text-align:left;">
+78.378
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+34.692
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Elac2
+</td>
+<td style="text-align:left;">
+6.476
+</td>
+<td style="text-align:left;">
+0.282
+</td>
+<td style="text-align:left;">
+77.269
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+34.634
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Map3k9
+</td>
+<td style="text-align:left;">
+6.443
+</td>
+<td style="text-align:left;">
+0.280
+</td>
+<td style="text-align:left;">
+76.877
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+34.613
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mis18a
+</td>
+<td style="text-align:left;">
+6.426
+</td>
+<td style="text-align:left;">
+0.279
+</td>
+<td style="text-align:left;">
+76.678
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+34.603
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nup35
+</td>
+<td style="text-align:left;">
+6.426
+</td>
+<td style="text-align:left;">
+0.279
+</td>
+<td style="text-align:left;">
+76.678
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+34.603
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pdcd7
+</td>
+<td style="text-align:left;">
+5.644
+</td>
+<td style="text-align:left;">
+0.245
+</td>
+<td style="text-align:left;">
+67.343
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+34.010
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Slco3a1
+</td>
+<td style="text-align:left;">
+5.248
+</td>
+<td style="text-align:left;">
+0.228
+</td>
+<td style="text-align:left;">
+62.619
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+33.624
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+S100a10
+</td>
+<td style="text-align:left;">
+5.044
+</td>
+<td style="text-align:left;">
+0.219
+</td>
+<td style="text-align:left;">
+60.190
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+33.397
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm43200
+</td>
+<td style="text-align:left;">
+5.000
+</td>
+<td style="text-align:left;">
+0.217
+</td>
+<td style="text-align:left;">
+59.660
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+33.344
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Npepl1
+</td>
+<td style="text-align:left;">
+4.907
+</td>
+<td style="text-align:left;">
+0.213
+</td>
+<td style="text-align:left;">
+58.549
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+33.230
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sms-ps
+</td>
+<td style="text-align:left;">
+4.654
+</td>
+<td style="text-align:left;">
+0.202
+</td>
+<td style="text-align:left;">
+55.531
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+32.894
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2810001G20Rik
+</td>
+<td style="text-align:left;">
+4.322
+</td>
+<td style="text-align:left;">
+0.188
+</td>
+<td style="text-align:left;">
+51.569
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+32.383
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm1972
+</td>
+<td style="text-align:left;">
+4.087
+</td>
+<td style="text-align:left;">
+0.178
+</td>
+<td style="text-align:left;">
+48.772
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+31.966
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pde8a
+</td>
+<td style="text-align:left;">
+4.000
+</td>
+<td style="text-align:left;">
+0.174
+</td>
+<td style="text-align:left;">
+47.728
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+31.796
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zfp362
+</td>
+<td style="text-align:left;">
+4.000
+</td>
+<td style="text-align:left;">
+0.174
+</td>
+<td style="text-align:left;">
+47.728
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+31.796
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Glmn
+</td>
+<td style="text-align:left;">
+3.807
+</td>
+<td style="text-align:left;">
+0.166
+</td>
+<td style="text-align:left;">
+45.430
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+31.394
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polr2d
+</td>
+<td style="text-align:left;">
+3.807
+</td>
+<td style="text-align:left;">
+0.166
+</td>
+<td style="text-align:left;">
+45.430
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+31.394
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm34237
+</td>
+<td style="text-align:left;">
+3.513
+</td>
+<td style="text-align:left;">
+0.153
+</td>
+<td style="text-align:left;">
+41.914
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+30.687
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Acsl3
+</td>
+<td style="text-align:left;">
+3.322
+</td>
+<td style="text-align:left;">
+0.144
+</td>
+<td style="text-align:left;">
+39.637
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+30.162
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tsen54
+</td>
+<td style="text-align:left;">
+3.322
+</td>
+<td style="text-align:left;">
+0.144
+</td>
+<td style="text-align:left;">
+39.637
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+30.162
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nedd4l
+</td>
+<td style="text-align:left;">
+3.170
+</td>
+<td style="text-align:left;">
+0.138
+</td>
+<td style="text-align:left;">
+37.824
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+29.699
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pilrb1
+</td>
+<td style="text-align:left;">
+2.855
+</td>
+<td style="text-align:left;">
+0.124
+</td>
+<td style="text-align:left;">
+34.069
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+28.591
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Skint3
+</td>
+<td style="text-align:left;">
+2.807
+</td>
+<td style="text-align:left;">
+0.122
+</td>
+<td style="text-align:left;">
+33.497
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+28.403
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AI662270
+</td>
+<td style="text-align:left;">
+6.170
+</td>
+<td style="text-align:left;">
+0.312
+</td>
+<td style="text-align:left;">
+28.448
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+26.454
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rps6ka4
+</td>
+<td style="text-align:left;">
+2.322
+</td>
+<td style="text-align:left;">
+0.101
+</td>
+<td style="text-align:left;">
+27.705
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+26.118
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AC131743.1
+</td>
+<td style="text-align:left;">
+2.307
+</td>
+<td style="text-align:left;">
+0.200
+</td>
+<td style="text-align:left;">
+27.273
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+25.916
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mta3
+</td>
+<td style="text-align:left;">
+7.289
+</td>
+<td style="text-align:left;">
+0.365
+</td>
+<td style="text-align:left;">
+25.673
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+25.120
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sirpb1b
+</td>
+<td style="text-align:left;">
+5.404
+</td>
+<td style="text-align:left;">
+0.278
+</td>
+<td style="text-align:left;">
+24.903
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+24.710
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Micall1
+</td>
+<td style="text-align:left;">
+2.000
+</td>
+<td style="text-align:left;">
+0.087
+</td>
+<td style="text-align:left;">
+23.866
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+24.125
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Taf1b
+</td>
+<td style="text-align:left;">
+2.000
+</td>
+<td style="text-align:left;">
+0.087
+</td>
+<td style="text-align:left;">
+23.864
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+24.125
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm44103
+</td>
+<td style="text-align:left;">
+2.000
+</td>
+<td style="text-align:left;">
+0.087
+</td>
+<td style="text-align:left;">
+23.863
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+24.124
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm20716
+</td>
+<td style="text-align:left;">
+7.223
+</td>
+<td style="text-align:left;">
+0.368
+</td>
+<td style="text-align:left;">
+23.262
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+23.768
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hist1h4d
+</td>
+<td style="text-align:left;">
+1.585
+</td>
+<td style="text-align:left;">
+0.069
+</td>
+<td style="text-align:left;">
+18.912
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+20.745
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ubash3a
+</td>
+<td style="text-align:left;">
+1.585
+</td>
+<td style="text-align:left;">
+0.069
+</td>
+<td style="text-align:left;">
+18.912
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+20.745
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zbtb39
+</td>
+<td style="text-align:left;">
+1.585
+</td>
+<td style="text-align:left;">
+0.069
+</td>
+<td style="text-align:left;">
+18.912
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+20.745
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fam69a
+</td>
+<td style="text-align:left;">
+6.541
+</td>
+<td style="text-align:left;">
+0.351
+</td>
+<td style="text-align:left;">
+17.758
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+19.787
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Batf3
+</td>
+<td style="text-align:left;">
+4.835
+</td>
+<td style="text-align:left;">
+0.259
+</td>
+<td style="text-align:left;">
+17.180
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+19.278
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sh3bgrl2
+</td>
+<td style="text-align:left;">
+3.459
+</td>
+<td style="text-align:left;">
+0.194
+</td>
+<td style="text-align:left;">
+15.951
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+18.125
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm12411
+</td>
+<td style="text-align:left;">
+2.477
+</td>
+<td style="text-align:left;">
+0.131
+</td>
+<td style="text-align:left;">
+15.942
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+18.116
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm43444
+</td>
+<td style="text-align:left;">
+3.314
+</td>
+<td style="text-align:left;">
+0.180
+</td>
+<td style="text-align:left;">
+15.272
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+17.443
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sde2
+</td>
+<td style="text-align:left;">
+6.820
+</td>
+<td style="text-align:left;">
+0.397
+</td>
+<td style="text-align:left;">
+14.450
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+16.572
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mpnd
+</td>
+<td style="text-align:left;">
+6.185
+</td>
+<td style="text-align:left;">
+0.346
+</td>
+<td style="text-align:left;">
+14.254
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+16.356
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ticam2
+</td>
+<td style="text-align:left;">
+7.373
+</td>
+<td style="text-align:left;">
+0.475
+</td>
+<td style="text-align:left;">
+13.678
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+15.704
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dcaf15
+</td>
+<td style="text-align:left;">
+5.858
+</td>
+<td style="text-align:left;">
+0.331
+</td>
+<td style="text-align:left;">
+13.374
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+15.348
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C1qc
+</td>
+<td style="text-align:left;">
+-11.302
+</td>
+<td style="text-align:left;">
+9.703
+</td>
+<td style="text-align:left;">
+-12.989
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+14.885
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Svep1
+</td>
+<td style="text-align:left;">
+2.807
+</td>
+<td style="text-align:left;">
+0.166
+</td>
+<td style="text-align:left;">
+12.944
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+14.831
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm45867
+</td>
+<td style="text-align:left;">
+3.617
+</td>
+<td style="text-align:left;">
+0.206
+</td>
+<td style="text-align:left;">
+12.888
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+14.762
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ppp1r26
+</td>
+<td style="text-align:left;">
+1.006
+</td>
+<td style="text-align:left;">
+0.044
+</td>
+<td style="text-align:left;">
+12.003
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+13.637
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm33023
+</td>
+<td style="text-align:left;">
+3.331
+</td>
+<td style="text-align:left;">
+0.194
+</td>
+<td style="text-align:left;">
+11.942
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+13.555
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm37390
+</td>
+<td style="text-align:left;">
+1.001
+</td>
+<td style="text-align:left;">
+0.044
+</td>
+<td style="text-align:left;">
+11.941
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+13.554
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cnn2
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.043
+</td>
+<td style="text-align:left;">
+11.932
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+13.543
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fbxo8
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.043
+</td>
+<td style="text-align:left;">
+11.932
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+13.543
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pex12
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.043
+</td>
+<td style="text-align:left;">
+11.932
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+13.543
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm3755
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.043
+</td>
+<td style="text-align:left;">
+11.932
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+13.543
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sms
+</td>
+<td style="text-align:left;">
+5.076
+</td>
+<td style="text-align:left;">
+0.298
+</td>
+<td style="text-align:left;">
+11.805
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+13.374
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ms4a4b
+</td>
+<td style="text-align:left;">
+4.536
+</td>
+<td style="text-align:left;">
+0.295
+</td>
+<td style="text-align:left;">
+11.730
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+13.273
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gsr
+</td>
+<td style="text-align:left;">
+5.084
+</td>
+<td style="text-align:left;">
+0.297
+</td>
+<td style="text-align:left;">
+11.606
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+13.106
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Strip1
+</td>
+<td style="text-align:left;">
+5.337
+</td>
+<td style="text-align:left;">
+0.696
+</td>
+<td style="text-align:left;">
+11.420
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+12.851
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm42725
+</td>
+<td style="text-align:left;">
+5.149
+</td>
+<td style="text-align:left;">
+0.281
+</td>
+<td style="text-align:left;">
+10.895
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+12.113
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Naalad2
+</td>
+<td style="text-align:left;">
+5.496
+</td>
+<td style="text-align:left;">
+0.908
+</td>
+<td style="text-align:left;">
+10.591
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+11.672
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1810014B01Rik
+</td>
+<td style="text-align:left;">
+2.980
+</td>
+<td style="text-align:left;">
+0.178
+</td>
+<td style="text-align:left;">
+10.589
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+11.668
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AC154640.4
+</td>
+<td style="text-align:left;">
+6.121
+</td>
+<td style="text-align:left;">
+0.409
+</td>
+<td style="text-align:left;">
+10.502
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+11.540
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Erlin1
+</td>
+<td style="text-align:left;">
+5.677
+</td>
+<td style="text-align:left;">
+0.344
+</td>
+<td style="text-align:left;">
+10.470
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+11.492
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm37521
+</td>
+<td style="text-align:left;">
+3.190
+</td>
+<td style="text-align:left;">
+0.194
+</td>
+<td style="text-align:left;">
+10.007
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+10.792
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1190007I07Rik
+</td>
+<td style="text-align:left;">
+5.935
+</td>
+<td style="text-align:left;">
+0.413
+</td>
+<td style="text-align:left;">
+9.822
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+10.505
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm10146
+</td>
+<td style="text-align:left;">
+2.768
+</td>
+<td style="text-align:left;">
+0.180
+</td>
+<td style="text-align:left;">
+9.623
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+10.190
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lrif1
+</td>
+<td style="text-align:left;">
+5.056
+</td>
+<td style="text-align:left;">
+0.317
+</td>
+<td style="text-align:left;">
+9.323
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+9.709
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tada3
+</td>
+<td style="text-align:left;">
+4.831
+</td>
+<td style="text-align:left;">
+0.368
+</td>
+<td style="text-align:left;">
+9.254
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+9.595
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm4739
+</td>
+<td style="text-align:left;">
+4.485
+</td>
+<td style="text-align:left;">
+0.283
+</td>
+<td style="text-align:left;">
+9.118
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+9.372
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gpatch11
+</td>
+<td style="text-align:left;">
+2.482
+</td>
+<td style="text-align:left;">
+0.156
+</td>
+<td style="text-align:left;">
+8.740
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+8.736
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Slfn1
+</td>
+<td style="text-align:left;">
+6.534
+</td>
+<td style="text-align:left;">
+0.421
+</td>
+<td style="text-align:left;">
+8.612
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+8.516
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cog3
+</td>
+<td style="text-align:left;">
+4.858
+</td>
+<td style="text-align:left;">
+0.333
+</td>
+<td style="text-align:left;">
+8.556
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+8.419
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Proser1
+</td>
+<td style="text-align:left;">
+6.161
+</td>
+<td style="text-align:left;">
+0.428
+</td>
+<td style="text-align:left;">
+8.488
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+8.301
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm17229
+</td>
+<td style="text-align:left;">
+3.537
+</td>
+<td style="text-align:left;">
+0.232
+</td>
+<td style="text-align:left;">
+8.149
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.704
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CT025600.1
+</td>
+<td style="text-align:left;">
+3.524
+</td>
+<td style="text-align:left;">
+0.265
+</td>
+<td style="text-align:left;">
+7.941
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.329
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mtrr
+</td>
+<td style="text-align:left;">
+2.207
+</td>
+<td style="text-align:left;">
+0.144
+</td>
+<td style="text-align:left;">
+7.863
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.186
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cep57l1
+</td>
+<td style="text-align:left;">
+1.115
+</td>
+<td style="text-align:left;">
+0.069
+</td>
+<td style="text-align:left;">
+7.793
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+7.058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AC154636.3
+</td>
+<td style="text-align:left;">
+6.033
+</td>
+<td style="text-align:left;">
+0.447
+</td>
+<td style="text-align:left;">
+7.712
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+6.909
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Arhgap11a
+</td>
+<td style="text-align:left;">
+6.000
+</td>
+<td style="text-align:left;">
+0.431
+</td>
+<td style="text-align:left;">
+7.634
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+6.762
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ice1
+</td>
+<td style="text-align:left;">
+5.045
+</td>
+<td style="text-align:left;">
+0.409
+</td>
+<td style="text-align:left;">
+7.502
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+6.515
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Emb
+</td>
+<td style="text-align:left;">
+5.870
+</td>
+<td style="text-align:left;">
+0.469
+</td>
+<td style="text-align:left;">
+7.443
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+6.406
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gle1
+</td>
+<td style="text-align:left;">
+5.026
+</td>
+<td style="text-align:left;">
+0.345
+</td>
+<td style="text-align:left;">
+7.254
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+6.046
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm38699
+</td>
+<td style="text-align:left;">
+3.356
+</td>
+<td style="text-align:left;">
+0.227
+</td>
+<td style="text-align:left;">
+7.208
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+5.957
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tex2
+</td>
+<td style="text-align:left;">
+8.813
+</td>
+<td style="text-align:left;">
+0.534
+</td>
+<td style="text-align:left;">
+7.196
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+5.933
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vac14
+</td>
+<td style="text-align:left;">
+4.954
+</td>
+<td style="text-align:left;">
+0.342
+</td>
+<td style="text-align:left;">
+7.150
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+5.845
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ino80
+</td>
+<td style="text-align:left;">
+4.988
+</td>
+<td style="text-align:left;">
+0.811
+</td>
+<td style="text-align:left;">
+7.130
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+5.806
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm4924
+</td>
+<td style="text-align:left;">
+2.475
+</td>
+<td style="text-align:left;">
+0.203
+</td>
+<td style="text-align:left;">
+7.004
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+5.563
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm36065
+</td>
+<td style="text-align:left;">
+1.885
+</td>
+<td style="text-align:left;">
+0.130
+</td>
+<td style="text-align:left;">
+6.716
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+4.995
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Plac8
+</td>
+<td style="text-align:left;">
+6.623
+</td>
+<td style="text-align:left;">
+0.502
+</td>
+<td style="text-align:left;">
+6.610
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+4.781
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AC187103.1
+</td>
+<td style="text-align:left;">
+0.943
+</td>
+<td style="text-align:left;">
+0.063
+</td>
+<td style="text-align:left;">
+6.519
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+4.599
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Eme2
+</td>
+<td style="text-align:left;">
+8.008
+</td>
+<td style="text-align:left;">
+0.506
+</td>
+<td style="text-align:left;">
+6.246
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+4.043
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N4bp1
+</td>
+<td style="text-align:left;">
+8.477
+</td>
+<td style="text-align:left;">
+0.540
+</td>
+<td style="text-align:left;">
+6.106
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+3.754
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm13369
+</td>
+<td style="text-align:left;">
+5.291
+</td>
+<td style="text-align:left;">
+0.430
+</td>
+<td style="text-align:left;">
+6.097
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+3.735
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cep70
+</td>
+<td style="text-align:left;">
+6.696
+</td>
+<td style="text-align:left;">
+0.427
+</td>
+<td style="text-align:left;">
+6.056
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+3.649
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tfdp1
+</td>
+<td style="text-align:left;">
+5.118
+</td>
+<td style="text-align:left;">
+0.427
+</td>
+<td style="text-align:left;">
+6.036
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+3.607
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ctr9
+</td>
+<td style="text-align:left;">
+6.329
+</td>
+<td style="text-align:left;">
+0.744
+</td>
+<td style="text-align:left;">
+6.026
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+3.587
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Slc2a3
+</td>
+<td style="text-align:left;">
+2.097
+</td>
+<td style="text-align:left;">
+0.289
+</td>
+<td style="text-align:left;">
+5.935
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+3.397
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm2436
+</td>
+<td style="text-align:left;">
+4.020
+</td>
+<td style="text-align:left;">
+0.358
+</td>
+<td style="text-align:left;">
+5.897
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+3.318
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4930404A12Rik
+</td>
+<td style="text-align:left;">
+5.736
+</td>
+<td style="text-align:left;">
+0.469
+</td>
+<td style="text-align:left;">
+5.875
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+3.272
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ddx23
+</td>
+<td style="text-align:left;">
+5.417
+</td>
+<td style="text-align:left;">
+0.761
+</td>
+<td style="text-align:left;">
+5.866
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+3.253
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ppp2r3c
+</td>
+<td style="text-align:left;">
+7.240
+</td>
+<td style="text-align:left;">
+0.773
+</td>
+<td style="text-align:left;">
+5.854
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+3.227
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rad52
+</td>
+<td style="text-align:left;">
+5.795
+</td>
+<td style="text-align:left;">
+0.491
+</td>
+<td style="text-align:left;">
+5.843
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+3.205
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A630001O12Rik
+</td>
+<td style="text-align:left;">
+4.927
+</td>
+<td style="text-align:left;">
+0.394
+</td>
+<td style="text-align:left;">
+5.791
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+3.095
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+9130401M01Rik
+</td>
+<td style="text-align:left;">
+6.217
+</td>
+<td style="text-align:left;">
+0.579
+</td>
+<td style="text-align:left;">
+5.728
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+2.962
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hmga1
+</td>
+<td style="text-align:left;">
+5.089
+</td>
+<td style="text-align:left;">
+0.497
+</td>
+<td style="text-align:left;">
+5.677
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+2.852
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hexa
+</td>
+<td style="text-align:left;">
+-10.196
+</td>
+<td style="text-align:left;">
+7.250
+</td>
+<td style="text-align:left;">
+-5.632
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+2.757
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm10825
+</td>
+<td style="text-align:left;">
+2.904
+</td>
+<td style="text-align:left;">
+0.307
+</td>
+<td style="text-align:left;">
+5.625
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+2.741
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rasgrp1
+</td>
+<td style="text-align:left;">
+2.703
+</td>
+<td style="text-align:left;">
+0.243
+</td>
+<td style="text-align:left;">
+5.602
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+2.693
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm45718
+</td>
+<td style="text-align:left;">
+3.089
+</td>
+<td style="text-align:left;">
+0.355
+</td>
+<td style="text-align:left;">
+5.540
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+2.560
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fam98a
+</td>
+<td style="text-align:left;">
+7.056
+</td>
+<td style="text-align:left;">
+0.543
+</td>
+<td style="text-align:left;">
+5.505
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+2.484
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Birc3
+</td>
+<td style="text-align:left;">
+8.822
+</td>
+<td style="text-align:left;">
+0.973
+</td>
+<td style="text-align:left;">
+5.463
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+2.396
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Smim11
+</td>
+<td style="text-align:left;">
+6.658
+</td>
+<td style="text-align:left;">
+0.714
+</td>
+<td style="text-align:left;">
+5.436
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+2.338
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sept6
+</td>
+<td style="text-align:left;">
+6.240
+</td>
+<td style="text-align:left;">
+0.524
+</td>
+<td style="text-align:left;">
+5.430
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+2.323
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pnisr
+</td>
+<td style="text-align:left;">
+-9.226
+</td>
+<td style="text-align:left;">
+3.742
+</td>
+<td style="text-align:left;">
+-5.399
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+2.258
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Harbi1
+</td>
+<td style="text-align:left;">
+6.804
+</td>
+<td style="text-align:left;">
+0.947
+</td>
+<td style="text-align:left;">
+5.395
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+2.249
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cib2
+</td>
+<td style="text-align:left;">
+6.727
+</td>
+<td style="text-align:left;">
+0.564
+</td>
+<td style="text-align:left;">
+5.266
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.005
+</td>
+<td style="text-align:left;">
+1.970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zfp512
+</td>
+<td style="text-align:left;">
+10.361
+</td>
+<td style="text-align:left;">
+1.100
+</td>
+<td style="text-align:left;">
+5.255
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.005
+</td>
+<td style="text-align:left;">
+1.945
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ell
+</td>
+<td style="text-align:left;">
+7.857
+</td>
+<td style="text-align:left;">
+0.607
+</td>
+<td style="text-align:left;">
+5.241
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.005
+</td>
+<td style="text-align:left;">
+1.914
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C1qa
+</td>
+<td style="text-align:left;">
+-5.605
+</td>
+<td style="text-align:left;">
+9.728
+</td>
+<td style="text-align:left;">
+-5.234
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.005
+</td>
+<td style="text-align:left;">
+1.900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Prrc2c
+</td>
+<td style="text-align:left;">
+-9.812
+</td>
+<td style="text-align:left;">
+3.907
+</td>
+<td style="text-align:left;">
+-5.198
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.006
+</td>
+<td style="text-align:left;">
+1.822
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm6061
+</td>
+<td style="text-align:left;">
+3.034
+</td>
+<td style="text-align:left;">
+0.235
+</td>
+<td style="text-align:left;">
+5.136
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.007
+</td>
+<td style="text-align:left;">
+1.686
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Qser1
+</td>
+<td style="text-align:left;">
+4.869
+</td>
+<td style="text-align:left;">
+0.435
+</td>
+<td style="text-align:left;">
+5.064
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+<td style="text-align:left;">
+1.530
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AC164550.2
+</td>
+<td style="text-align:left;">
+2.768
+</td>
+<td style="text-align:left;">
+0.218
+</td>
+<td style="text-align:left;">
+5.062
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+<td style="text-align:left;">
+1.524
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm37988
+</td>
+<td style="text-align:left;">
+4.109
+</td>
+<td style="text-align:left;">
+0.279
+</td>
+<td style="text-align:left;">
+5.038
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+<td style="text-align:left;">
+1.472
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cpt1a
+</td>
+<td style="text-align:left;">
+7.529
+</td>
+<td style="text-align:left;">
+0.803
+</td>
+<td style="text-align:left;">
+5.001
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.009
+</td>
+<td style="text-align:left;">
+1.392
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hist1h3e
+</td>
+<td style="text-align:left;">
+5.461
+</td>
+<td style="text-align:left;">
+0.436
+</td>
+<td style="text-align:left;">
+4.973
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.009
+</td>
+<td style="text-align:left;">
+1.330
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rpap2
+</td>
+<td style="text-align:left;">
+6.896
+</td>
+<td style="text-align:left;">
+0.639
+</td>
+<td style="text-align:left;">
+4.956
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.009
+</td>
+<td style="text-align:left;">
+1.294
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm38126
+</td>
+<td style="text-align:left;">
+4.560
+</td>
+<td style="text-align:left;">
+0.490
+</td>
+<td style="text-align:left;">
+4.953
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.009
+</td>
+<td style="text-align:left;">
+1.286
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rnaset2b
+</td>
+<td style="text-align:left;">
+-8.436
+</td>
+<td style="text-align:left;">
+7.105
+</td>
+<td style="text-align:left;">
+-4.930
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.010
+</td>
+<td style="text-align:left;">
+1.236
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Idua
+</td>
+<td style="text-align:left;">
+8.029
+</td>
+<td style="text-align:left;">
+0.983
+</td>
+<td style="text-align:left;">
+4.929
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.010
+</td>
+<td style="text-align:left;">
+1.234
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nup54
+</td>
+<td style="text-align:left;">
+0.822
+</td>
+<td style="text-align:left;">
+0.054
+</td>
+<td style="text-align:left;">
+4.916
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.010
+</td>
+<td style="text-align:left;">
+1.205
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lrrc45
+</td>
+<td style="text-align:left;">
+7.832
+</td>
+<td style="text-align:left;">
+0.539
+</td>
+<td style="text-align:left;">
+4.880
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+1.126
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hexb
+</td>
+<td style="text-align:left;">
+-8.893
+</td>
+<td style="text-align:left;">
+9.372
+</td>
+<td style="text-align:left;">
+-4.875
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+1.114
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Slc26a11
+</td>
+<td style="text-align:left;">
+5.704
+</td>
+<td style="text-align:left;">
+0.463
+</td>
+<td style="text-align:left;">
+4.868
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+1.099
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rbm34
+</td>
+<td style="text-align:left;">
+8.200
+</td>
+<td style="text-align:left;">
+0.996
+</td>
+<td style="text-align:left;">
+4.868
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+1.099
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dlg1
+</td>
+<td style="text-align:left;">
+6.594
+</td>
+<td style="text-align:left;">
+0.912
+</td>
+<td style="text-align:left;">
+4.828
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.012
+</td>
+<td style="text-align:left;">
+1.010
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zfand2a
+</td>
+<td style="text-align:left;">
+7.845
+</td>
+<td style="text-align:left;">
+0.760
+</td>
+<td style="text-align:left;">
+4.764
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.013
+</td>
+<td style="text-align:left;">
+0.869
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Xylt1
+</td>
+<td style="text-align:left;">
+3.427
+</td>
+<td style="text-align:left;">
+0.485
+</td>
+<td style="text-align:left;">
+4.708
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.015
+</td>
+<td style="text-align:left;">
+0.746
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mpeg1
+</td>
+<td style="text-align:left;">
+-6.780
+</td>
+<td style="text-align:left;">
+7.133
+</td>
+<td style="text-align:left;">
+-4.700
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.015
+</td>
+<td style="text-align:left;">
+0.729
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zfyve16
+</td>
+<td style="text-align:left;">
+6.676
+</td>
+<td style="text-align:left;">
+0.542
+</td>
+<td style="text-align:left;">
+4.681
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.016
+</td>
+<td style="text-align:left;">
+0.687
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pigyl
+</td>
+<td style="text-align:left;">
+5.377
+</td>
+<td style="text-align:left;">
+0.446
+</td>
+<td style="text-align:left;">
+4.663
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.016
+</td>
+<td style="text-align:left;">
+0.647
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Slamf7
+</td>
+<td style="text-align:left;">
+6.865
+</td>
+<td style="text-align:left;">
+0.559
+</td>
+<td style="text-align:left;">
+4.656
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.016
+</td>
+<td style="text-align:left;">
+0.631
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Apoe
+</td>
+<td style="text-align:left;">
+-10.851
+</td>
+<td style="text-align:left;">
+10.645
+</td>
+<td style="text-align:left;">
+-4.649
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.016
+</td>
+<td style="text-align:left;">
+0.615
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm42857
+</td>
+<td style="text-align:left;">
+-6.895
+</td>
+<td style="text-align:left;">
+3.936
+</td>
+<td style="text-align:left;">
+-4.644
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.017
+</td>
+<td style="text-align:left;">
+0.603
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Prmt3
+</td>
+<td style="text-align:left;">
+6.674
+</td>
+<td style="text-align:left;">
+0.592
+</td>
+<td style="text-align:left;">
+4.628
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.017
+</td>
+<td style="text-align:left;">
+0.570
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fhad1
+</td>
+<td style="text-align:left;">
+2.903
+</td>
+<td style="text-align:left;">
+0.239
+</td>
+<td style="text-align:left;">
+4.626
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.017
+</td>
+<td style="text-align:left;">
+0.564
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nol10
+</td>
+<td style="text-align:left;">
+3.911
+</td>
+<td style="text-align:left;">
+0.364
+</td>
+<td style="text-align:left;">
+4.591
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.018
+</td>
+<td style="text-align:left;">
+0.487
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pdhx
+</td>
+<td style="text-align:left;">
+3.517
+</td>
+<td style="text-align:left;">
+0.288
+</td>
+<td style="text-align:left;">
+4.590
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.018
+</td>
+<td style="text-align:left;">
+0.485
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm26905
+</td>
+<td style="text-align:left;">
+-10.419
+</td>
+<td style="text-align:left;">
+5.057
+</td>
+<td style="text-align:left;">
+-4.583
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.018
+</td>
+<td style="text-align:left;">
+0.470
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sirpb1a
+</td>
+<td style="text-align:left;">
+6.429
+</td>
+<td style="text-align:left;">
+0.539
+</td>
+<td style="text-align:left;">
+4.563
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.019
+</td>
+<td style="text-align:left;">
+0.425
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Slc12a8
+</td>
+<td style="text-align:left;">
+1.777
+</td>
+<td style="text-align:left;">
+0.174
+</td>
+<td style="text-align:left;">
+4.546
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.020
+</td>
+<td style="text-align:left;">
+0.387
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Igsf11
+</td>
+<td style="text-align:left;">
+1.079
+</td>
+<td style="text-align:left;">
+0.096
+</td>
+<td style="text-align:left;">
+4.511
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.021
+</td>
+<td style="text-align:left;">
+0.310
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm37090
+</td>
+<td style="text-align:left;">
+4.102
+</td>
+<td style="text-align:left;">
+0.575
+</td>
+<td style="text-align:left;">
+4.510
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.021
+</td>
+<td style="text-align:left;">
+0.307
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fbxo21
+</td>
+<td style="text-align:left;">
+6.792
+</td>
+<td style="text-align:left;">
+0.482
+</td>
+<td style="text-align:left;">
+4.487
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.022
+</td>
+<td style="text-align:left;">
+0.256
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm16505
+</td>
+<td style="text-align:left;">
+2.716
+</td>
+<td style="text-align:left;">
+0.386
+</td>
+<td style="text-align:left;">
+4.461
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.023
+</td>
+<td style="text-align:left;">
+0.199
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AC183268.1
+</td>
+<td style="text-align:left;">
+3.079
+</td>
+<td style="text-align:left;">
+0.413
+</td>
+<td style="text-align:left;">
+4.457
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.023
+</td>
+<td style="text-align:left;">
+0.189
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm37733
+</td>
+<td style="text-align:left;">
+6.042
+</td>
+<td style="text-align:left;">
+0.837
+</td>
+<td style="text-align:left;">
+4.436
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.024
+</td>
+<td style="text-align:left;">
+0.143
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pex6
+</td>
+<td style="text-align:left;">
+7.916
+</td>
+<td style="text-align:left;">
+0.819
+</td>
+<td style="text-align:left;">
+4.428
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.025
+</td>
+<td style="text-align:left;">
+0.124
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vps36
+</td>
+<td style="text-align:left;">
+6.862
+</td>
+<td style="text-align:left;">
+0.670
+</td>
+<td style="text-align:left;">
+4.416
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.025
+</td>
+<td style="text-align:left;">
+0.098
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ppid
+</td>
+<td style="text-align:left;">
+10.056
+</td>
+<td style="text-align:left;">
+1.694
+</td>
+<td style="text-align:left;">
+4.409
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.025
+</td>
+<td style="text-align:left;">
+0.082
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gpr35
+</td>
+<td style="text-align:left;">
+5.562
+</td>
+<td style="text-align:left;">
+0.593
+</td>
+<td style="text-align:left;">
+4.409
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.025
+</td>
+<td style="text-align:left;">
+0.082
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tcea1-ps1
+</td>
+<td style="text-align:left;">
+3.893
+</td>
+<td style="text-align:left;">
+0.355
+</td>
+<td style="text-align:left;">
+4.385
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.026
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ppp2r2d
+</td>
+<td style="text-align:left;">
+6.806
+</td>
+<td style="text-align:left;">
+0.965
+</td>
+<td style="text-align:left;">
+4.380
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.026
+</td>
+<td style="text-align:left;">
+0.019
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nelfa
+</td>
+<td style="text-align:left;">
+3.818
+</td>
+<td style="text-align:left;">
+0.273
+</td>
+<td style="text-align:left;">
+4.379
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.026
+</td>
+<td style="text-align:left;">
+0.016
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mefv
+</td>
+<td style="text-align:left;">
+6.225
+</td>
+<td style="text-align:left;">
+0.652
+</td>
+<td style="text-align:left;">
+4.378
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.026
+</td>
+<td style="text-align:left;">
+0.014
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Me2
+</td>
+<td style="text-align:left;">
+6.618
+</td>
+<td style="text-align:left;">
+0.561
+</td>
+<td style="text-align:left;">
+4.371
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.027
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2300009A05Rik
+</td>
+<td style="text-align:left;">
+3.891
+</td>
+<td style="text-align:left;">
+0.493
+</td>
+<td style="text-align:left;">
+4.322
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+-0.111
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hnrnpul2
+</td>
+<td style="text-align:left;">
+6.174
+</td>
+<td style="text-align:left;">
+0.752
+</td>
+<td style="text-align:left;">
+4.310
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+-0.138
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tpm3-rs7
+</td>
+<td style="text-align:left;">
+2.746
+</td>
+<td style="text-align:left;">
+0.267
+</td>
+<td style="text-align:left;">
+4.288
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.032
+</td>
+<td style="text-align:left;">
+-0.185
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gabra2
+</td>
+<td style="text-align:left;">
+2.837
+</td>
+<td style="text-align:left;">
+0.470
+</td>
+<td style="text-align:left;">
+4.286
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.032
+</td>
+<td style="text-align:left;">
+-0.191
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Map2k4
+</td>
+<td style="text-align:left;">
+7.239
+</td>
+<td style="text-align:left;">
+0.919
+</td>
+<td style="text-align:left;">
+4.282
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.032
+</td>
+<td style="text-align:left;">
+-0.200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ech1
+</td>
+<td style="text-align:left;">
+9.397
+</td>
+<td style="text-align:left;">
+1.154
+</td>
+<td style="text-align:left;">
+4.281
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.032
+</td>
+<td style="text-align:left;">
+-0.202
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4930481A15Rik
+</td>
+<td style="text-align:left;">
+7.771
+</td>
+<td style="text-align:left;">
+0.954
+</td>
+<td style="text-align:left;">
+4.274
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.032
+</td>
+<td style="text-align:left;">
+-0.217
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mtmr3
+</td>
+<td style="text-align:left;">
+5.946
+</td>
+<td style="text-align:left;">
+0.597
+</td>
+<td style="text-align:left;">
+4.258
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.033
+</td>
+<td style="text-align:left;">
+-0.254
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mfsd4b5
+</td>
+<td style="text-align:left;">
+2.735
+</td>
+<td style="text-align:left;">
+0.311
+</td>
+<td style="text-align:left;">
+4.256
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.033
+</td>
+<td style="text-align:left;">
+-0.258
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fn1
+</td>
+<td style="text-align:left;">
+8.142
+</td>
+<td style="text-align:left;">
+1.215
+</td>
+<td style="text-align:left;">
+4.246
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.034
+</td>
+<td style="text-align:left;">
+-0.280
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ttc32
+</td>
+<td style="text-align:left;">
+7.534
+</td>
+<td style="text-align:left;">
+0.711
+</td>
+<td style="text-align:left;">
+4.203
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.037
+</td>
+<td style="text-align:left;">
+-0.375
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mtr
+</td>
+<td style="text-align:left;">
+5.276
+</td>
+<td style="text-align:left;">
+0.579
+</td>
+<td style="text-align:left;">
+4.196
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.037
+</td>
+<td style="text-align:left;">
+-0.391
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Acot6
+</td>
+<td style="text-align:left;">
+1.818
+</td>
+<td style="text-align:left;">
+0.156
+</td>
+<td style="text-align:left;">
+4.194
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.037
+</td>
+<td style="text-align:left;">
+-0.395
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tnpo2
+</td>
+<td style="text-align:left;">
+7.555
+</td>
+<td style="text-align:left;">
+0.787
+</td>
+<td style="text-align:left;">
+4.180
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.038
+</td>
+<td style="text-align:left;">
+-0.427
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adcy8
+</td>
+<td style="text-align:left;">
+1.797
+</td>
+<td style="text-align:left;">
+0.156
+</td>
+<td style="text-align:left;">
+4.179
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.038
+</td>
+<td style="text-align:left;">
+-0.429
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Khdrbs2
+</td>
+<td style="text-align:left;">
+2.866
+</td>
+<td style="text-align:left;">
+0.270
+</td>
+<td style="text-align:left;">
+4.161
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.039
+</td>
+<td style="text-align:left;">
+-0.469
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ripor1
+</td>
+<td style="text-align:left;">
+7.623
+</td>
+<td style="text-align:left;">
+0.764
+</td>
+<td style="text-align:left;">
+4.119
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.043
+</td>
+<td style="text-align:left;">
+-0.562
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Haus6
+</td>
+<td style="text-align:left;">
+2.903
+</td>
+<td style="text-align:left;">
+0.250
+</td>
+<td style="text-align:left;">
+4.110
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.044
+</td>
+<td style="text-align:left;">
+-0.582
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dcaf5
+</td>
+<td style="text-align:left;">
+6.249
+</td>
+<td style="text-align:left;">
+0.583
+</td>
+<td style="text-align:left;">
+4.104
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.044
+</td>
+<td style="text-align:left;">
+-0.595
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tex10
+</td>
+<td style="text-align:left;">
+5.290
+</td>
+<td style="text-align:left;">
+0.389
+</td>
+<td style="text-align:left;">
+4.098
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.044
+</td>
+<td style="text-align:left;">
+-0.609
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Stk26
+</td>
+<td style="text-align:left;">
+4.345
+</td>
+<td style="text-align:left;">
+0.385
+</td>
+<td style="text-align:left;">
+4.070
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.047
+</td>
+<td style="text-align:left;">
+-0.671
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hist1h2ae
+</td>
+<td style="text-align:left;">
+4.538
+</td>
+<td style="text-align:left;">
+0.541
+</td>
+<td style="text-align:left;">
+4.064
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.047
+</td>
+<td style="text-align:left;">
+-0.685
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+March2
+</td>
+<td style="text-align:left;">
+5.394
+</td>
+<td style="text-align:left;">
+0.758
+</td>
+<td style="text-align:left;">
+4.062
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.047
+</td>
+<td style="text-align:left;">
+-0.689
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm28959
+</td>
+<td style="text-align:left;">
+3.928
+</td>
+<td style="text-align:left;">
+0.441
+</td>
+<td style="text-align:left;">
+4.052
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.048
+</td>
+<td style="text-align:left;">
+-0.711
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mcm2
+</td>
+<td style="text-align:left;">
+5.506
+</td>
+<td style="text-align:left;">
+0.659
+</td>
+<td style="text-align:left;">
+4.043
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.049
+</td>
+<td style="text-align:left;">
+-0.730
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fam193a
+</td>
+<td style="text-align:left;">
+7.138
+</td>
+<td style="text-align:left;">
+0.950
+</td>
+<td style="text-align:left;">
+4.041
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.049
+</td>
+<td style="text-align:left;">
+-0.735
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code>print(res_output[[&quot;plot&quot;]])</code></pre>
+<pre><code>[1] &quot;no significant enrichment identified&quot;</code></pre>
+<p>get results table <a href="LMER_Microglia_5.xlsx">here</a></p>
+</div>
+<div id="granulozytes" class="section level3">
+<h3>Granulozytes</h3>
+<p>calculation not converging as Celltype not identified in all conditions however also rare in other conditions, no significant difference</p>
+<pre class="r"><code>idx=samplemeta$Celltype==&quot;Granulocytes&quot;
+table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx])</code></pre>
+<pre><code>        
+         WT APPPS1+
+  Ctrl    0       2
+  Stroke  6      14</code></pre>
+<pre class="r"><code>table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %&gt;% fisher.test()</code></pre>
+<pre><code>
+    Fisher&#39;s Exact Test for Count Data
+
+data:  .
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.0000 14.7518
+sample estimates:
+odds ratio 
+         0 </code></pre>
+<pre class="r"><code># res_output=generate_output(&quot;Granulocytes &quot;)
+# res_output[[&quot;results_sig&quot;]] %&gt;% display_tab()
+# print(res_output[[&quot;plot&quot;]])</code></pre>
+<p>get results table <a href="LMER_Granulozytes.xlsx">here</a></p>
+</div>
+<div id="t_nk" class="section level3">
+<h3>T_NK</h3>
+<pre class="r"><code>idx=samplemeta$Celltype==&quot;T/NK&quot;
+table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx])</code></pre>
+<pre><code>        
+         WT APPPS1+
+  Ctrl    1       2
+  Stroke  2      17</code></pre>
+<pre class="r"><code>table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %&gt;% fisher.test()</code></pre>
+<pre><code>
+    Fisher&#39;s Exact Test for Count Data
+
+data:  .
+p-value = 0.3708
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+   0.0481749 117.2316789
+sample estimates:
+odds ratio 
+  3.869104 </code></pre>
+<pre class="r"><code># res_output=generate_output(&quot;T/NK&quot;)
+# res_output[[&quot;results_sig&quot;]] %&gt;% display_tab()
+# print(res_output[[&quot;plot&quot;]])</code></pre>
+<p>get results table <a href="LMER_T_NK.xlsx">here</a></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1019,117 +10709,17 @@ Running under: Windows 10 x64 (build 18363)
 Matrix products: default
 
 locale:
-[1] LC_COLLATE=German_Germany.1252  LC_CTYPE=German_Germany.1252   
-[3] LC_MONETARY=German_Germany.1252 LC_NUMERIC=C                   
-[5] LC_TIME=German_Germany.1252    
+[1] LC_COLLATE=German_Germany.1252  LC_CTYPE=German_Germany.1252    LC_MONETARY=German_Germany.1252 LC_NUMERIC=C                    LC_TIME=German_Germany.1252    
 
 attached base packages:
-[1] stats4    stats     graphics  grDevices utils     datasets  methods  
-[8] base     
+[1] stats4    stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] pheatmap_1.0.12             RColorBrewer_1.1-2         
- [3] kableExtra_1.3.4            compareGroups_4.5.1        
- [5] data.table_1.14.2           SingleR_1.8.1              
- [7] SeuratObject_4.0.4          Seurat_4.1.0               
- [9] forcats_0.5.1               stringr_1.4.0              
-[11] dplyr_1.0.7                 purrr_0.3.4                
-[13] readr_2.1.2                 tidyr_1.1.4                
-[15] tibble_3.1.6                ggplot2_3.3.5              
-[17] tidyverse_1.3.1             DESeq2_1.34.0              
-[19] SummarizedExperiment_1.24.0 Biobase_2.54.0             
-[21] MatrixGenerics_1.6.0        matrixStats_0.61.0         
-[23] GenomicRanges_1.46.1        GenomeInfoDb_1.30.1        
-[25] IRanges_2.28.0              S4Vectors_0.32.3           
-[27] BiocGenerics_0.40.0         limma_3.50.0               
-[29] workflowr_1.7.0            
+ [1] gprofiler2_0.2.1            lm.beta_1.5-1               pheatmap_1.0.12             RColorBrewer_1.1-2          kableExtra_1.3.4            viridis_0.6.2               viridisLite_0.4.0           xlsx_0.6.5                  brms_2.16.3                 Rcpp_1.0.8                  compareGroups_4.5.1         data.table_1.14.2           SingleR_1.8.1               SeuratObject_4.0.4          Seurat_4.1.0                forcats_0.5.1               stringr_1.4.0               dplyr_1.0.7                 purrr_0.3.4                 readr_2.1.2                 tidyr_1.1.4                 tibble_3.1.6                ggplot2_3.3.5               tidyverse_1.3.1             DESeq2_1.34.0               SummarizedExperiment_1.24.0 Biobase_2.54.0              MatrixGenerics_1.6.0        matrixStats_0.61.0          GenomicRanges_1.46.1        GenomeInfoDb_1.30.1         IRanges_2.28.0              S4Vectors_0.32.3            BiocGenerics_0.40.0         limma_3.50.0               
 
 loaded via a namespace (and not attached):
-  [1] scattermore_0.7           bit64_4.0.5              
-  [3] knitr_1.37                irlba_2.3.5              
-  [5] DelayedArray_0.20.0       rpart_4.1.16             
-  [7] KEGGREST_1.34.0           RCurl_1.98-1.5           
-  [9] generics_0.1.2            ScaledMatrix_1.2.0       
- [11] callr_3.7.0               cowplot_1.1.1            
- [13] RSQLite_2.2.9             mice_3.14.0              
- [15] RANN_2.6.1                future_1.23.0            
- [17] chron_2.3-56              bit_4.0.4                
- [19] tzdb_0.2.0                spatstat.data_2.1-2      
- [21] webshot_0.5.2             xml2_1.3.3               
- [23] lubridate_1.8.0           httpuv_1.6.5             
- [25] assertthat_0.2.1          xfun_0.29                
- [27] hms_1.1.1                 jquerylib_0.1.4          
- [29] evaluate_0.14             promises_1.2.0.1         
- [31] fansi_1.0.2               dbplyr_2.1.1             
- [33] readxl_1.3.1              igraph_1.2.11            
- [35] DBI_1.1.2                 geneplotter_1.72.0       
- [37] Rsolnp_1.16               htmlwidgets_1.5.4        
- [39] spatstat.geom_2.3-1       ellipsis_0.3.2           
- [41] backports_1.4.1           annotate_1.72.0          
- [43] deldir_1.0-6              sparseMatrixStats_1.6.0  
- [45] vctrs_0.3.8               ROCR_1.0-11              
- [47] abind_1.4-5               cachem_1.0.6             
- [49] withr_2.4.3               HardyWeinberg_1.7.4      
- [51] sctransform_0.3.3         goftest_1.2-3            
- [53] svglite_2.0.0             cluster_2.1.2            
- [55] lazyeval_0.2.2            crayon_1.4.2             
- [57] genefilter_1.76.0         pkgconfig_2.0.3          
- [59] nlme_3.1-155              nnet_7.3-17              
- [61] rlang_1.0.0               globals_0.14.0           
- [63] lifecycle_1.0.1           miniUI_0.1.1.1           
- [65] modelr_0.1.8              rsvd_1.0.5               
- [67] cellranger_1.1.0          rprojroot_2.0.2          
- [69] polyclip_1.10-0           lmtest_0.9-39            
- [71] flextable_0.6.10          Matrix_1.4-0             
- [73] zoo_1.8-9                 reprex_2.0.1             
- [75] base64enc_0.1-3           whisker_0.4              
- [77] ggridges_0.5.3            processx_3.5.2           
- [79] png_0.1-7                 viridisLite_0.4.0        
- [81] bitops_1.0-7              getPass_0.2-2            
- [83] KernSmooth_2.23-20        Biostrings_2.62.0        
- [85] blob_1.2.2                DelayedMatrixStats_1.16.0
- [87] parallelly_1.30.0         beachmat_2.10.0          
- [89] scales_1.1.1              memoise_2.0.1            
- [91] magrittr_2.0.2            plyr_1.8.6               
- [93] ica_1.0-2                 zlibbioc_1.40.0          
- [95] compiler_4.1.2            fitdistrplus_1.1-6       
- [97] cli_3.1.1                 XVector_0.34.0           
- [99] listenv_0.8.0             patchwork_1.1.1          
-[101] pbapply_1.5-0             ps_1.6.0                 
-[103] MASS_7.3-55               mgcv_1.8-38              
-[105] tidyselect_1.1.1          stringi_1.7.6            
-[107] highr_0.9                 yaml_2.2.2               
-[109] BiocSingular_1.10.0       locfit_1.5-9.4           
-[111] ggrepel_0.9.1             grid_4.1.2               
-[113] sass_0.4.0                tools_4.1.2              
-[115] future.apply_1.8.1        parallel_4.1.2           
-[117] rstudioapi_0.13           uuid_1.0-3               
-[119] git2r_0.29.0              gridExtra_2.3            
-[121] farver_2.1.0              Rtsne_0.15               
-[123] digest_0.6.29             shiny_1.7.1              
-[125] Rcpp_1.0.8                broom_0.7.12             
-[127] later_1.3.0               writexl_1.4.0            
-[129] RcppAnnoy_0.0.19          httr_1.4.2               
-[131] gdtools_0.2.3             AnnotationDbi_1.56.2     
-[133] colorspace_2.0-2          rvest_1.0.2              
-[135] XML_3.99-0.8              fs_1.5.2                 
-[137] tensor_1.5                reticulate_1.24          
-[139] truncnorm_1.0-8           splines_4.1.2            
-[141] uwot_0.1.11               spatstat.utils_2.3-0     
-[143] plotly_4.10.0             systemfonts_1.0.3        
-[145] xtable_1.8-4              jsonlite_1.7.3           
-[147] R6_2.5.1                  pillar_1.7.0             
-[149] htmltools_0.5.2           mime_0.12                
-[151] glue_1.6.1                fastmap_1.1.0            
-[153] BiocParallel_1.28.3       BiocNeighbors_1.12.0     
-[155] codetools_0.2-18          utf8_1.2.2               
-[157] lattice_0.20-45           bslib_0.3.1              
-[159] spatstat.sparse_2.1-0     leiden_0.3.9             
-[161] officer_0.4.1             zip_2.2.0                
-[163] survival_3.2-13           rmarkdown_2.11           
-[165] munsell_0.5.0             GenomeInfoDbData_1.2.7   
-[167] haven_2.4.3               reshape2_1.4.4           
-[169] gtable_0.3.0              spatstat.core_2.3-2      </code></pre>
+  [1] scattermore_0.7           coda_0.19-4               bit64_4.0.5               knitr_1.37                dygraphs_1.1.1.6          irlba_2.3.5               DelayedArray_0.20.0       inline_0.3.19             rpart_4.1.16              KEGGREST_1.34.0           RCurl_1.98-1.5            generics_0.1.2            ScaledMatrix_1.2.0        callr_3.7.0               cowplot_1.1.1             RSQLite_2.2.9             mice_3.14.0               RANN_2.6.1                future_1.23.0             chron_2.3-56              bit_4.0.4                 tzdb_0.2.0                spatstat.data_2.1-2       webshot_0.5.2             xml2_1.3.3                lubridate_1.8.0           httpuv_1.6.5              StanHeaders_2.21.0-7      assertthat_0.2.1          xfun_0.29                 rJava_1.0-6               hms_1.1.1                 jquerylib_0.1.4           bayesplot_1.8.1           evaluate_0.14             promises_1.2.0.1          fansi_1.0.2               dbplyr_2.1.1              readxl_1.3.1              igraph_1.2.11             DBI_1.1.2                 geneplotter_1.72.0        Rsolnp_1.16               htmlwidgets_1.5.4         tensorA_0.36.2            spatstat.geom_2.3-1       ellipsis_0.3.2            crosstalk_1.2.0           backports_1.4.1           markdown_1.1              annotate_1.72.0           RcppParallel_5.1.5        deldir_1.0-6              sparseMatrixStats_1.6.0   vctrs_0.3.8               ROCR_1.0-11               abind_1.4-5               cachem_1.0.6              withr_2.4.3               HardyWeinberg_1.7.4       checkmate_2.0.0           sctransform_0.3.3         prettyunits_1.1.1         xts_0.12.1                goftest_1.2-3             svglite_2.0.0             cluster_2.1.2             lazyeval_0.2.2            crayon_1.4.2              genefilter_1.76.0         pkgconfig_2.0.3           nlme_3.1-155              nnet_7.3-17               rlang_1.0.0               globals_0.14.0            lifecycle_1.0.1           miniUI_0.1.1.1            colourpicker_1.1.1        modelr_0.1.8              rsvd_1.0.5                cellranger_1.1.0          distributional_0.3.0      rprojroot_2.0.2           polyclip_1.10-0           lmtest_0.9-39             flextable_0.6.10          Matrix_1.4-0              loo_2.4.1                 zoo_1.8-9                 reprex_2.0.1              base64enc_0.1-3           processx_3.5.2            ggridges_0.5.3            png_0.1-7                 bitops_1.0-7              KernSmooth_2.23-20        Biostrings_2.62.0         blob_1.2.2                DelayedMatrixStats_1.16.0 workflowr_1.7.0           parallelly_1.30.0         shinystan_2.5.0           beachmat_2.10.0           scales_1.1.1              memoise_2.0.1             magrittr_2.0.2            plyr_1.8.6                ica_1.0-2                 threejs_0.3.3             zlibbioc_1.40.0           compiler_4.1.2            rstantools_2.1.1          fitdistrplus_1.1-6        cli_3.1.1                 XVector_0.34.0            listenv_0.8.0             ps_1.6.0                  patchwork_1.1.1           pbapply_1.5-0             Brobdingnag_1.2-7         MASS_7.3-55               mgcv_1.8-38               tidyselect_1.1.1          stringi_1.7.6             highr_0.9                 yaml_2.2.2                BiocSingular_1.10.0       locfit_1.5-9.4            ggrepel_0.9.1             bridgesampling_1.1-2      grid_4.1.2                sass_0.4.0                tools_4.1.2               future.apply_1.8.1        parallel_4.1.2            rstudioapi_0.13           uuid_1.0-3                git2r_0.29.0              gridExtra_2.3             farver_2.1.0              posterior_1.2.0           Rtsne_0.15                digest_0.6.29             shiny_1.7.1               broom_0.7.12              later_1.3.0               writexl_1.4.0             RcppAnnoy_0.0.19          httr_1.4.2                gdtools_0.2.3             AnnotationDbi_1.56.2      rsconnect_0.8.25          colorspace_2.0-2          rvest_1.0.2               XML_3.99-0.8              fs_1.5.2                  tensor_1.5                reticulate_1.24           truncnorm_1.0-8           splines_4.1.2             statmod_1.4.36            uwot_0.1.11               spatstat.utils_2.3-0      xlsxjars_0.6.1            shinythemes_1.2.0         plotly_4.10.0             systemfonts_1.0.3         xtable_1.8-4              jsonlite_1.7.3            rstan_2.21.3              R6_2.5.1                  pillar_1.7.0              htmltools_0.5.2           mime_0.12                 DT_0.20                   glue_1.6.1                fastmap_1.1.0             BiocParallel_1.28.3       BiocNeighbors_1.12.0      codetools_0.2-18          pkgbuild_1.3.1            mvtnorm_1.1-3             utf8_1.2.2                lattice_0.20-45           bslib_0.3.1               spatstat.sparse_2.1-0     leiden_0.3.9              gtools_3.9.2              officer_0.4.1             shinyjs_2.1.0             zip_2.2.0                 survival_3.2-13           rmarkdown_2.11            munsell_0.5.0             GenomeInfoDbData_1.2.7    haven_2.4.3               reshape2_1.4.4            gtable_0.3.0              spatstat.core_2.3-2      </code></pre>
+</div>
 </div>
 </div>
 
