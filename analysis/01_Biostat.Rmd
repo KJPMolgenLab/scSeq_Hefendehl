@@ -13,10 +13,12 @@ library(DESeq2)
 library(tidyverse)
 library(Seurat)
 library(SingleR)
-
+library(data.table)
+library(compareGroups)
 
 home=getwd()
 load(paste0(home,"/data/samples.integrated.RData"))
+source(paste0(home, "/code/custom_functions.R"))
 
 ```
 
@@ -45,21 +47,110 @@ nCells=nrow(samplemeta)
 nMice=nlevels(samplemeta$Mouse_ID)
 nCelltypes=nlevels(samplemeta$Celltype)
 
-table(Mouse_ID=samplemeta$Mouse_ID) %>% as.data.frame()
-
 
 ```
 
-Sample descriptive: 
-Data  contains a total of `r nCells` Cells from `r nMice`. 
+## Sample descriptive: 
 
-Cells per Mouse
+Data  contains a total of `r nCells` Cells from `r nMice`. 
+*Q:* Original raw datset containing only frankfurt data included 1149 cells. What were the filter criteria in the primary cell type analysis
+
+
+**Cells per Mouse**
 ```{r}
-table(Mouse_ID=samplemeta$Mouse_ID) %>% as.data.frame()
+table(Mouse_ID=samplemeta$Mouse_ID) %>% as.data.frame() %>% display_tab()
 
 ```
 Cells per Strain
 ```{r}
-table(Strain=samplemeta$Genotype_corr, Treatment=samplemeta$Treatment) %>% as.data.frame()
+table(Strain=samplemeta$Genotype_corr, Treatment=samplemeta$Treatment) %>% as.data.frame() %>% display_tab()
+
+table(Strain=samplemeta$Genotype_corr, Celltype=samplemeta$Celltype) %>% 
+  as.data.frame() %>% display_tab()
+
+variables=c("Celltype","Sex", "Genotype_corr", "Treatment","Phase", "Brain_region","nCount_RNA","pseudoaligned_reads", "percent.mito", "percent.ribo", "Mouse_ID")
+
+res = compareGroups(Celltype~., data = samplemeta[,variables], max.ylev = 10)
+#summary(res)
+export_table <- createTable(res)
+export_table
 
 ```
+```{r read gene counts}
+
+#get normalized counts 
+# question to Desiree hat the Seurat object been initialized with normalized data?
+counts <- samples.integrated@assays$RNA@counts %>% as.data.frame()
+
+# drop no variance data and sort by samplemeta
+counts <- counts[apply(counts,1, sd) > 0, rownames(samplemeta)]
+
+# drop genes with low detection rate (more than 5 counts per cell)
+counts_per_celltype=apply(counts, 1, function(x){tapply(x, samplemeta$Celltype, function(z){sum(z>5,na.rm=T)})})
+
+# keep RNAs with at least 5 cells with goood expression
+idx=which(colSums(counts_per_celltype)>5)
+
+counts = counts[idx,]
+
+```
+
+
+## Hierarchical clustering 
+
+to check where the variance in the data comes from 
+
+```{r, fig.height=15, fig.width=15}
+log2_cpm = log2(counts+1)
+
+varsset=apply(log2_cpm, 1, var)
+
+cpm.sel.trans = t(log2_cpm[order(varsset,decreasing = T)[1:2000],])
+
+distance = dist(cpm.sel.trans)
+
+sampleDistMatrix <- as.matrix(distance)
+
+#colors for plotting heatmap
+colors <- colorRampPalette(brewer.pal(9, "Spectral"))(255)
+
+cellcol = Dark8[1:nlevels(samplemeta$Celltype)]
+names(cellcol) = levels(samplemeta$Celltype)
+
+genotypecol = brewer.pal(4,"Accent")[c(1:nlevels(samplemeta$Genotype_corr))]
+names(genotypecol) = levels(samplemeta$Genotype_corr)
+
+mousecol = brewer.pal(9,"Set1")[1:nlevels(samplemeta$Mouse_ID)]
+names(mousecol) = levels(samplemeta$Mouse_ID)
+
+braincol = brewer.pal(3,"Set2")[1:nlevels(samplemeta$Brain_region)]
+names(braincol) = levels(samplemeta$Brain_region)
+
+ann_colors = list(
+  Genotype_corr = genotypecol, 
+  Mouse_ID = mousecol,
+  Brain_region = braincol,
+  Celltype=cellcol
+  )
+
+labels = samplemeta[,c("Genotype_corr","Mouse_ID", "Brain_region", "Celltype")] %>%  
+  mutate_all(as.character) %>% as.data.frame()
+
+rownames(labels)=rownames(samplemeta)
+
+pheatmap(sampleDistMatrix,
+         clustering_distance_rows = distance,
+         clustering_distance_cols = distance,
+         clustering_method = "ward.D2",
+         scale ="row",
+         show_rownames=F, show_colnames = F,
+         legend=T,
+         border_color = NA, 
+         annotation_row = labels,
+         annotation_col = labels,
+         annotation_colors = ann_colors,
+         col = colors, 
+         main = "D62 Distances normalized log2 counts")
+
+```
+
