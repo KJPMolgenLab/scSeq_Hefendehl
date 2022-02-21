@@ -38,7 +38,7 @@ samples.integrated@meta.data %>% as.data.frame() -> samplemeta
 
 # convert to correct data type 
 
-# define gentype as is
+# define genotype as is
 samplemeta$Genotype_corr = factor(samplemeta$Genotype=="wt", levels=c(F,T), labels = c("APPPS1+", "WT"))
 samplemeta$Genotype_corr = relevel(samplemeta$Genotype_corr, ref="WT")
 
@@ -85,7 +85,7 @@ variables=c("Celltype","Sex", "Genotype_corr", "Treatment","Phase", "Brain_regio
 ```
 
 Descriptive stats across Cell type
-```{r Compare Celltype}
+```{r Compare Celltype, width=100}
 res = compareGroups(Celltype~., data = samplemeta[,variables], max.ylev = 10)
 #summary(res)
 export_table <- createTable(res)
@@ -95,7 +95,7 @@ export2xls(export_table,paste0(home,"/docs/Descriptives.xlsx"))
 
 ```
 
-download data as excel file [here](Descriptives.docx)
+download data as excel file [here](Descriptives.xlsx)
 
 
 ```{r read gene counts}
@@ -189,7 +189,7 @@ pheatmap(sampleDistMatrix,
 getres=function(Celltype="Specify", 
                 Hypothesis="~1+Sex+Genotype_corr*Treatment", 
                 Target="Genotype_corrAPPPS1+:TreatmentStroke",
-                Randomeffect="Mouse_ID"){
+                Randomeffect="Sex"){
   
   res= comparison_rand(designform =Hypothesis, 
                        randomeffect = Randomeffect, 
@@ -349,3 +349,26 @@ table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %>% fisher.test(
 ```
 
 get results table [here](LMER_T_NK.xlsx)
+
+## Gene expression app
+
+```{r}
+secret="C:/Users/andreas_chiocchetti/OneDrive/personal/fuchs_credentials.R"
+source(secret)
+
+counts=as.data.frame(samples.integrated@assays$RNA@data)
+
+save(list=c("samplemeta", "counts"), file=paste0(home, "/geneviewer/Dataset.RData"))
+
+rsconnect::setAccountInfo(name='molgenlab',
+			  token='86875F8B6550C3A26488035E69B1F18D',
+			  secret=shinySECRET)
+
+rsconnect::deployApp(paste0(home, "/geneviewer"))
+
+```
+
+
+<iframe src="https://molgenlab.shinyapps.io/geneviewer/" height=900px width=900px />
+
+
