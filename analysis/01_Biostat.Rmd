@@ -186,7 +186,7 @@ pheatmap(sampleDistMatrix,
 ```{r define LMER function}
 
 getres=function(Celltype="Specify", 
-                Hypothesis="~1+Sex+Genotype_corr*Treatment", 
+                Hypothesis="~1+Genotype_corr*Treatment", 
                 Target="Genotype_corrAPPPS1+:TreatmentStroke",
                 Randomeffect="Sex"){
   
