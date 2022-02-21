@@ -349,9 +349,9 @@ table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %>% fisher.test(
 
 get results table [here](LMER_T_NK.xlsx)
 
-## Gene expression app
+## Gene expression plot
 
-```{r}
+```{r include=F}
 secret="C:/Users/andreas_chiocchetti/OneDrive/personal/fuchs_credentials.R"
 source(secret)
 
@@ -368,8 +368,10 @@ rsconnect::deployApp(paste0(home, "/geneviewer"))
 ```
 
 
-<iframe src="https://molgenlab.shinyapps.io/geneviewer/" height=900px width=900px />
+<iframe src="https://molgenlab.shinyapps.io/geneviewer/" height=900px width=900px></iframe>
 
- <button onclick="window.location.href = 'https://molgenlab.shinyapps.io/geneviewer/';">im Browser öffnen</button>
+<button onclick="window.location.href='https://molgenlab.shinyapps.io/geneviewer/'">Open in Browser</button>
 
+<p></p>
 
+<p></p>
