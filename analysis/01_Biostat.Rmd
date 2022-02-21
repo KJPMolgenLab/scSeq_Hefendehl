@@ -5,12 +5,11 @@ date: "2 2 2022"
 output: html_document
 ---
 
-
 ```{r, include=F}
 home=getwd()
 ```
 
-```{r setup, include=FALSE}
+```{r setup, include=F}
 knitr::opts_chunk$set(echo = TRUE, fig.height=8, fig.width=15)
 
 library(limma)
@@ -370,5 +369,7 @@ rsconnect::deployApp(paste0(home, "/geneviewer"))
 
 
 <iframe src="https://molgenlab.shinyapps.io/geneviewer/" height=900px width=900px />
+
+ <button onclick="window.location.href = 'https://molgenlab.shinyapps.io/geneviewer/';">im Browser öffnen</button>
 
 
