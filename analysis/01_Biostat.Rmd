@@ -28,6 +28,12 @@ load(paste0(home,"/data/samples.integrated.RData"))
 source(paste0(home, "/code/custom_functions.R"))
 
 
+trimmed_scaled <- function(vec){
+  m <- max(vec, na.rm=T)
+  vec[vec>quantile(vec,.95)] = m
+  return(scale(vec))
+}
+
 
 ```
 
@@ -85,14 +91,14 @@ table(Genotype=samplemeta$Genotype_corr, Celltype=samplemeta$Celltype) %>%
 
 table(Genotype=samplemeta$Genotype_corr, 
       Celltype=samplemeta$Celltype, Treatment=samplemeta$Treatment
-      ) %>% 
+) %>% 
   as.data.frame() %>% display_tab()
 
 variables=c("Celltype","Sex", "Genotype_corr", "Treatment","Phase", "Brain_region","nCount_RNA","pseudoaligned_reads", "percent.mito", "percent.ribo", "Mouse_ID")
 ```
 
 Descriptive stats across Cell type
-```{r Compare Celltype, width=100}
+```{r Compare Celltype}
 res = compareGroups(Celltype~., data = samplemeta[,variables], max.ylev = 10)
 #summary(res)
 export_table <- createTable(res)
@@ -104,6 +110,13 @@ export2xls(export_table,paste0(home,"/docs/Descriptives.xlsx"))
 
 download data as excel file [here](Descriptives.xlsx)
 
+## Preprocessing 
+
+include only genes that are different across samples (5 974 excluded)
+include only genes with more than 10 reads in at least 10 cells in at least one Celltype (21 733 transcripts excluded)
+exclude all cells with less than 10000 reads (none excluded)
+
+649 cells and 11 623 transcripts analyzed
 
 ```{r read gene counts}
 
@@ -115,21 +128,23 @@ counts <- samples.integrated@assays$RNA@counts %>% as.data.frame()
 counts <- counts[apply(counts,1, sd) > 0, rownames(samplemeta)]
 
 # drop genes with low detection rate (more than 5 counts per cell)
-counts_per_celltype=apply(counts, 1, function(x){tapply(x, samplemeta$Celltype, function(z){sum(z>5,na.rm=T)})})
+counts_per_celltype=apply(counts, 1, function(x){tapply(x, samplemeta$Celltype, function(z){sum(z>10,na.rm=T)})}) %>% as.data.frame()
 
-# keep RNAs with at least 10 cells with goood expression
-idx=which(colSums(counts_per_celltype)>10)
+# keep RNAs with at least 10 cells with good expression
+idxr=which(colSums(counts_per_celltype)>10)
 
-counts = counts[idx,]
+idxc=which(colSums(counts)>10000)
 
-
+counts = counts[idxr,idxc]
+samplemeta=samplemeta[colnames(counts), ]
 
 ```
 
-## Overview table
+## Overview tables
 ```{r}
 
-samplemeta$corrGenotype_Treatment=paste0(samplemeta$Genotype_corr," ", samplemeta$Treatment)
+samplemeta$corrGenotype_Treatment<-
+  paste0(samplemeta$Genotype_corr," ", samplemeta$Treatment)
 
 sumstat = counts %>% t() %>%  
   aggregate(by=samplemeta["corrGenotype_Treatment"], mean) %>% 
@@ -147,16 +162,16 @@ sumstatCelltype<-sumstatCelltype[-1,]
 
 
 Geno.Treatment_Anova=apply(counts,1, function(x){
-    res = summary(aov(unlist(x)~samplemeta$corrGenotype_Treatment)) %>% unlist()
-return(res[["Pr(>F)1"]])
-          })
+  res = summary(aov(unlist(x)~samplemeta$corrGenotype_Treatment)) %>% unlist()
+  return(res[["Pr(>F)1"]])
+})
 
 Geno.Treatment_Anova_fdr = p.adjust(Geno.Treatment_Anova, method = "fdr")
 
 Celltype_Anova=apply(counts,1, function(x){
-    res = summary(aov(unlist(x)~samplemeta$Celltype)) %>% unlist()
-return(res[["Pr(>F)1"]])
-          })
+  res = summary(aov(unlist(x)~samplemeta$Celltype)) %>% unlist()
+  return(res[["Pr(>F)1"]])
+})
 
 Celltype_Anova_fdr = p.adjust(Celltype_Anova, method = "fdr")
 
@@ -177,7 +192,7 @@ log2_cpm = log2(counts+1)
 
 varsset=apply(log2_cpm, 1, var)
 
-cpm.sel.trans = t(log2_cpm[order(varsset,decreasing = T)[1:2000],])
+cpm.sel.trans = t(log2_cpm[order(varsset,decreasing = T)[1:1000],])
 
 distance = dist(cpm.sel.trans)
 
@@ -208,12 +223,13 @@ ann_colors = list(
   Mouse_ID = mousecol,
   Brain_region = braincol,
   Celltype=cellcol,
-  Treatment=strokecol
+  Treatment=strokecol, 
+  Age=colorRampPalette(c("skyblue", "dodgerblue4"))(20)
 )
 
-labels = samplemeta[,c("Genotype_corr","Mouse_ID", "Brain_region", "Celltype", "Treatment")] %>%  
+labels = samplemeta[,c("Genotype_corr","Mouse_ID", "Age", "Brain_region", "Celltype", "Treatment")] %>%  
   mutate_all(as.character) %>% as.data.frame()
-
+labels$Age = as.numeric(labels$Age)
 rownames(labels)=rownames(samplemeta)
 
 pheatmap(sampleDistMatrix,
@@ -228,18 +244,24 @@ pheatmap(sampleDistMatrix,
          annotation_col = labels,
          annotation_colors = ann_colors,
          col = colors, 
-         main = "D62 Distances normalized log2 counts")
+         main = "D62 top1000 Distances normalized log2 counts")
 
 ```
 
 ## Genotype X Treatment Statistical modelling
 
+the logFC should not be interpreted on its own without the specific post hoc tests (see app below to check the individual genes) In any case the value here woudl correspond to the APPPS1+ with Stroke against all others.
+
+Heatmaps show standardized deviations from mean across all cells, trimmed to 2 standard deviations ( i.e. values above 2 SD are set to 2 SD). this allows to see more subtle changes better. 
+
+
+
 ```{r define LMER function}
 
 getres=function(Celltype="Specify", 
-                Hypothesis="~1+Genotype_corr*Treatment", 
+                Hypothesis="~1+Sex+Genotype_corr*Treatment", 
                 Target="Genotype_corrAPPPS1+:TreatmentStroke",
-                Randomeffect="Sex"){
+                Randomeffect=NULL){
   
   res= comparison_rand(designform =Hypothesis, 
                        randomeffect = Randomeffect, 
@@ -250,17 +272,21 @@ getres=function(Celltype="Specify",
   
   
   
-  labels = samplemeta[samplemeta$Celltype==Celltype,c("Treatment", "Genotype_corr","Mouse_ID", "Brain_region", "Celltype")] %>%  
+  labels = samplemeta[samplemeta$Celltype==Celltype,c("Treatment","Age", "Genotype_corr","Mouse_ID", "Brain_region", "Celltype")] %>%  
     mutate_all(as.character) %>% as.data.frame()
+  labels$Age = as.numeric(labels$Age)
   
   labels=labels %>% arrange(Treatment,Genotype_corr)
   plotdata=log2_cpm[res$adj.P.Val<0.05,rownames(labels)]
+  plotdata = apply(plotdata, 2, trimmed_scaled)
+  
+  
   
   pheatmap(plotdata,
            #clustering_method = "ward.D2",
            cluster_cols = F,
            cluster_rows  = T,
-           scale ="column",
+           scale ="row",
            show_rownames=F, show_colnames = F,
            legend=T,
            border_color = NA, 
@@ -268,6 +294,7 @@ getres=function(Celltype="Specify",
            annotation_col = labels,
            annotation_colors = ann_colors,
            col = colors, 
+           breaks = seq(-2,2, length.out=254),
            main = "D62 Distances normalized log2 counts")
   return(res)
   
@@ -313,7 +340,7 @@ get results table [here](LMER_Microglia_0.xlsx)
 
 ### Microglia_1
 ```{r Microglia_1, message=F, warning=FALSE}
-res_output=generate_output("Microglia_1")
+res_output=generate_output(CT = "Microglia_1")
 res_output[["results_sig"]] %>% display_tab()
 res_output[["plot"]]
 ```
@@ -413,8 +440,8 @@ samplemeta= cbind(samplemeta, samples.integrated@reductions$umap@cell.embeddings
 save(list=c("samplemeta", "counts"), file=paste0(home, "/geneviewer/Dataset.RData"))
 
 rsconnect::setAccountInfo(name='molgenlab',
-			  token='86875F8B6550C3A26488035E69B1F18D',
-			  secret=shinySECRET)
+                          token='86875F8B6550C3A26488035E69B1F18D',
+                          secret=shinySECRET)
 
 rsconnect::deployApp(paste0(home, "/geneviewer"))
 

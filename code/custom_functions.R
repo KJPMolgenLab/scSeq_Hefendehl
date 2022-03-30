@@ -77,12 +77,10 @@ comparison_rand <- function(designform, randomeffect,
                             Samples, log_cpm, samplesdata,
                             target){
   require(limma)
-
   if(length(Samples)==0){
     print("Sample length is 0 all samples included")
     Samples = colnames(log_cpm)
   }
-
   log_cpm_filt = log_cpm[,Samples]
   samplesfilt=samplesdata[Samples,]
   ## no random effect
@@ -92,6 +90,12 @@ comparison_rand <- function(designform, randomeffect,
     rande = samplesfilt[,randomeffect]
     dupcor <- duplicateCorrelation(log_cpm_filt, design, block=rande)
     fitDupCor <- lmFit(log_cpm_filt, design, block=rande, correlation=dupcor$consensus)
+    fit<- eBayes(fitDupCor)
+    A = topTable(fit,n=dim(fit)[1], coef=target)
+  }
+  if(length(randomeffect)==0){
+    design = model.matrix(as.formula(designform), samplesfilt)
+    fitDupCor <- lmFit(log_cpm_filt, design)
     fit<- eBayes(fitDupCor)
     A = topTable(fit,n=dim(fit)[1], coef=target)
   }
