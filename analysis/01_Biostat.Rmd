@@ -22,10 +22,12 @@ library(compareGroups)
 library(brms)
 library(xlsx)
 library(viridis)
-
+library(DT)
 
 load(paste0(home,"/data/samples.integrated.RData"))
 source(paste0(home, "/code/custom_functions.R"))
+
+
 
 ```
 
@@ -80,6 +82,12 @@ table(Genotype=samplemeta$Genotype_corr, Treatment=samplemeta$Treatment) %>% as.
 table(Genotype=samplemeta$Genotype_corr, Celltype=samplemeta$Celltype) %>% 
   as.data.frame() %>% display_tab()
 
+
+table(Genotype=samplemeta$Genotype_corr, 
+      Celltype=samplemeta$Celltype, Treatment=samplemeta$Treatment
+      ) %>% 
+  as.data.frame() %>% display_tab()
+
 variables=c("Celltype","Sex", "Genotype_corr", "Treatment","Phase", "Brain_region","nCount_RNA","pseudoaligned_reads", "percent.mito", "percent.ribo", "Mouse_ID")
 ```
 
@@ -89,7 +97,7 @@ res = compareGroups(Celltype~., data = samplemeta[,variables], max.ylev = 10)
 #summary(res)
 export_table <- createTable(res)
 options(width = 10000)
-print(export_table)
+export2md(export_table)
 export2xls(export_table,paste0(home,"/docs/Descriptives.xlsx"))
 
 ```
@@ -114,14 +122,57 @@ idx=which(colSums(counts_per_celltype)>10)
 
 counts = counts[idx,]
 
+
+
 ```
+
+## Overview table
+```{r}
+
+samplemeta$corrGenotype_Treatment=paste0(samplemeta$Genotype_corr," ", samplemeta$Treatment)
+
+sumstat = counts %>% t() %>%  
+  aggregate(by=samplemeta["corrGenotype_Treatment"], mean) %>% 
+  t() %>% as.data.frame()
+
+names(sumstat) <- paste0("mean",sumstat[1,])
+sumstat<-sumstat[-1,]
+
+sumstatCelltype = counts %>% t() %>%  
+  aggregate(by=samplemeta["Celltype"], mean) %>% 
+  t() %>% as.data.frame()
+
+names(sumstatCelltype) <- paste0("mean",sumstatCelltype[1,])
+sumstatCelltype<-sumstatCelltype[-1,]
+
+
+Geno.Treatment_Anova=apply(counts,1, function(x){
+    res = summary(aov(unlist(x)~samplemeta$corrGenotype_Treatment)) %>% unlist()
+return(res[["Pr(>F)1"]])
+          })
+
+Geno.Treatment_Anova_fdr = p.adjust(Geno.Treatment_Anova, method = "fdr")
+
+Celltype_Anova=apply(counts,1, function(x){
+    res = summary(aov(unlist(x)~samplemeta$Celltype)) %>% unlist()
+return(res[["Pr(>F)1"]])
+          })
+
+Celltype_Anova_fdr = p.adjust(Celltype_Anova, method = "fdr")
+
+summarytab=cbind(sumstat, Geno.Treatment_Anova, Geno.Treatment_Anova_fdr , sumstatCelltype, Celltype_Anova, Celltype_Anova_fdr)
+
+summarytab %>% display_tab()
+
+```
+
 
 
 ## Hierarchical clustering 
 
 to check where the variance in the data comes from 
 
-```{r basic QC, fig.height=15, fig.width=15}
+```{r basic QC, fig.height=12, fig.width=12}
 log2_cpm = log2(counts+1)
 
 varsset=apply(log2_cpm, 1, var)
@@ -356,6 +407,8 @@ secret="C:/Users/andreas_chiocchetti/OneDrive/personal/fuchs_credentials.R"
 source(secret)
 
 counts=as.data.frame(samples.integrated@assays$RNA@data)
+samplemeta= cbind(samplemeta, samples.integrated@reductions$tsne@cell.embeddings[row.names(samplemeta), ])
+samplemeta= cbind(samplemeta, samples.integrated@reductions$umap@cell.embeddings[row.names(samplemeta), ])
 
 save(list=c("samplemeta", "counts"), file=paste0(home, "/geneviewer/Dataset.RData"))
 

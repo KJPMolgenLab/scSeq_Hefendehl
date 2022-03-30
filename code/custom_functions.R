@@ -18,10 +18,14 @@ OBcolors = colorRampPalette(c("darkblue", "skyb lue",
                               "white",  "orange", "darkorange3"))
 
 display_tab = function(df){
-  df %>% kbl(digits = 3,align = "l") %>%
-    kable_classic(full_width = F, position = "left") %>%
-    scroll_box(width = "900px", height ="500px",
-               fixed_thead = T)
+df %>% DT::datatable(extensions = "Buttons",
+                     options = list(
+                       pageLength = 15,
+                       info = FALSE,
+                       lengthMenu = list(c(15,50, 100, -1),
+                                         c("15","50", "100" ,"All")
+                       ), dom = 'Bfrtip',
+                       buttons = c('copy', 'csv', 'excel')))
 }
 
 
