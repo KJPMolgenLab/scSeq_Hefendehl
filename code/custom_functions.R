@@ -24,7 +24,7 @@ df %>% DT::datatable(extensions = "Buttons",
                        info = FALSE,
                        lengthMenu = list(c(15,50, 100, -1),
                                          c("15","50", "100" ,"All")
-                       ), dom = 'Bfrtip',
+                       ), dom = 'Blfrtip',
                        buttons = c('copy', 'csv', 'excel')))
 }
 
