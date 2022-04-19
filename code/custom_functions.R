@@ -25,7 +25,7 @@ df %>% DT::datatable(extensions = "Buttons",
                        lengthMenu = list(c(15,50, 100, -1),
                                          c("15","50", "100" ,"All")
                        ), dom = 'Blfrtip',
-                       buttons = c('copy', 'csv', 'excel')))
+                       buttons = c('csv', 'excel')))
 }
 
 
@@ -112,6 +112,7 @@ getGOresults = function(geneset, genereference, organism = "mmusculus",
                correction_method = "gSCS",
                domain_scope = "custom",
                sources = sources,
+               evcodes = TRUE,
                custom_bg = genereference,
                numeric_ns = "ENTREZGENE_ACC")
   if(length(resgo) != 0){

@@ -94,7 +94,9 @@ table(Genotype=samplemeta$Genotype_corr,
 ) %>% 
   as.data.frame() %>% display_tab()
 
-variables=c("Celltype","Sex", "Genotype_corr", "Treatment","Phase", "Brain_region","nCount_RNA","pseudoaligned_reads", "percent.mito", "percent.ribo", "Mouse_ID")
+samplemeta$condition=paste0(samplemeta$Genotype_corr,"_", samplemeta$Treatment)
+variables=c("Celltype","Sex", "Age","Genotype_corr", "Treatment", "condition","Phase", "Brain_region","nCount_RNA","pseudoaligned_reads", "percent.mito", "percent.ribo", "Mouse_ID")
+
 ```
 
 Descriptive stats across Cell type
@@ -334,6 +336,8 @@ res_output[["results_sig"]] %>% display_tab()
 res_output[["plot"]]
 
 ```
+Data sources and their abbreviations are: [Gene Ontology](http://geneontology.org/) (GO or by branch GO:MF, GO:BP, GO:CC)[KEGG](https://www.genome.jp/kegg/) (KEGG) [TRANSFAC](https://genexplain.com/transfac/) (TF) [miRTarBase](https://mirtarbase.cuhk.edu.cn/~miRTarBase/miRTarBase_2019/php/index.php) (MIRNA) [CORUM](https://mips.helmholtz-muenchen.de/corum/) (CORUM) [Human phenotype ontology](http://hpo.jax.org/app/) (HP) [Human Protein Atlas](https://www.proteinatlas.org/) (HPA) 
+
 
 get results table [here](LMER_Microglia_0.xlsx)
 
@@ -344,6 +348,7 @@ res_output=generate_output(CT = "Microglia_1")
 res_output[["results_sig"]] %>% display_tab()
 res_output[["plot"]]
 ```
+Data sources and their abbreviations are: [Gene Ontology](http://geneontology.org/) (GO or by branch GO:MF, GO:BP, GO:CC)[KEGG](https://www.genome.jp/kegg/) (KEGG) [TRANSFAC](https://genexplain.com/transfac/) (TF) [miRTarBase](https://mirtarbase.cuhk.edu.cn/~miRTarBase/miRTarBase_2019/php/index.php) (MIRNA) [CORUM](https://mips.helmholtz-muenchen.de/corum/) (CORUM) [Human phenotype ontology](http://hpo.jax.org/app/) (HP) [Human Protein Atlas](https://www.proteinatlas.org/) (HPA)
 
 get results table [here](LMER_Microglia_1.xlsx)
 
@@ -354,6 +359,7 @@ res_output=generate_output("Microglia_2")
 res_output[["results_sig"]] %>% display_tab()
 res_output[["plot"]]
 ```
+Data sources and their abbreviations are: [Gene Ontology](http://geneontology.org/) (GO or by branch GO:MF, GO:BP, GO:CC)[KEGG](https://www.genome.jp/kegg/) (KEGG) [TRANSFAC](https://genexplain.com/transfac/) (TF) [miRTarBase](https://mirtarbase.cuhk.edu.cn/~miRTarBase/miRTarBase_2019/php/index.php) (MIRNA) [CORUM](https://mips.helmholtz-muenchen.de/corum/) (CORUM) [Human phenotype ontology](http://hpo.jax.org/app/) (HP) [Human Protein Atlas](https://www.proteinatlas.org/) (HPA)
 
 get results table [here](LMER_Microglia_2.xlsx)
 
@@ -363,6 +369,7 @@ res_output=generate_output("Microglia_3")
 res_output[["results_sig"]] %>% display_tab()
 res_output[["plot"]]
 ```
+Data sources and their abbreviations are: [Gene Ontology](http://geneontology.org/) (GO or by branch GO:MF, GO:BP, GO:CC)[KEGG](https://www.genome.jp/kegg/) (KEGG) [TRANSFAC](https://genexplain.com/transfac/) (TF) [miRTarBase](https://mirtarbase.cuhk.edu.cn/~miRTarBase/miRTarBase_2019/php/index.php) (MIRNA) [CORUM](https://mips.helmholtz-muenchen.de/corum/) (CORUM) [Human phenotype ontology](http://hpo.jax.org/app/) (HP) [Human Protein Atlas](https://www.proteinatlas.org/) (HPA)
 
 get results table [here](LMER_Microglia_3.xlsx)
 
@@ -391,7 +398,7 @@ res_output[["results_sig"]] %>% display_tab()
 res_output[["plot"]]
 
 ```
-
+Data sources and their abbreviations are: [Gene Ontology](http://geneontology.org/) (GO or by branch GO:MF, GO:BP, GO:CC)[KEGG](https://www.genome.jp/kegg/) (KEGG) [TRANSFAC](https://genexplain.com/transfac/) (TF) [miRTarBase](https://mirtarbase.cuhk.edu.cn/~miRTarBase/miRTarBase_2019/php/index.php) (MIRNA) [CORUM](https://mips.helmholtz-muenchen.de/corum/) (CORUM) [Human phenotype ontology](http://hpo.jax.org/app/) (HP) [Human Protein Atlas](https://www.proteinatlas.org/) (HPA)
 get results table [here](LMER_Microglia_5.xlsx)
 
 
