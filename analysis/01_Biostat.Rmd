@@ -149,35 +149,35 @@ samplemeta$corrGenotype_Treatment<-
   paste0(samplemeta$Genotype_corr," ", samplemeta$Treatment)
 
 sumstat = counts %>% t() %>%  
-  aggregate(by=samplemeta["corrGenotype_Treatment"], mean) %>% 
+  aggregate(by=samplemeta["corrGenotype_Treatment"], median) %>% 
   t() %>% as.data.frame()
 
-names(sumstat) <- paste0("mean",sumstat[1,])
+names(sumstat) <- paste0("median",sumstat[1,])
 sumstat<-sumstat[-1,]
 
 sumstatCelltype = counts %>% t() %>%  
-  aggregate(by=samplemeta["Celltype"], mean) %>% 
+  aggregate(by=samplemeta["Celltype"], median) %>% 
   t() %>% as.data.frame()
 
-names(sumstatCelltype) <- paste0("mean",sumstatCelltype[1,])
+names(sumstatCelltype) <- paste0("median",sumstatCelltype[1,])
 sumstatCelltype<-sumstatCelltype[-1,]
 
 
-Geno.Treatment_Anova=apply(counts,1, function(x){
-  res = summary(aov(unlist(x)~samplemeta$corrGenotype_Treatment)) %>% unlist()
-  return(res[["Pr(>F)1"]])
+Geno.Treatment_kruskal=apply(counts,1, function(x){
+  res = kruskal.test(unlist(x)~samplemeta$corrGenotype_Treatment) %>% unlist()
+  return(as.numeric(res["p.value"]))
 })
 
-Geno.Treatment_Anova_fdr = p.adjust(Geno.Treatment_Anova, method = "fdr")
+Geno.Treatment_kruskal_fdr = p.adjust(Geno.Treatment_kruskal, method = "fdr")
 
-Celltype_Anova=apply(counts,1, function(x){
-  res = summary(aov(unlist(x)~samplemeta$Celltype)) %>% unlist()
-  return(res[["Pr(>F)1"]])
+Celltype_kruskal=apply(counts,1, function(x){
+   res = kruskal.test(unlist(x)~samplemeta$Celltype) %>% unlist()
+  return(as.numeric(res["p.value"]))
 })
 
-Celltype_Anova_fdr = p.adjust(Celltype_Anova, method = "fdr")
+Celltype_kruskal_fdr = p.adjust(Celltype_kruskal, method = "fdr")
 
-summarytab=cbind(sumstat, Geno.Treatment_Anova, Geno.Treatment_Anova_fdr , sumstatCelltype, Celltype_Anova, Celltype_Anova_fdr)
+summarytab=cbind(sumstat, Geno.Treatment_kruskal, Geno.Treatment_kruskal_fdr , sumstatCelltype, Celltype_kruskal, Celltype_kruskal_fdr)
 
 summarytab %>% display_tab()
 
@@ -189,7 +189,7 @@ summarytab %>% display_tab()
 
 to check where the variance in the data comes from 
 
-```{r basic QC, fig.height=12, fig.width=12}
+```{r basic QC, fig.height=10, fig.width=10}
 log2_cpm = log2(counts+1)
 
 varsset=apply(log2_cpm, 1, var)
@@ -220,13 +220,18 @@ names(mousecol) = levels(samplemeta$Mouse_ID)
 braincol = brewer.pal(3,"Set2")[1:nlevels(samplemeta$Brain_region)]
 names(braincol) = levels(samplemeta$Brain_region)
 
+samplemeta$Age = as.factor(samplemeta$Age)
+Agecol = colorRampPalette(c("dodgerblue",
+                          "dodgerblue4"))(nlevels(samplemeta$Age))[1:nlevels(samplemeta$Age)]
+names(Agecol) = as.character(sort(as.numeric(levels(samplemeta$Age))))
+
 ann_colors = list(
   Genotype_corr = genotypecol, 
   Mouse_ID = mousecol,
   Brain_region = braincol,
   Celltype=cellcol,
   Treatment=strokecol, 
-  Age=colorRampPalette(c("skyblue", "dodgerblue4"))(20)
+  Age=Agecol
 )
 
 labels = samplemeta[,c("Genotype_corr","Mouse_ID", "Age", "Brain_region", "Celltype", "Treatment")] %>%  
@@ -240,7 +245,6 @@ pheatmap(sampleDistMatrix,
          clustering_method = "ward.D2",
          scale ="none",
          show_rownames=F, show_colnames = F,
-         legend=T,
          border_color = NA, 
          annotation_row = labels,
          annotation_col = labels,
@@ -249,10 +253,29 @@ pheatmap(sampleDistMatrix,
          main = "D62 top1000 Distances normalized log2 counts")
 
 ```
+```{r fig.height=3, fig.width=10}
+heatmaplegend=function(){
+  plot(0,0,type='n',
+     axes=FALSE,ann=FALSE, 
+     xlim=c(0,1), ylim=c(0,1))
+title(main="legend")
+
+grid=1:length(ann_colors)/length(ann_colors)
+
+for(i in 1:length(ann_colors))
+  legend(x = grid[i],y=1, xpd=T,xjust = 1,
+         title = names(ann_colors[i]),bty = "n",
+         legend=names(ann_colors[[i]]),pch=15, 
+         col = ann_colors[[i]])
+}
+
+heatmaplegend()
+
+```
 
 ## Genotype X Treatment Statistical modelling
 
-the logFC should not be interpreted on its own without the specific post hoc tests (see app below to check the individual genes) In any case the value here woudl correspond to the APPPS1+ with Stroke against all others.
+the logFC should not be interpreted on its own without the specific post hoc tests (see app below to check the individual genes) In any case the value here would correspond to the APPPS1+ with Stroke against all others.
 
 Heatmaps show standardized deviations from mean across all cells, trimmed to 2 standard deviations ( i.e. values above 2 SD are set to 2 SD). this allows to see more subtle changes better. 
 
@@ -325,7 +348,6 @@ generate_output=function(CT="Celltype", ...){
   write.xlsx2(ResGO$result, file = respath, sheetName = "GO_enrichment", append=T)
   return(list(results=analysis,results_sig=analysis_sig, plot=p))
 }
-
 
 ```
 
