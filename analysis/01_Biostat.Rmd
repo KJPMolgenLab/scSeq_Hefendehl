@@ -253,7 +253,7 @@ pheatmap(sampleDistMatrix,
          main = "D62 top1000 Distances normalized log2 counts")
 
 ```
-```{r fig.height=3, fig.width=10}
+```{r fig.height=3, fig.width=10, echo=F}
 heatmaplegend=function(){
   plot(0,0,type='n',
      axes=FALSE,ann=FALSE, 
