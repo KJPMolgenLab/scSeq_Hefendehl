@@ -19,6 +19,7 @@ OBcolors = colorRampPalette(c("darkblue", "skyb lue",
 
 display_tab = function(df){
 df %>% DT::datatable(extensions = "Buttons",
+                     filter="top",
                      options = list(
                        pageLength = 15,
                        info = FALSE,

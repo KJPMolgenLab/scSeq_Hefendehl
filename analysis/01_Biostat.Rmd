@@ -28,6 +28,7 @@ load(paste0(home,"/data/samples.integrated.RData"))
 source(paste0(home, "/code/custom_functions.R"))
 
 
+
 trimmed_scaled <- function(vec){
   m <- max(vec, na.rm=T)
   vec[vec>quantile(vec,.95)] = m
