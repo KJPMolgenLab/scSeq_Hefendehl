@@ -144,7 +144,7 @@ samplemeta=samplemeta[colnames(counts), ]
 ```
 
 ## Overview tables
-```{r}
+```{r summary tables}
 
 samplemeta$corrGenotype_Treatment<-
   paste0(samplemeta$Genotype_corr," ", samplemeta$Treatment)
@@ -255,7 +255,8 @@ pheatmap(sampleDistMatrix,
          main = "D62 top1000 Distances normalized log2 counts")
 
 ```
-```{r fig.height=3, fig.width=10, echo=F}
+
+```{r heatmap_legend, fig.height=3, fig.width=10, echo=F}
 heatmaplegend=function(){
   plot(0,0,type='n',
      axes=FALSE,ann=FALSE, 
@@ -458,11 +459,43 @@ table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %>% fisher.test(
 
 get results table [here](LMER_T_NK.xlsx)
 
+```{r calculate pseudotime}
+
+library(slingshot)
+library(SingleCellExperiment)
+
+sce=as.SingleCellExperiment(samples.integrated)
+sce <- slingshot(sce, clusterLabels = 'Celltype', reducedDim = 'UMAP')
+
+colors <- viridis(100)
+plotcol <- colors[cut(sce$slingPseudotime_1, breaks=100)]
+
+plot(reducedDims(sce)$UMAP, col = plotcol, pch=16, asp = 1)
+lines(SlingshotDataSet(sce), lwd=2, col='black', type="l")
+
+samplemeta$Pseudotime <- sce$slingPseudotime_1
+
+
+```
+
+
+
 ## Gene expression plot
 
-```{r include=F}
-secret="C:/Users/andreas_chiocchetti/OneDrive/personal/fuchs_credentials.R"
+```{r setapp, include=F}
+
+
+secret="/Users/andreas_chiocchetti/fuchs_credentials.R"
 source(secret)
+
+local({
+  r <- getOption("repos")
+  r["CRAN"] <- "https://cran.rstudio.com/"
+  r["BioCsoft"] <- "https://bioconductor.org/packages/release/bioc"
+  r["BioCann"] <- "https://bioconductor.org/packages/release/data/annotation"
+  r["BioCexp"] <- "https://bioconductor.org/packages/release/data/experiment"
+  options(repos = r)
+})
 
 counts=as.data.frame(samples.integrated@assays$RNA@data)
 samplemeta= cbind(samplemeta, samples.integrated@reductions$tsne@cell.embeddings[row.names(samplemeta), ])
@@ -473,6 +506,7 @@ save(list=c("samplemeta", "counts"), file=paste0(home, "/geneviewer/Dataset.RDat
 rsconnect::setAccountInfo(name='molgenlab',
                           token='86875F8B6550C3A26488035E69B1F18D',
                           secret=shinySECRET)
+
 
 rsconnect::deployApp(paste0(home, "/geneviewer"))
 
