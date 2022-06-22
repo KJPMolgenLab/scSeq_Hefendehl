@@ -363,7 +363,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -374,8 +374,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -388,9 +388,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>scSeq_Hefendehl/</code> <span
@@ -413,21 +413,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -518,15 +515,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreefaf20e9100d4b3d33fecbcf253b6ee1fde775ad7targetblankfaf20e9a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreecfbfcf64e976caa763142f22cfebdc2e47b49b43targetblankcfbfcf6a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/faf20e9100d4b3d33fecbcf253b6ee1fde775ad7" target="_blank">faf20e9</a>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/cfbfcf64e976caa763142f22cfebdc2e47b49b43" target="_blank">cfbfcf6</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreefaf20e9100d4b3d33fecbcf253b6ee1fde775ad7targetblankfaf20e9a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreecfbfcf64e976caa763142f22cfebdc2e47b49b43targetblankcfbfcf6a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -536,7 +533,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/faf20e9100d4b3d33fecbcf253b6ee1fde775ad7" target="_blank">faf20e9</a>.
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/cfbfcf64e976caa763142f22cfebdc2e47b49b43" target="_blank">cfbfcf6</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -575,14 +572,6 @@ Unstaged changes:
     Modified:   .gitignore
     Modified:   README.md
     Modified:   _workflowr.yml
-    Modified:   analysis/00_Original_Analysis.Rmd
-    Modified:   analysis/01_Biostat.Rmd
-    Modified:   analysis/_site.yml
-    Modified:   analysis/about.Rmd
-    Modified:   analysis/index.Rmd
-    Modified:   analysis/license.Rmd
-    Modified:   code/README.md
-    Modified:   code/custom_functions.R
     Modified:   data/README.md
     Modified:   geneviewer/app.R
     Modified:   geneviewer/rsconnect/shinyapps.io/molgenlab/geneviewer.dcf
@@ -633,6 +622,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/analysis/00_Original_Analysis.Rmd" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+<td>
+wflow_publish(c("analysis/<em>", "docs/</em>", "code/*"))
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/KJPMolgenLab/scSeq_Hefendehl/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/00_Original_Analysis.html" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+<td>
+wflow_publish(c("analysis/<em>", "docs/</em>", "code/*"))
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -978,6 +1001,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-3-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/faf20e9100d4b3d33fecbcf253b6ee1fde775ad7/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-3-1.png" target="_blank">faf20e9</a>
 </td>
 <td>
@@ -1072,6 +1106,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-3-2.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-3-2.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -1159,6 +1204,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-4-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/faf20e9100d4b3d33fecbcf253b6ee1fde775ad7/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-4-1.png" target="_blank">faf20e9</a>
@@ -1255,6 +1311,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-4-2.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-4-2.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -1318,6 +1385,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-5-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-5-1.png" target="_blank">9b778b1</a>
@@ -1405,6 +1483,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-6-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-6-1.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -1485,6 +1574,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-6-2.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-6-2.png" target="_blank">9b778b1</a>
@@ -1575,6 +1675,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-7-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-7-1.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -1658,6 +1769,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-7-2.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-7-2.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -1717,6 +1839,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-7-3.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-7-3.png" target="_blank">9b778b1</a>
@@ -1780,6 +1913,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-7-4.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-7-4.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -1839,6 +1983,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-7-5.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-7-5.png" target="_blank">9b778b1</a>
@@ -1908,6 +2063,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/cell cycle scoring-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/cell cycle scoring-1.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -1966,6 +2132,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/cell cycle scoring-2.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/cell cycle scoring-2.png" target="_blank">9b778b1</a>
@@ -2030,6 +2207,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/cluster distribution-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/cluster distribution-1.png" target="_blank">9b778b1</a>
@@ -2115,6 +2303,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/cluster distribution-2.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/cluster distribution-2.png" target="_blank">9b778b1</a>
@@ -2283,6 +2482,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/cell distribution per cluster-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/cell distribution per cluster-1.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -2420,6 +2630,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/cell distribution per cluster-2.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/cell distribution per cluster-2.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -2510,6 +2731,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/Marker genes-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/Marker genes-1.png" target="_blank">9b778b1</a>
@@ -2629,6 +2861,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/cell distribution MouseRNASeq-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/cell distribution MouseRNASeq-1.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -2716,6 +2959,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/cell distribution MouseRNASeq-2.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/cell distribution MouseRNASeq-2.png" target="_blank">9b778b1</a>
@@ -2820,6 +3074,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/cell distribution immgen-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/faf20e9100d4b3d33fecbcf253b6ee1fde775ad7/docs/figure/00_Original_Analysis.Rmd/cell distribution immgen-1.png" target="_blank">faf20e9</a>
 </td>
 <td>
@@ -2897,6 +3162,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/cell distribution immgen-2.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/faf20e9100d4b3d33fecbcf253b6ee1fde775ad7/docs/figure/00_Original_Analysis.Rmd/cell distribution immgen-2.png" target="_blank">faf20e9</a>
 </td>
 <td>
@@ -2968,6 +3244,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-8-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-8-1.png" target="_blank">9b778b1</a>
@@ -3059,6 +3346,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/subclustering microglia-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/subclustering microglia-1.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -3145,6 +3443,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/Stage 2 DAMs-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/Stage 2 DAMs-1.png" target="_blank">9b778b1</a>
@@ -3234,6 +3543,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-9-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-9-1.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -3316,6 +3636,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-10-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/faf20e9100d4b3d33fecbcf253b6ee1fde775ad7/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-10-1.png" target="_blank">faf20e9</a>
 </td>
 <td>
@@ -3385,6 +3716,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-10-2.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/faf20e9100d4b3d33fecbcf253b6ee1fde775ad7/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-10-2.png" target="_blank">faf20e9</a>
@@ -3458,6 +3800,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-10-3.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/faf20e9100d4b3d33fecbcf253b6ee1fde775ad7/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-10-3.png" target="_blank">faf20e9</a>
 </td>
 <td>
@@ -3527,6 +3880,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-10-4.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/faf20e9100d4b3d33fecbcf253b6ee1fde775ad7/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-10-4.png" target="_blank">faf20e9</a>
@@ -3600,6 +3964,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-10-5.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/faf20e9100d4b3d33fecbcf253b6ee1fde775ad7/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-10-5.png" target="_blank">faf20e9</a>
 </td>
 <td>
@@ -3669,6 +4044,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-10-6.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/faf20e9100d4b3d33fecbcf253b6ee1fde775ad7/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-10-6.png" target="_blank">faf20e9</a>
@@ -3745,6 +4131,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/cluster renaming-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/cluster renaming-1.png" target="_blank">9b778b1</a>
@@ -3867,6 +4264,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-21-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-21-1.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -3948,6 +4356,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-22-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-22-1.png" target="_blank">9b778b1</a>
@@ -4033,6 +4452,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-23-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-23-1.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -4114,6 +4544,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-24-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-24-1.png" target="_blank">9b778b1</a>
@@ -4199,6 +4640,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-25-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-25-1.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -4282,6 +4734,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/cfbfcf64e976caa763142f22cfebdc2e47b49b43/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-26-1.png" target="_blank">cfbfcf6</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/9b778b1461f069bd3cca3cb5f3ae21317fcb06cf/docs/figure/00_Original_Analysis.Rmd/unnamed-chunk-26-1.png" target="_blank">9b778b1</a>
 </td>
 <td>
@@ -4327,12 +4790,12 @@ Session information
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 4.2.0 (2022-04-22)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Monterey 12.4
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Big Sur/Monterey 10.16
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -4351,19 +4814,20 @@ other attached packages:
 [13] MatrixGenerics_1.8.0        matrixStats_0.62.0         
 [15] ggplot2_3.3.6               sp_1.5-0                   
 [17] SeuratObject_4.1.0          Seurat_4.1.1               
+[19] workflowr_1.7.0            
 
 loaded via a namespace (and not attached):
-  [1] workflowr_1.7.0           plyr_1.8.7               
-  [3] igraph_1.3.2              lazyeval_0.2.2           
-  [5] splines_4.2.0             BiocParallel_1.30.3      
-  [7] listenv_0.8.0             scattermore_0.8          
-  [9] digest_0.6.29             htmltools_0.5.2          
- [11] fansi_1.0.3               magrittr_2.0.3           
- [13] ScaledMatrix_1.4.0        tensor_1.5               
- [15] cluster_2.1.3             ROCR_1.0-11              
- [17] globals_0.15.0            spatstat.sparse_2.1-1    
- [19] colorspace_2.0-3          xfun_0.31                
- [21] dplyr_1.0.9               crayon_1.5.1             
+  [1] plyr_1.8.7                igraph_1.3.2             
+  [3] lazyeval_0.2.2            splines_4.2.0            
+  [5] BiocParallel_1.30.3       listenv_0.8.0            
+  [7] scattermore_0.8           digest_0.6.29            
+  [9] htmltools_0.5.2           fansi_1.0.3              
+ [11] magrittr_2.0.3            ScaledMatrix_1.4.0       
+ [13] tensor_1.5                cluster_2.1.3            
+ [15] ROCR_1.0-11               globals_0.15.0           
+ [17] spatstat.sparse_2.1-1     colorspace_2.0-3         
+ [19] xfun_0.31                 dplyr_1.0.9              
+ [21] callr_3.7.0               crayon_1.5.1             
  [23] RCurl_1.98-1.7            jsonlite_1.8.0           
  [25] progressr_0.10.1          spatstat.data_2.2-0      
  [27] survival_3.3-1            zoo_1.8-10               
@@ -4389,37 +4853,38 @@ loaded via a namespace (and not attached):
  [67] generics_0.1.2            ggridges_0.5.3           
  [69] evaluate_0.15             stringr_1.4.0            
  [71] fastmap_1.1.0             yaml_2.3.5               
- [73] goftest_1.2-3             knitr_1.39               
- [75] fs_1.5.2                  fitdistrplus_1.1-8       
- [77] purrr_0.3.4               RANN_2.6.1               
- [79] sparseMatrixStats_1.8.0   pbapply_1.5-0            
- [81] future_1.26.1             nlme_3.1-157             
- [83] whisker_0.4               mime_0.12                
- [85] compiler_4.2.0            rstudioapi_0.13          
- [87] plotly_4.10.0             png_0.1-7                
- [89] spatstat.utils_2.3-1      tibble_3.1.7             
- [91] bslib_0.3.1               stringi_1.7.6            
- [93] highr_0.9                 rgeos_0.5-9              
- [95] lattice_0.20-45           Matrix_1.4-1             
- [97] vctrs_0.4.1               pillar_1.7.0             
- [99] lifecycle_1.0.1           spatstat.geom_2.4-0      
-[101] lmtest_0.9-40             jquerylib_0.1.4          
-[103] BiocNeighbors_1.14.0      RcppAnnoy_0.0.19         
-[105] data.table_1.14.2         cowplot_1.1.1            
-[107] bitops_1.0-7              irlba_2.3.5              
-[109] httpuv_1.6.5              patchwork_1.1.1          
-[111] R6_2.5.1                  promises_1.2.0.1         
-[113] KernSmooth_2.23-20        gridExtra_2.3            
-[115] parallelly_1.32.0         codetools_0.2-18         
-[117] MASS_7.3-56               assertthat_0.2.1         
-[119] rprojroot_2.0.3           withr_2.5.0              
-[121] sctransform_0.3.3         GenomeInfoDbData_1.2.8   
-[123] mgcv_1.8-40               parallel_4.2.0           
-[125] beachmat_2.12.0           grid_4.2.0               
-[127] rpart_4.1.16              tidyr_1.2.0              
-[129] DelayedMatrixStats_1.18.0 rmarkdown_2.14           
-[131] Rtsne_0.16                git2r_0.30.1             
-[133] shiny_1.7.1              </code></pre>
+ [73] goftest_1.2-3             processx_3.6.1           
+ [75] knitr_1.39                fs_1.5.2                 
+ [77] fitdistrplus_1.1-8        purrr_0.3.4              
+ [79] RANN_2.6.1                sparseMatrixStats_1.8.0  
+ [81] pbapply_1.5-0             future_1.26.1            
+ [83] nlme_3.1-158              whisker_0.4              
+ [85] mime_0.12                 compiler_4.2.0           
+ [87] rstudioapi_0.13           plotly_4.10.0            
+ [89] png_0.1-7                 spatstat.utils_2.3-1     
+ [91] tibble_3.1.7              bslib_0.3.1              
+ [93] stringi_1.7.6             highr_0.9                
+ [95] ps_1.7.1                  rgeos_0.5-9              
+ [97] lattice_0.20-45           Matrix_1.4-1             
+ [99] vctrs_0.4.1               pillar_1.7.0             
+[101] lifecycle_1.0.1           spatstat.geom_2.4-0      
+[103] lmtest_0.9-40             jquerylib_0.1.4          
+[105] BiocNeighbors_1.14.0      RcppAnnoy_0.0.19         
+[107] data.table_1.14.2         cowplot_1.1.1            
+[109] bitops_1.0-7              irlba_2.3.5              
+[111] httpuv_1.6.5              patchwork_1.1.1          
+[113] R6_2.5.1                  promises_1.2.0.1         
+[115] KernSmooth_2.23-20        gridExtra_2.3            
+[117] parallelly_1.32.0         codetools_0.2-18         
+[119] MASS_7.3-57               assertthat_0.2.1         
+[121] rprojroot_2.0.3           withr_2.5.0              
+[123] sctransform_0.3.3         GenomeInfoDbData_1.2.8   
+[125] mgcv_1.8-40               parallel_4.2.0           
+[127] beachmat_2.12.0           grid_4.2.0               
+[129] rpart_4.1.16              tidyr_1.2.0              
+[131] DelayedMatrixStats_1.18.0 rmarkdown_2.14           
+[133] Rtsne_0.16                git2r_0.30.1             
+[135] getPass_0.2-2             shiny_1.7.1              </code></pre>
 </div>
 </div>
 </div>
