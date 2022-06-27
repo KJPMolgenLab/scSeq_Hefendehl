@@ -23,10 +23,11 @@ library(brms)
 library(xlsx)
 library(viridis)
 library(DT)
+library(slingshot)
+library(SingleCellExperiment)
 
 load(paste0(home,"/data/samples.integrated.RData"))
 source(paste0(home, "/code/custom_functions.R"))
-
 
 
 trimmed_scaled <- function(vec){
@@ -96,7 +97,13 @@ table(Genotype=samplemeta$Genotype_corr,
   as.data.frame() %>% display_tab()
 
 samplemeta$condition=paste0(samplemeta$Genotype_corr,"_", samplemeta$Treatment)
-variables=c("Celltype","Sex", "Age","Genotype_corr", "Treatment", "condition","Phase", "Brain_region","nCount_RNA","pseudoaligned_reads", "percent.mito", "percent.ribo", "Mouse_ID")
+
+sce=as.SingleCellExperiment(samples.integrated)
+sce <- slingshot(sce, clusterLabels = 'Celltype', reducedDim = 'UMAP')
+samplemeta$Pseudotime <- sce$slingPseudotime_1
+
+variables=c("Celltype","Sex", "Age","Genotype_corr", "Treatment", "condition","Phase", "Pseudotime","Brain_region","nCount_RNA","pseudoaligned_reads", "percent.mito", "percent.ribo", "Mouse_ID")
+
 
 ```
 
@@ -459,22 +466,25 @@ table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %>% fisher.test(
 
 get results table [here](LMER_T_NK.xlsx)
 
+## Pseudotime analysis 
+
 ```{r calculate pseudotime}
 
-library(slingshot)
-library(SingleCellExperiment)
-
-sce=as.SingleCellExperiment(samples.integrated)
-sce <- slingshot(sce, clusterLabels = 'Celltype', reducedDim = 'UMAP')
 
 colors <- viridis(100)
 plotcol <- colors[cut(sce$slingPseudotime_1, breaks=100)]
 
-plot(reducedDims(sce)$UMAP, col = plotcol, pch=16, asp = 1)
+plot(reducedDims(sce)$UMAP, col = "grey", pch=16, asp = 1)
+points(reducedDims(sce)$UMAP, col = plotcol, pch=16, asp = 1)
 lines(SlingshotDataSet(sce), lwd=2, col='black', type="l")
 
-samplemeta$Pseudotime <- sce$slingPseudotime_1
 
+
+plot(samplemeta$Pseudotime[samplemeta$condition == "WT_Ctrl"] %>% density(na.rm=T), col=Dark8[1], lwd=2, xlab="Pseudotime", main="distribution of cells over pseudotime")
+lines(samplemeta$Pseudotime[samplemeta$condition == "APPPS1+_Stroke"] %>% density(na.rm=T), col=Dark8[2], lwd=2)
+lines(samplemeta$Pseudotime[samplemeta$condition == "WT_Stroke"] %>% density(na.rm=T), col=Dark8[3], lwd=2)
+lines(samplemeta$Pseudotime[samplemeta$condition == "APPPS1+_Ctrl"] %>% density(na.rm=T), col=Dark8[4], lwd=2)
+legend("topright", legend=c("WT_Ctrl","APPPS1+_Stroke","WT_Stroke","APPPS1+_Ctrl"), fill = Dark8[1:4])
 
 ```
 
@@ -483,7 +493,6 @@ samplemeta$Pseudotime <- sce$slingPseudotime_1
 ## Gene expression plot
 
 ```{r setapp, include=F}
-
 
 secret="/Users/andreas_chiocchetti/fuchs_credentials.R"
 source(secret)
