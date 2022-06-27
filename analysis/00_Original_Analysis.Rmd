@@ -10,7 +10,6 @@ output:
 ```{r ,message=FALSE, warning=FALSE, include=FALSE}
 home=getwd()
 
-
 ep_str_wrap <- function(string, width) {
     x <- gregexpr(' ', string)
     vapply(seq_along(x),
