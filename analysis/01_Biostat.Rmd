@@ -5,10 +5,6 @@ date: "2 2 2022"
 output: html_document
 ---
 
-```{r, include=F}
-home=getwd()
-```
-
 ```{r setup, include=F}
 knitr::opts_chunk$set(echo = TRUE, fig.height=8, fig.width=15)
 
@@ -26,9 +22,8 @@ library(DT)
 library(slingshot)
 library(SingleCellExperiment)
 
-load(paste0(home,"/data/samples.integrated.RData"))
-source(paste0(home, "/code/custom_functions.R"))
-
+load("./output/integrated_analysis.RData")
+source("./code/custom_functions.R")
 
 trimmed_scaled <- function(vec){
   m <- max(vec, na.rm=T)
@@ -45,20 +40,23 @@ trimmed_scaled <- function(vec){
 #get sample data
 samples.integrated@meta.data %>% as.data.frame() -> samplemeta
 
+
 # convert to correct data type 
 
 # define genotype as is
-samplemeta$Genotype_corr = factor(samplemeta$Genotype=="wt", levels=c(F,T), labels = c("APPPS1+", "WT"))
+samplemeta$Genotype_corr = factor(samplemeta$Genotype=="WT", levels=c(F,T), labels = c("APPPS1+", "WT"))
 samplemeta$Genotype_corr = relevel(samplemeta$Genotype_corr, ref="WT")
 
-samplemeta$methoxy = factor(samplemeta$Genotype=="MX04+", levels=c(T,F), labels = c("MX04+", "MX04-"))
+samplemeta$methoxy = factor(samplemeta$Methoxy=="pos", levels=c(T,F), labels = c("MX04+", "MX04-"))
 
 samplemeta$Treatment = as.factor(samplemeta$Treatment)
 samplemeta$Treatment = relevel(samplemeta$Treatment, ref="Ctrl")
 samplemeta$Mouse_ID = as.factor(samplemeta$Mouse_ID)
-samplemeta$Sex = as.factor(samplemeta$Sex)
+samplemeta$Sex = as.factor(samplemeta$Gender)
 samplemeta$Brain_region = as.factor(samplemeta$Brain_region)
 samplemeta$Celltype = as.factor(samplemeta$Celltype)
+
+samples.integrated@meta.data = samplemeta
 
 nCells=nrow(samplemeta)
 nMice=nlevels(samplemeta$Mouse_ID)
@@ -70,8 +68,6 @@ nCelltypes=nlevels(samplemeta$Celltype)
 ## Sample descriptive: 
 
 Data  contains a total of `r nCells` Cells from `r nMice`. 
-*Q:* Original raw datset containing only frankfurt data included 1149 cells. What were the filter criteria in the primary cell type analysis
-
 
 **Cells per Mouse**
 
@@ -82,7 +78,7 @@ table(Mouse_ID=samplemeta$Mouse_ID) %>% as.data.frame() %>% display_tab()
 
 ```
 
-Cells per Genotype
+**Cells per Genotype**
 
 ```{r Cells per Strain}
 table(Genotype=samplemeta$Genotype_corr, Treatment=samplemeta$Treatment) %>% as.data.frame() %>% display_tab()
@@ -97,13 +93,15 @@ table(Genotype=samplemeta$Genotype_corr,
   as.data.frame() %>% display_tab()
 
 samplemeta$condition=paste0(samplemeta$Genotype_corr,"_", samplemeta$Treatment)
+samples.integrated@meta.data = samplemeta
 
 sce=as.SingleCellExperiment(samples.integrated)
+
 sce <- slingshot(sce, clusterLabels = 'Celltype', reducedDim = 'UMAP')
 samplemeta$Pseudotime <- sce$slingPseudotime_1
+samples.integrated@meta.data = samplemeta
 
-variables=c("Celltype","Sex", "Age","Genotype_corr", "Treatment", "condition","Phase", "Pseudotime","Brain_region","nCount_RNA","pseudoaligned_reads", "percent.mito", "percent.ribo", "Mouse_ID")
-
+variables=c("Celltype","Sex", "Age","Genotype_corr", "Treatment", "condition","Phase", "Pseudotime","Brain_region","nCount_RNA","pseudoaligned_reads", "percent.mt", "percent.rp", "Mouse_ID")
 
 ```
 
@@ -157,17 +155,17 @@ samplemeta$corrGenotype_Treatment<-
   paste0(samplemeta$Genotype_corr," ", samplemeta$Treatment)
 
 sumstat = counts %>% t() %>%  
-  aggregate(by=samplemeta["corrGenotype_Treatment"], median) %>% 
+  aggregate(by=samplemeta["corrGenotype_Treatment"], mean) %>% 
   t() %>% as.data.frame()
 
-names(sumstat) <- paste0("median",sumstat[1,])
+names(sumstat) <- paste0("mean",sumstat[1,])
 sumstat<-sumstat[-1,]
 
 sumstatCelltype = counts %>% t() %>%  
-  aggregate(by=samplemeta["Celltype"], median) %>% 
+  aggregate(by=samplemeta["Celltype"], mean) %>% 
   t() %>% as.data.frame()
 
-names(sumstatCelltype) <- paste0("median",sumstatCelltype[1,])
+names(sumstatCelltype) <- paste0("mean",sumstatCelltype[1,])
 sumstatCelltype<-sumstatCelltype[-1,]
 
 
@@ -231,7 +229,7 @@ names(braincol) = levels(samplemeta$Brain_region)
 samplemeta$Age = as.factor(samplemeta$Age)
 Agecol = colorRampPalette(c("dodgerblue",
                           "dodgerblue4"))(nlevels(samplemeta$Age))[1:nlevels(samplemeta$Age)]
-names(Agecol) = as.character(sort(as.numeric(levels(samplemeta$Age))))
+names(Agecol) = levels(samplemeta$Age)
 
 ann_colors = list(
   Genotype_corr = genotypecol, 
@@ -244,7 +242,6 @@ ann_colors = list(
 
 labels = samplemeta[,c("Genotype_corr","Mouse_ID", "Age", "Brain_region", "Celltype", "Treatment")] %>%  
   mutate_all(as.character) %>% as.data.frame()
-labels$Age = as.numeric(labels$Age)
 rownames(labels)=rownames(samplemeta)
 
 pheatmap(sampleDistMatrix,
@@ -309,7 +306,7 @@ getres=function(Celltype="Specify",
   
   labels = samplemeta[samplemeta$Celltype==Celltype,c("Treatment","Age", "Genotype_corr","Mouse_ID", "Brain_region", "Celltype")] %>%  
     mutate_all(as.character) %>% as.data.frame()
-  labels$Age = as.numeric(labels$Age)
+
   
   labels=labels %>% arrange(Treatment,Genotype_corr)
   plotdata=log2_cpm[res$adj.P.Val<0.05,rownames(labels)]
@@ -360,18 +357,6 @@ generate_output=function(CT="Celltype", ...){
 }
 
 ```
-
-### Microglia_0
-```{r Microglia_0, message=F, warning=FALSE}
-res_output=generate_output("Microglia_0")
-res_output[["results_sig"]] %>% display_tab()
-res_output[["plot"]]
-
-```
-Data sources and their abbreviations are: [Gene Ontology](http://geneontology.org/) (GO or by branch GO:MF, GO:BP, GO:CC)[KEGG](https://www.genome.jp/kegg/) (KEGG) [TRANSFAC](https://genexplain.com/transfac/) (TF) [miRTarBase](https://mirtarbase.cuhk.edu.cn/~miRTarBase/miRTarBase_2019/php/index.php) (MIRNA) [CORUM](https://mips.helmholtz-muenchen.de/corum/) (CORUM) [Human phenotype ontology](http://hpo.jax.org/app/) (HP) [Human Protein Atlas](https://www.proteinatlas.org/) (HPA) 
-
-
-get results table [here](LMER_Microglia_0.xlsx)
 
 
 ### Microglia_1
@@ -451,11 +436,11 @@ table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %>% fisher.test(
 
 get results table [here](LMER_Granulozytes.xlsx)
 
-### T_NK
+### Mono/Mac
 
 ```{r T_NK, message=F, warning=FALSE}
 
-idx=samplemeta$Celltype=="T/NK"
+idx=samplemeta$Celltype=="Mono/Mac"
 table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx])
 table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %>% fisher.test()
 # res_output=generate_output("T/NK")
@@ -480,10 +465,10 @@ lines(SlingshotDataSet(sce), lwd=2, col='black', type="l")
 
 
 
-plot(samplemeta$Pseudotime[samplemeta$condition == "WT_Ctrl"] %>% density(na.rm=T), col=Dark8[1], lwd=2, xlab="Pseudotime", main="distribution of cells over pseudotime")
+plot(samplemeta$Pseudotime[samplemeta$condition == "APPPS1+_Ctrl"] %>% density(na.rm=T), col=Dark8[4], lwd=2, xlab="Pseudotime", main="distribution of cells over pseudotime")
 lines(samplemeta$Pseudotime[samplemeta$condition == "APPPS1+_Stroke"] %>% density(na.rm=T), col=Dark8[2], lwd=2)
 lines(samplemeta$Pseudotime[samplemeta$condition == "WT_Stroke"] %>% density(na.rm=T), col=Dark8[3], lwd=2)
-lines(samplemeta$Pseudotime[samplemeta$condition == "APPPS1+_Ctrl"] %>% density(na.rm=T), col=Dark8[4], lwd=2)
+lines(samplemeta$Pseudotime[samplemeta$condition == "WT_Ctrl"] %>% density(na.rm=T), col=Dark8[1], lwd=2)
 legend("topright", legend=c("WT_Ctrl","APPPS1+_Stroke","WT_Stroke","APPPS1+_Ctrl"), fill = Dark8[1:4])
 
 ```
@@ -494,7 +479,7 @@ legend("topright", legend=c("WT_Ctrl","APPPS1+_Stroke","WT_Stroke","APPPS1+_Ctrl
 
 ```{r setapp, include=F}
 
-secret="/Users/andreas_chiocchetti/fuchs_credentials.R"
+secret="/files/scSeq_Hefendehl/shinySecret.R"
 source(secret)
 
 local({
@@ -507,17 +492,21 @@ local({
 })
 
 counts=as.data.frame(samples.integrated@assays$RNA@data)
+counts = counts[,rownames(samplemeta)]
 samplemeta= cbind(samplemeta, samples.integrated@reductions$tsne@cell.embeddings[row.names(samplemeta), ])
 samplemeta= cbind(samplemeta, samples.integrated@reductions$umap@cell.embeddings[row.names(samplemeta), ])
 
+
 save(list=c("samplemeta", "counts"), file=paste0(home, "/geneviewer/Dataset.RData"))
+
+
 
 rsconnect::setAccountInfo(name='molgenlab',
                           token='86875F8B6550C3A26488035E69B1F18D',
                           secret=shinySECRET)
 
 
-rsconnect::deployApp(paste0(home, "/geneviewer"))
+rsconnect::deployApp(paste0(home, "/geneviewer"), forceUpdate = T)
 
 ```
 

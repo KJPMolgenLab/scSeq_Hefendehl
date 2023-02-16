@@ -45,10 +45,9 @@ library(SingleR)
 library(EnhancedVolcano)
 library(pheatmap)
 
-
 knitr::opts_chunk$set(fig.height=8, fig.width=15)
 
-load(paste0(home,"/data/ReloadAllData_Hefendehl_Stroke_Dec'21.RData"))
+load("/files/scSeq_Hefendehl/data/ReloadAllData_Hefendehl_Stroke_Dec'21.RData")
 
 
 ```
@@ -63,7 +62,7 @@ load(paste0(home,"/data/ReloadAllData_Hefendehl_Stroke_Dec'21.RData"))
 # Visualize QC metrics as a violin plot
 Idents(plates_hefendehl) <- "Plate"
 VlnPlot(plates_hefendehl, features = c("nFeature_RNA", "nCount_RNA", "percent.mito","percent.ribo"), 
-        group.by = "Plate", pt.size = 1, ncol = 4, )
+        group.by = "Plate", pt.size = 1, ncol = 4)
 
 plot1 | plot2
 
@@ -393,6 +392,10 @@ VlnPlot(microglia, features = DAM2_down_3) + ggtitle("Genes downregulated in Sta
 ```{r cluster renaming, message=FALSE,warning=FALSE}
 Idents(microglia) <- "Celltype"
 DimPlot(microglia, reduction = "umap", label = TRUE, pt.size = 1)+ NoLegend()
+
+save(list=c("DAM_up", "DAM_down","Stage2_DAM_down", "Stage2_DAM_up",
+            "DAM2_up_1", "DAM2_up_2", "DAM2_up_3", "DAM2_down_1", "DAM2_down_2","DAM2_down_3"), file = "/files/scSeq_Hefendehl/data/DAM_genelists.RData")
+
 
 ```
 

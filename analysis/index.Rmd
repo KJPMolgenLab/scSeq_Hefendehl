@@ -12,5 +12,7 @@ editor_options:
 Here you find all analyses, results and visualizations
 
 
-* Original analysis provided by Bonn [view](00_Original_Analysis.html)
-* Statistical analysis [view](01_Biostat.html)
+* Frist analysis provided by Desiree [view](00_Original_Analysis.html)
+* Follow up analysis with new WT data [view](00.1_Original_Analysis_Integrated.html) <br>*analysis adapted from originalscript of Desiree*
+* Statistical analysis [view](01_Biostat.html) *based on new WT data*
+

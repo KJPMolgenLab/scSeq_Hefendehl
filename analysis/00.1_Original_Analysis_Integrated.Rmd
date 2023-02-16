@@ -1,0 +1,1523 @@
+---
+title: 'SS2 (for AG Hefendehl): Integration'
+author: "Desirée Brösamle"
+date: "Dec 2021"
+output:
+  html_document:
+    toc: true
+---
+
+```{r ,message=FALSE, warning=FALSE, include=FALSE}
+home=getwd()
+
+ep_str_wrap <- function(string, width) {
+    x <- gregexpr(' ', string)
+    vapply(seq_along(x),
+           FUN = function(i) {
+               y <- x[[i]]
+               n <- nchar(string[i])
+               len <- (c(y,n) - c(0, y)) ## length + 1
+               idx <- len > width
+               j <- which(!idx)
+               if (length(j) && max(j) == length(len)) {
+                   j <- j[-length(j)]
+               }
+               if (length(j)) {
+                   idx[j] <- len[j] + len[j+1] > width
+               }
+               idx <- idx[-length(idx)] ## length - 1
+               start <- c(1, y[idx] + 1)
+               end <- c(y[idx] - 1, n)
+               words <- substring(string[i], start, end)
+               paste0(words, collapse="\n")
+           },
+           FUN.VALUE = character(1)
+    )
+}
+
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(Seurat)
+library(ggplot2)
+library(SingleR)
+library(EnhancedVolcano)
+library(pheatmap)
+library(tidyverse)
+library(gprofiler2)
+
+
+knitr::opts_chunk$set(fig.height=8, fig.width=15)
+
+plates_hefendehl<-readRDS("./data/20230203/seu-SCT-harmony_02-02-23.rds")
+samples.integrated <- plates_hefendehl
+
+```
+
+
+# **Preprocessing**
+
+**QC metrics from AG Hefendehl (Stroke)**
+
+Combined datasets and filter cells that have unique feature counts (gene number) over 7000 or less than 200 and cells with >5%  mitochondrial counts.
+
+```{r message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+
+# Visualize QC metrics as a violin plot
+Idents(plates_hefendehl) <- "Plate"
+VlnPlot(plates_hefendehl, features = c("nFeature_RNA", "nCount_RNA", "percent.mt","percent.rp"), 
+        group.by = "Plate", ncol = 4)
+
+SampleMeta=plates_hefendehl@meta.data
+cormt<- cor(SampleMeta$nCount_RNA, SampleMeta$percent.mt, method="spearman")
+corfeat<- cor(SampleMeta$nCount_RNA, SampleMeta$nFeature_RNA, method="spearman")
+
+plot1 <- ggplot(plates_hefendehl@meta.data,aes(x=nCount_RNA, y=percent.mt, col=Plate))+
+  geom_point()+theme_classic()+geom_abline(slope = 0, intercept = 5)+labs(title=cormt)
+plot2 <- ggplot(plates_hefendehl@meta.data,aes(x=nCount_RNA, y=nFeature_RNA, col=Plate))+geom_point()+theme_classic()+geom_abline(slope = 0, intercept = 7000)+
+  ggtitle(corfeat)
+
+plot1 | plot2
+
+
+```
+
+
+# **Perform integrated analysis**
+
+```{r echo=FALSE, results='hide',message=FALSE,warning=FALSE}
+Idents(samples.integrated) <- "Plate"
+
+DimPlot(samples.integrated, reduction = "harmony", group.by = "Mouse_ID")
+DimHeatmap(samples.integrated, dims = 1:2, cells = 200, balanced = TRUE)
+
+```
+
+PCA, tSNE and UMAP from the first 30 dimensions and with a resolution of 0.8
+
+```{r message=FALSE, warning=FALSE,}
+# Visualization
+Idents(samples.integrated) <- "seurat_clusters"
+
+DimPlot(samples.integrated, reduction = "umap", split.by = "Treatment")
+```
+
+
+```{r message=FALSE, warning=FALSE,fig.width=12, fig.height=4}
+p1<- DimPlot(samples.integrated, reduction = "umap", group.by = "Plate")
+p1a<- DimPlot(samples.integrated, reduction = "umap", group.by = "Mouse_ID")
+p1b<- DimPlot(samples.integrated, reduction = "umap", group.by = "Genotype_Treatment")
+  
+
+p1 + p1a +  p1b
+```
+
+
+```{r message=FALSE, warning=FALSE,fig.width=4, fig.height=4}
+DimPlot(samples.integrated, group.by = "seurat_clusters", pt.size =1, label = T) + NoLegend()
+```
+
+
+```{r message=FALSE, warning=FALSE,fig.width=9, fig.height=3}
+DimPlot(samples.integrated, reduction = "umap", split.by = "Plate", pt.size= 1)
+DimPlot(samples.integrated, reduction = "umap", split.by = "Genotype_Treatment", pt.size =1)
+
+```
+
+
+**Cell cycle scoring**
+
+First, a score is assigned to each cell (Tirosh et al. 2016), based on its expression of G2/M and S phase markers. These markers should be anticorrelated in their expression levels and cells expression neither are likely not cycling and in G1 phase.
+Note: For downstream cell cylce regression the quantitative scores for G2/M and S phase are used, not the dicrete classification.
+
+```{r cell cycle scoring genes, echo=FALSE, results='hide',message=FALSE,warning=FALSE, fig.width=8, fig.height=4}
+Idents(samples.integrated) <- "Phase"
+# View cell cycle scores and phase assignment
+head(samples.integrated[[]])
+ 
+# visualize the distribution of cell cycle markers across
+RidgePlot(samples.integrated, features = c("Pcna", "Top2a", "Mcm6", "Mki67"), ncol = 2)
+```
+
+
+```{r cell cycle scoring, echo=FALSE, results='hide',message=FALSE,warning=FALSE, fig.width=4, fig.height=4}
+DimPlot(samples.integrated)+ theme_classic()
+```
+
+
+**Cluster distribution**
+
+```{r cluster distribution, message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+ 
+DimPlot(object = samples.integrated, pt.size = 1,reduction = "umap", group.by="Age",label = F) +
+  ggtitle("Cluster distribution according to Age") + theme_classic()| DimPlot(object = samples.integrated, pt.size = 1,reduction = "umap", group.by="Genotype_Treatment",label = F) +
+  ggtitle("Cluster distribution according to Genotype + Treatment")+ theme_classic()
+
+DimPlot(object = samples.integrated, pt.size = 1,reduction = "umap", group.by="Plate",label = F) +
+  ggtitle("Cluster distribution according to Plate")+ theme_classic() | DimPlot(object = samples.integrated, pt.size = 1,reduction = "umap", group.by = "seurat_clusters", label = T) +
+  ggtitle("Clustering")+ theme_classic()
+
+
+
+```
+
+
+```{r cell distribution per cluster, message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+Idents(samples.integrated) <- "seurat_clusters"
+
+# use same colors for clusters as in plots
+require(scales)
+
+samples.integrated$seurat_clusters = factor(samples.integrated$seurat_clusters, levels=sort(as.character(unique(samples.integrated$seurat_clusters))))
+identities <- levels(samples.integrated$seurat_clusters) # Create vector with levels of object@ident
+cluster_colors <- hue_pal()(length(identities)) # Create vector of default ggplot2 colors
+
+
+# number of cells in each cluster 
+cluster_nCell <- as.data.frame.matrix(table(samples.integrated$seurat_clusters,
+                                            samples.integrated$Genotype_Treatment))
+cluster_nCell["Total" ,] = colSums(cluster_nCell)
+cluster_nCell
+
+
+# % of cells in each cluster , grouped by genotype_Age
+
+cluster_per_Cell <- data.frame(table(samples.integrated$seurat_clusters, 
+                              samples.integrated$Age))
+colnames(cluster_per_Cell) <- c("Cluster", "Age", "Frequency")
+cluster_per_Cell
+
+
+cluster_percent_Cell <- data.frame(round((prop.table(x = table(samples.integrated$seurat_clusters, 
+                              samples.integrated$Age), margin = 2)*100),2))
+colnames(cluster_percent_Cell) <- c("Cluster", "Age", "Frequency")
+cluster_percent_Cell
+
+
+cluster_per_Treatment <- data.frame(table(samples.integrated$seurat_clusters, 
+                              samples.integrated$Genotype_Treatment))
+colnames(cluster_per_Treatment) <- c("Cluster", "Genotype_Treatment", "Frequency")
+cluster_per_Treatment
+
+cluster_percent_Treatment <- data.frame(round((prop.table(x = table(samples.integrated$seurat_clusters, 
+                              samples.integrated$Genotype_Treatment), margin = 2)*100),2))
+colnames(cluster_percent_Treatment) <- c("Cluster", "Genotype_Treatment", "Frequency")
+cluster_percent_Treatment
+```
+
+
+```{r plot cell distribution per cluster, message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+# Grouped barchart of cell proportions
+a1<- ggplot(cluster_percent_Cell, aes(fill=Age, 
+                                 y=Frequency, 
+                                 x=Cluster)) +
+  geom_bar(position="dodge", stat="identity")+
+  ggtitle("Cell distribution according to Age [%]") +theme_classic()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1)) +
+  xlab("")
+
+
+# Grouped barchart of cell proportions
+b1 <- ggplot(cluster_percent_Cell, aes(fill=Cluster, y=Frequency, x=Age)) + 
+  geom_bar(position="dodge", stat="identity")+
+  ggtitle("Cell distribution according to Age [%]") +theme_classic()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1))
+
+
+c1 <-ggplot(cluster_percent_Cell, aes(fill=Cluster, y=Frequency, x=Age)) + 
+    geom_bar(position="stack", stat="identity")+theme_classic()+
+  theme(axis.text.x = element_text(angle = 90, hjust=1, vjust=1))
+
+a1 | b1 | c1
+
+```
+```{r plot cell distribution per GenoTReamtne, message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+# Grouped barchart of cell proportions
+a1<- ggplot(cluster_percent_Treatment, aes(fill=Genotype_Treatment, 
+                                 y=Frequency, 
+                                 x=Cluster)) +
+  geom_bar(position="dodge", stat="identity")+
+  ggtitle("Cell distribution according to Genotype_Treatment [%]") +theme_classic()+
+  theme(axis.text.x = element_text(angle = 90, hjust=1, vjust=1)) +
+  xlab("")
+
+
+# Grouped barchart of cell proportions
+b1 <- ggplot(cluster_percent_Treatment, aes(fill=Cluster, y=Frequency, x=Genotype_Treatment)) + 
+  geom_bar(position="dodge", stat="identity")+
+  ggtitle("Cell distribution according to Genotype_Treatment [%]") +theme_classic()+
+  theme(axis.text.x = element_text(angle = 90, hjust=1, vjust=1))
+
+
+c1 <-ggplot(cluster_percent_Treatment, aes(fill=Cluster, y=Frequency, x=Genotype_Treatment)) + 
+    geom_bar(position="stack", stat="identity")+theme_classic()+
+  theme(axis.text.x = element_text(angle = 90, hjust=1, vjust=1))
+
+a1 | b1 | c1
+
+```
+
+# **Cell type identification**
+
+## **Finding differentially expressed features (cluster biomarkers)**
+
+```{r Marker genes, message=FALSE, warning=FALSE, fig.width=8, fig.height=8}
+
+Idents(samples.integrated) <- samples.integrated$seurat_clusters
+
+markers <- FindAllMarkers(object = samples.integrated, 
+                          only.pos = TRUE,
+                          logfc.threshold = 0.25)  
+
+
+DefaultAssay(samples.integrated) = "SCT"
+
+markers %>%
+    group_by(cluster) %>%
+    top_n(n = 20, wt = avg_log2FC) -> top20
+
+DoHeatmap(samples.integrated, features = top20$gene) + NoLegend() + ggtitle("Top20 cluster marker genes")
+```
+
+
+## **SingleR**
+SingleR is an automatic annotation method for (scRNAseq) data (Aran et al. 2019). Given a reference dataset of samples (single-cell or bulk) with known labels, it labels new cells from a test dataset based on similarity to the reference set. Here we use the built-in references "Immgen" (830 microarray samples of sorted hematopoetic and immune cell populations) 	 and "Mouse RNA-Seq" (358 non-specific mouse RNA-seq samples). 
+
+**Immgen reference**
+
+
+```{r SingleR: Immgen, echo=FALSE, results='hide',message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=4}
+
+# Based on clusters
+
+#table(pred.immgen$first.labels) #main cell types
+#table(pred.immgen$labels) #fine tuned cell types
+#table(pred.immgen$pruned.labels) #cell type after pruning
+
+#plotScoreHeatmap(pred.immgen, show.labels = TRUE,
+#                 annotation_col=data.frame(cluster=unique(samples.integrated@meta.data$seurat_clusters),
+#                                           row.names=rownames(pred.immgen)))
+
+# Based on single cells
+  
+#table(pred.immgen.sc$first.labels)
+#table(pred.immgen.sc$labels)
+
+#plotScoreHeatmap(pred.immgen.sc)
+
+#Visualization
+DimPlot(samples.integrated,group.by ="Immgen_cluster_labels" ,label = F) | DimPlot(samples.integrated, reduction = "umap",group.by = "seurat_clusters", label = T) 
+DimPlot(samples.integrated,group.by ="Immgen_sc_labels", label = F ) + NoLegend() | DimPlot(samples.integrated, reduction = "umap",group.by = "seurat_clusters", label = T)
+
+
+```
+
+**MouseRNA-Seq reference**
+Section Skipped as pred.mouseRNA object is not available 
+
+```{r SingleR: MouseRNA-Seq, echo=FALSE, results='hide',message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=4}
+
+# Based on clusters
+
+#table(pred.mouseRNA$first.labels) #main cell types
+#table(pred.mouseRNA$labels) #fine tuned cell types
+#table(pred.mouseRNA$pruned.labels) #cell type after pruning
+
+# plotScoreHeatmap(pred.mouseRNA, show.labels = TRUE,
+#                  annotation_col=data.frame(cluster=unique(samples.integrated$seurat_clusters),
+#                                            row.names=rownames(pred.mouseRNA)))
+# 
+# Based on single cells
+  
+# table(pred.mouseRNA.sc$first.labels)
+# table(pred.mouseRNA.sc$labels)
+# 
+# plotScoreHeatmap(pred.mouseRNA.sc)
+# 
+#Visualization
+
+DimPlot(samples.integrated,group.by ="MouseRNASeq_cluster_labels" ,label = T) + NoLegend() | DimPlot(samples.integrated, reduction = "umap",group.by = "seurat_clusters", label=T)+ NoLegend()
+DimPlot(samples.integrated,group.by ="MouseRNASeq_sc_labels", label=F) + NoLegend() | DimPlot(samples.integrated, reduction = "umap",group.by = "seurat_clusters", label=T)+ NoLegend()
+
+```
+
+
+```{r cell distribution MouseRNASeq, message=FALSE, warning=FALSE, fig.with=6, fig.height=6}
+
+# number of cells in each cluster 
+cluster_nCell <- data.frame(table(samples.integrated$MouseRNASeq_sc_labels,samples.integrated$Genotype_Treatment))
+colnames(cluster_nCell) <- c( "MouseRNASeq_sc_labels", "Genotype_Treatment","Number")
+
+#cluster_nCell["Total" ,] = colSums(cluster_nCell)
+# cluster_nCell
+
+# % of cells in each cluster 
+cluster_percent_Cell <- data.frame(round((prop.table(x = table(samples.integrated$MouseRNASeq_sc_labels, 
+                              samples.integrated$Genotype_Treatment), margin = 2)*100),2))
+colnames(cluster_percent_Cell) <- c("MouseRNASeq_sc_labels", "Genotype_Treatment", "Frequency")
+# cluster_percent_Cell
+
+
+# Grouped barchart of absolute cell numbers
+ggplot(cluster_nCell, aes(fill=Genotype_Treatment, y=Number, x=MouseRNASeq_sc_labels)) + 
+  geom_bar(position="dodge", stat="identity") +
+  ggtitle("Cell distribution according to MouseRNASeq reference (absolut values)")+ theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, hjust=1, vjust=0.5)) +
+  xlab("")
+
+# Grouped barchart of cell proportions
+ggplot(cluster_percent_Cell, aes(fill=Genotype_Treatment, y=Frequency, x=MouseRNASeq_sc_labels)) + 
+  geom_bar(position="dodge", stat="identity")+
+  ggtitle("Cell distribution according to MouseRNASeq reference [%]")+ theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, hjust=1, vjust=0.5)) +
+  xlab("")
+
+```
+
+```{r cell distribution immgen, message=FALSE, warning=FALSE, fig.with=8, fig.height=6}
+
+# number of cells in each cluster 
+cluster_nCell <- data.frame(table(samples.integrated$Immgen_sc_labels,samples.integrated$Genotype_Treatment))
+colnames(cluster_nCell) <- c( "Immgen_sc_labels", "Genotype_Treatment","Number")
+
+#cluster_nCell["Total" ,] = colSums(cluster_nCell)
+# cluster_nCell
+
+# % of cells in each cluster 
+cluster_percent_Cell <- data.frame(round((prop.table(x = table(samples.integrated$Immgen_sc_labels, 
+                              samples.integrated$Genotype_Treatment), margin = 2)*100),2))
+colnames(cluster_percent_Cell) <- c( "Immgen_sc_labels", "Genotype_Treatment","Frequency")
+# cluster_percent_Cell
+
+
+# Grouped barchart of absolute cell numbers
+ggplot(cluster_nCell, aes(fill=Genotype_Treatment, y=Number, x=Immgen_sc_labels)) + 
+  geom_bar(position="dodge", stat="identity") +
+  ggtitle("Cell distribution according to Immgen reference (absolut values)") + theme_classic()+
+  theme(axis.text.x = element_text(angle = 90, hjust=1, vjust=0.5)) +
+  xlab("")
+
+# Grouped barchart of cell proportions
+ggplot(cluster_percent_Cell, aes(fill=Genotype_Treatment, y=Frequency, x=Immgen_sc_labels)) + 
+  geom_bar(position="dodge", stat="identity")+
+  ggtitle("Cell distribution according to Immgen reference [%]") + theme_classic()+
+  theme(axis.text.x = element_text(angle = 90, hjust=1, vjust=0.5)) +
+  xlab("")
+
+```
+Renaming Clusters
+
+```{r}
+DimPlot(samples.integrated, reduction = "umap", label=T) + NoLegend()+ theme_classic()
+```
+
+
+# **Zoom into Microglia clusters**
+
+A second Seurat cluster is generated, where all non-microglial immune cells are removed according to the mouseRNASeq_sc_labels.
+
+```{r subclustering microglia, message=FALSE, warning=FALSE, fig.with=8, fig.height=4}
+
+samples.microglia <- samples.integrated[,grepl("Microgli.*", samples.integrated$MouseRNASeq_sc_labels)]
+
+p3 <- DimPlot(samples.microglia, reduction = "umap", label=T, group.by = "MouseRNASeq_sc_labels")  + theme_classic()+ NoLegend()
+
+p3a <- DimPlot(samples.microglia, reduction = "umap", label=T, group.by = "seurat_clusters") + theme_classic()+ NoLegend()
+
+p3 + p3a
+
+```
+
+
+## **DAMs (Cell. 2017 Jun 15;169(7):1276-1290.e17. doi: 10.1016/j.cell.2017.05.018)**
+
+**DAM plotting**
+
+```{r Stage 2 DAMs, echo=FALSE, results='hide',message=FALSE,warning=FALSE, fig.width=8, fig.height=4}
+
+load("./data/DAM_genelists.RData")
+
+samples.microglia <- AddModuleScore(object = samples.microglia, 
+                                    features = list(DAM_up), name = "DAM_score")
+p4 <- FeaturePlot(object = samples.microglia, features = "DAM_score1")+scale_color_viridis_c()
+p4a <- DimPlot(object = samples.microglia, reduction = "umap")
+
+p4 | p4a
+
+```
+
+```{r,  fig.width=8, fig.height=4}
+
+DAM2_marker_gene_list <- list(Stage2_DAM_up)
+samples.microglia <- AddModuleScore(object = samples.microglia, 
+                                    features = DAM2_marker_gene_list, name = "DAM2_score")
+p5 <- FeaturePlot(object = samples.microglia, features = "DAM2_score1")+scale_color_viridis_c()
+p5a <- DimPlot(object = samples.microglia, reduction = "umap")
+
+p5 | p5a
+
+```
+
+**DAM 2 Markers**
+
+**DAM2 upreagulated markers**
+```{r echo=FALSE, message=FALSE,results='hide',warning=FALSE}
+VlnPlot(samples.microglia, features = DAM2_up_1) 
+VlnPlot(samples.microglia, features = DAM2_up_2) 
+VlnPlot(samples.microglia, features = DAM2_up_3)
+```
+
+**DAM2 dowreagulated markers**
+```{r echo=FALSE, message=FALSE,results='hide',warning=FALSE}
+VlnPlot(samples.microglia, features = DAM2_down_1)
+VlnPlot(samples.microglia, features = DAM2_down_2) 
+VlnPlot(samples.microglia, features = DAM2_down_3) 
+```
+
+## **Renaming clusters**
+
+```{r cluster renaming, message=FALSE,warning=FALSE}
+
+Idents(samples.microglia) <- "Celltype"
+DimPlot(samples.microglia, reduction = "umap", label = TRUE, pt.size = 1)+ NoLegend()
+
+```
+
+
+## **Signature enrichment**
+
+All enrichment tests were done with gprofiler 2 
+
+Tested Ontologies and Signatures 
+GO:MF = Molecular Function
+GO:BP = Biological Processes
+GO:CC = Cellular Compartment),
+KEGG = pathways from KEGG Reactome, 
+TF = regulatory motif matches from TRANSFAC
+HPA = tissue specificity from Human Protein Atlas;
+CORUM = protein complexes from CORUM 
+HP = human disease phenotypes  from Human Phenotype Ontology. 
+
+For more dteails see 
+Website: https://biit.cs.ut.ee/gprofiler/gost"
+
+
+### **DEGs and GSEA across microglia of different genotypes**
+
+log fold-change of the average expression between the two groups: Positive values indicate that the gene is more highly expressed in the target group (e.g. the APPPS1+ group)
+
+
+#### **WT vs App**
+
+
+
+```{r general DEGs WT vs APPPS1, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=8}
+
+Idents(samples.microglia) <- "Genotype"
+
+# WT vs App
+samples.microglia <- PrepSCTFindMarkers(samples.microglia)
+markers_WtvsApp <- FindMarkers(samples.microglia, ident.1 = "APPPS1")
+
+library(DESeq2)
+
+DT::datatable(markers_WtvsApp, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Genotype"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+EnhancedVolcano(markers_WtvsApp,
+                lab = rownames(markers_WtvsApp),
+                x = 'avg_log2FC', 
+                y = 'p_val_adj', xlim = c(-1.5, 1.5), ylim=c(0,15), pCutoff = 0.05,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(Padj)),
+                title = "DEGs", subtitle = "Wt vs APPPS1+",
+                caption = "pval-adj cutoff  0.05 \n FC cutoff  1.5")
+
+
+sig.markers_WtvsApp <- markers_WtvsApp[abs(markers_WtvsApp$avg_log2FC)>log(1.5,2) 
+                                       &markers_WtvsApp$p_val_adj<0.05,]
+
+
+DT::datatable(sig.markers_WtvsApp, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Genotype"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_WtvsApp), f = sig.markers_WtvsApp$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("APPPS1_down", "APPPS1_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Genotype"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+#### **WT vs MX04+**
+log fold-chage of the average expression between the two groups: Positive values indicate that the gene is more highly expressed in the Methoxy positive group
+
+```{r echo=FALSE, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=8}
+Idents(samples.microglia) <- "Methoxy" 
+markers_WtvsMX <- FindMarkers(samples.microglia, ident.1 = "pos")
+
+
+EnhancedVolcano(markers_WtvsMX,
+                lab = rownames(markers_WtvsMX),
+                x = 'avg_log2FC', 
+                y = 'p_val_adj', xlim = c(-1.5, 1.5), ylim=c(0,15), pCutoff = 0.05,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(Padj)),
+                title = "DEGs", subtitle = "MX04+ vs MX04-",
+                caption = "pval-adj cutoff  0.05 \n FC cutoff  1.5")
+
+
+sig.markers_WtvsMX <- markers_WtvsMX[abs(markers_WtvsMX$avg_log2FC)>log(1.5,2) 
+                                       &markers_WtvsMX$p_val_adj<0.05,]
+
+
+DT::datatable(sig.markers_WtvsMX, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Genotype"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_WtvsMX), f = sig.markers_WtvsMX$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Methoxy_down", "Methoxy_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of MX04+ across Genotypes"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+#### **MX04+ vs MX04- in APPPS1 cohort only**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=8}
+samples.microglia.app <- samples.microglia[,samples.microglia$Genotype=="APPPS1"]
+
+samples.microglia.app <- SCTransform(samples.microglia.app)
+samples.microglia.app <- RunPCA(samples.microglia.app)
+samples.microglia.app <- RunUMAP(samples.microglia.app, dims = 1:40)
+
+markers_MXAPP <- FindMarkers(samples.microglia.app, ident.1 = "pos")
+
+
+EnhancedVolcano(markers_MXAPP,
+                lab = rownames(markers_MXAPP),
+                x = 'avg_log2FC', 
+                y = 'p_val_adj', xlim = c(-1.5, 1.5), ylim=c(0,15), pCutoff = 0.05,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(Padj)),
+                title = "DEGs", subtitle = "MX04+ vs MX04- in APPPS1+",
+                caption = "pval-adj cutoff  0.05 \n FC cutoff  1.5")
+
+
+sig.markers_MXAPP <- markers_MXAPP[abs(markers_MXAPP$avg_log2FC)>log(1.5,2) 
+                                       &markers_MXAPP$p_val_adj<0.05,]
+
+
+DT::datatable(sig.markers_MXAPP, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of MX04+ in APPPS1+"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_MXAPP), f = sig.markers_MXAPP$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("MX04pos_APPPS_down", "MX04pos_APPPS_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of MX04pos in APPPS"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+
+
+### **DEGs and GSEA of microglia of different genotype and treatment**
+
+#### **WT_Ctrl vs WT_Stroke**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=8}
+
+samples.microglia.WT <- samples.microglia[,samples.microglia$Genotype=="WT"]
+
+samples.microglia.WT <- SCTransform(samples.microglia.WT)
+samples.microglia.WT <- RunPCA(samples.microglia.WT)
+samples.microglia.WT <- RunUMAP(samples.microglia.WT, dims = 1:40)
+
+Idents(samples.microglia.WT) <- "Treatment"
+markers_StrokeWT <- FindMarkers(samples.microglia.WT, ident.1 = "Stroke")
+
+
+EnhancedVolcano(markers_StrokeWT,
+                lab = rownames(markers_StrokeWT),
+                x = 'avg_log2FC', 
+                y = 'p_val_adj', xlim = c(-1.5, 1.5), ylim=c(0,15), pCutoff = 0.05,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(Padj)),
+                title = "DEGs", subtitle = "Stroke- vs Stroke+ in WT",
+                caption = "pval-adj cutoff  0.05 \n FC cutoff  1.5")
+
+
+sig.markers_StrokeWT <- markers_StrokeWT[abs(markers_StrokeWT$avg_log2FC)>log(1.5,2) 
+                                       &markers_StrokeWT$p_val_adj<0.05,]
+
+
+DT::datatable(sig.markers_StrokeWT, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Stroke in WT"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_StrokeWT), f = sig.markers_StrokeWT$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("WT_Stroke_down", "WT_Stroke_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Stroke in WT"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+
+#### **APP_Ctrl vs APP_Stroke**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=8}
+
+Idents(samples.microglia.app) <- "Treatment"
+markers_StrokeAPPPS <- FindMarkers(samples.microglia.app, ident.1 = "Stroke")
+
+
+EnhancedVolcano(markers_StrokeAPPPS,
+                lab = rownames(markers_StrokeAPPPS),
+                x = 'avg_log2FC', 
+                y = 'p_val_adj', xlim = c(-1.5, 1.5), ylim=c(0,15), pCutoff = 0.05,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(Padj)),
+                title = "DEGs", subtitle = "Stroke+ vs Stroke- in WT",
+                caption = "pval-adj cutoff  0.05 \n FC cutoff  1.5")
+
+
+sig.markers_StrokeAPPPS <- markers_StrokeAPPPS[abs(markers_StrokeAPPPS$avg_log2FC)>log(1.5,2) 
+                                       &markers_StrokeAPPPS$p_val_adj<0.05,]
+
+
+DT::datatable(sig.markers_StrokeAPPPS, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Stroke in APPPS"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_StrokeAPPPS), f = sig.markers_StrokeAPPPS$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("APPPS_Stroke_down", "APPPS_Stroke_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of STroke in APPPS1+"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+
+#### **WT_Ctrl vs APP_Ctrl**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+
+samples.microglia.Ctrl <- samples.microglia[,samples.microglia$Treatment=="Ctrl"]
+
+samples.microglia.Ctrl <- SCTransform(samples.microglia.Ctrl)
+samples.microglia.Ctrl <- RunPCA(samples.microglia.Ctrl)
+samples.microglia.Ctrl <- RunUMAP(samples.microglia.Ctrl, dims = 1:40)
+
+Idents(samples.microglia.Ctrl) <- "Genotype"
+markers_GenotypeCtrl <- FindMarkers(samples.microglia.Ctrl, ident.1 = "APPPS1")
+
+
+EnhancedVolcano(markers_GenotypeCtrl,
+                lab = rownames(markers_GenotypeCtrl),
+                x = 'avg_log2FC', 
+                y = 'p_val_adj', xlim = c(-1.5, 1.5), ylim=c(0,15), pCutoff = 0.05,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(Padj)),
+                title = "DEGs", subtitle = "APPPS1- vs APPPS1+ in Ctrl",
+                caption = "pval-adj cutoff  0.05 \n FC cutoff  1.5")
+
+
+sig.markers_GenotypeCtrl <- markers_GenotypeCtrl[abs(markers_GenotypeCtrl$avg_log2FC)>log(1.5,2) 
+                                       &markers_GenotypeCtrl$p_val_adj<0.05,]
+
+
+DT::datatable(sig.markers_GenotypeCtrl, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of APPPS1 in Ctrl"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_GenotypeCtrl), f = sig.markers_GenotypeCtrl$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Ctrl_APPPS1_down", "Ctrl_APPPS1_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of APPPS1 in Ctrls"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+```
+
+
+#### **WT_Stroke vs APP_Stroke**
+
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=8} 
+
+
+samples.microglia.Stroke <- samples.microglia[,samples.microglia$Treatment=="Stroke"]
+
+samples.microglia.Stroke <- SCTransform(samples.microglia.Stroke)
+samples.microglia.Stroke <- RunPCA(samples.microglia.Stroke)
+samples.microglia.Stroke <- RunUMAP(samples.microglia.Stroke, dims = 1:40)
+
+Idents(samples.microglia.Stroke) <- "Genotype"
+markers_GenotypeStroke <- FindMarkers(samples.microglia.Stroke, ident.1 = "APPPS1")
+
+
+EnhancedVolcano(markers_GenotypeStroke,
+                lab = rownames(markers_GenotypeStroke),
+                x = 'avg_log2FC', 
+                y = 'p_val_adj', xlim = c(-1.5, 1.5), ylim=c(0,15), pCutoff = 0.05,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(Padj)),
+                title = "DEGs", subtitle = "APPPS1- vs APPPS1+ in Stroke",
+                caption = "pval-adj cutoff  0.05 \n FC cutoff  1.5")
+
+
+sig.markers_GenotypeStroke <- markers_GenotypeStroke[abs(markers_GenotypeStroke$avg_log2FC)>log(1.5,2) 
+                                       &markers_GenotypeStroke$p_val_adj<0.05,]
+
+
+DT::datatable(sig.markers_GenotypeStroke, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of APPPS1 in Stroke"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_GenotypeStroke), f = sig.markers_GenotypeStroke$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Stroke_APPPS1_down", "Stroke_APPPS1_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of APPPS1 in Strokes"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+
+### **DEGs and GSEA of each cluster**
+
+log fold-chage of the average expression between the two groups: Positive values indicate that the gene is more highly expressed in the target group (e.g. Microglia 0) versus all others. 
+
+#### **Microglia_0**
+
+
+```{r DEGs GSEA_output_ctrl Microglia_0, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+
+Idents(samples.microglia)="seurat_clusters"
+markers.Microglia_0 = FindMarkers(samples.microglia, ident.1 = "0")
+
+EnhancedVolcano(markers.Microglia_0,
+                lab = rownames(markers.Microglia_0),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-3, 3), ylim=c(0,55), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Microglia_0",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+sig.markers.Microglia_0 <- markers.Microglia_0[abs(markers.Microglia_0$avg_log2FC)>log(1.5,2) 
+                                       &markers.Microglia_0$p_val_adj<0.05,]
+
+DT::datatable(sig.markers.Microglia_0, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Microglia_0 markers"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_GenotypeCtrl), f = sig.markers_GenotypeCtrl$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Microglia_0_down", "Microglia_0_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Microglia_0_Marker_Enrichment"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+
+#### **Microglia_1**
+
+```{r DEGs GSEA_output_ctrl Microglia_1, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+
+Idents(samples.microglia)="seurat_clusters"
+markers.Microglia_1 = FindMarkers(samples.microglia, ident.1 = "1")
+
+EnhancedVolcano(markers.Microglia_1,
+                lab = rownames(markers.Microglia_1),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-3, 3), ylim=c(0,55), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Microglia_1",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+sig.markers.Microglia_1 <- markers.Microglia_1[abs(markers.Microglia_1$avg_log2FC)>log(1.5,2) 
+                                       &markers.Microglia_1$p_val_adj<0.05,]
+
+DT::datatable(sig.markers.Microglia_1, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Microglia_1 markers"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_GenotypeCtrl), f = sig.markers_GenotypeCtrl$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Microglia_1_down", "Microglia_1_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Microglia_1_Marker_Enrichment"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+```
+
+
+#### **Microglia_2**
+```{r DEGs GSEA_output_ctrl Microglia_2, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+
+Idents(samples.microglia)="seurat_clusters"
+markers.Microglia_2 = FindMarkers(samples.microglia, ident.1 = "2")
+
+EnhancedVolcano(markers.Microglia_2,
+                lab = rownames(markers.Microglia_2),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-3, 3), ylim=c(0,55), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Microglia_2",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+sig.markers.Microglia_2 <- markers.Microglia_2[abs(markers.Microglia_2$avg_log2FC)>log(1.5,2) 
+                                       &markers.Microglia_2$p_val_adj<0.05,]
+
+DT::datatable(sig.markers.Microglia_2, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Microglia_2 markers"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_GenotypeCtrl), f = sig.markers_GenotypeCtrl$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Microglia_2_down", "Microglia_2_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Microglia_2_Marker_Enrichment"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+
+#### **Microglia_3**
+```{r DEGs GSEA_output_ctrl Microglia_3, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+
+Idents(samples.microglia)="seurat_clusters"
+markers.Microglia_3 = FindMarkers(samples.microglia, ident.1 = "3")
+
+EnhancedVolcano(markers.Microglia_3,
+                lab = rownames(markers.Microglia_3),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-3, 3), ylim=c(0,55), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Microglia_3",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+sig.markers.Microglia_3 <- markers.Microglia_3[abs(markers.Microglia_3$avg_log2FC)>log(1.5,2) 
+                                       &markers.Microglia_3$p_val_adj<0.05,]
+
+DT::datatable(sig.markers.Microglia_3, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Microglia_3 markers"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_GenotypeCtrl), f = sig.markers_GenotypeCtrl$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Microglia_3_down", "Microglia_3_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Microglia_3_Marker_Enrichment"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+
+#### **Microglia_4**
+```{r DEGs GSEA_output_ctrl Microglia_4, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+
+Idents(samples.microglia)="seurat_clusters"
+markers.Microglia_4 = FindMarkers(samples.microglia, ident.1 = "4")
+
+EnhancedVolcano(markers.Microglia_4,
+                lab = rownames(markers.Microglia_4),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-3, 3), ylim=c(0,55), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Microglia_4",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+sig.markers.Microglia_4 <- markers.Microglia_4[abs(markers.Microglia_4$avg_log2FC)>log(1.5,2) 
+                                       &markers.Microglia_4$p_val_adj<0.05,]
+
+DT::datatable(sig.markers.Microglia_4, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Microglia_4 markers"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_GenotypeCtrl), f = sig.markers_GenotypeCtrl$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Microglia_4_down", "Microglia_4_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Microglia_4_Marker_Enrichment"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+
+#### **Microglia_5**
+```{r DEGs GSEA_output_ctrl Microglia_5, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+
+Idents(samples.microglia)="seurat_clusters"
+markers.Microglia_5 = FindMarkers(samples.microglia, ident.1 = "5")
+
+EnhancedVolcano(markers.Microglia_5,
+                lab = rownames(markers.Microglia_5),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-3, 3), ylim=c(0,55), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Microglia_5",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+sig.markers.Microglia_5 <- markers.Microglia_5[abs(markers.Microglia_5$avg_log2FC)>log(1.5,2) 
+                                       &markers.Microglia_5$p_val_adj<0.05,]
+
+DT::datatable(sig.markers.Microglia_5, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Microglia_5 markers"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_GenotypeCtrl), f = sig.markers_GenotypeCtrl$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Microglia_5_down", "Microglia_5_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+gostplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Microglia_5_Marker_Enrichment"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+
+## Genotype + Treatment comparison in each cluster
+
+```{r prep data}
+Idents(samples.microglia) <- "Genotype_Treatment"
+
+mg1 <- samples.microglia[,samples.microglia$Celltype == "Microglia_1"]
+mg1 <- SCTransform(mg1)
+mg1.markers.Genotype_Treatment <- FindAllMarkers(mg1)
+if(length(mg1.markers.Genotype_Treatment)!=0){
+mg1_top20 = mg1.markers.Genotype_Treatment %>% group_by(cluster) %>% top_n(n=20, wt=abs(avg_log2FC))
+mg1_top20chk=T
+} else {mg1_top20chk=F}
+
+mg2 <- samples.microglia[,samples.microglia$Celltype == "Microglia_2"]
+mg2 <- SCTransform(mg2)
+mg2.markers.Genotype_Treatment <- FindAllMarkers(mg2)
+if(length(mg2.markers.Genotype_Treatment)!=0){
+mg2_top20 = mg2.markers.Genotype_Treatment %>% group_by(cluster) %>% top_n(n=20, wt=abs(avg_log2FC))
+mg2_top20chk=T
+} else {mg2_top20chk=F}
+
+mg3 <- samples.microglia[,samples.microglia$Celltype == "Microglia_3"]
+mg3 <- SCTransform(mg3)
+mg3.markers.Genotype_Treatment <- FindAllMarkers(mg3)
+if(length(mg3.markers.Genotype_Treatment)!=0){
+mg3_top20 = mg3.markers.Genotype_Treatment %>% group_by(cluster) %>% top_n(n=20, wt=abs(avg_log2FC))
+mg3_top20chk=T
+} else {mg3_top20chk=F}
+
+mg4 <- samples.microglia[,samples.microglia$Celltype == "Microglia_4"]
+mg4 <- SCTransform(mg4)
+mg4.markers.Genotype_Treatment <- FindAllMarkers(mg4)
+if(length(mg4.markers.Genotype_Treatment)!=0){
+mg4_top20 = mg4.markers.Genotype_Treatment %>% group_by(cluster) %>% top_n(n=20, wt=abs(avg_log2FC))
+mg4_top20chk=T
+} else {mg4_top20chk=F}
+
+mg5 <- samples.microglia[,samples.microglia$Celltype == "Microglia_5"]
+mg5 <- SCTransform(mg5)
+mg5.markers.Genotype_Treatment <- FindAllMarkers(mg5)
+if(length(mg5.markers.Genotype_Treatment)!=0){
+mg5_top20 = mg5.markers.Genotype_Treatment %>% group_by(cluster) %>% top_n(n=20, wt=abs(avg_log2FC))
+mg5_top20chk=T
+} else {mg5_top20chk=F}
+
+```
+
+### **Microglia_1**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, fig.width=8,fig.height=8}
+if(mg1_top20chk){
+  
+gg = DoHeatmap(mg1, features = mg1_top20$gene) +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in Microglia_1")
+print(gg)
+
+DT::datatable(mg1.markers.Genotype_Treatment, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Genotype_Treatment in Microglia_1"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+} else print("no significant markers identified")
+
+```
+
+### **Microglia_2**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, fig.width=8,fig.height=8}
+if(mg2_top20chk){
+gg = DoHeatmap(mg2, features = mg2_top20$gene)  +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in Microglia_2")
+print(gg)
+
+DT::datatable(mg2.markers.Genotype_Treatment, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Genotype_Treatment in Microglia_2"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+} else print("no significant markers identified")
+```
+
+### **Microglia_3**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, fig.width=8,fig.height=8}
+if(mg3_top20chk){
+gg = DoHeatmap(mg3, features = mg3_top20$gene)  +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in Microglia_3")
+print(gg)
+
+DT::datatable(mg3.markers.Genotype_Treatment, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Genotype_Treatment in Microglia_3"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+} else print("no significant markers identified")
+```
+
+### **Microglia_4**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, fig.width=8,fig.height=8}
+if(mg4_top20chk){
+gg =DoHeatmap(mg4, features = mg4_top20$gene)  +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in Microglia_4")
+print(gg)
+
+ DT::datatable(mg4.markers.Genotype_Treatment, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Genotype_Treatment in Microglia_4"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+} else print("no significant markers identified")
+```
+
+
+### **Microglia_5**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, fig.width=8,fig.height=8}
+if(mg5_top20chk){
+gg = DoHeatmap(mg5, features = mg5_top20$gene)  +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in Microglia_5")
+print(gg)
+
+DT::datatable(mg5.markers.Genotype_Treatment, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Genotype_Treatment in Microglia_5"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+} else print("no significant markers identified")
+```
+
+
+
+```{r}
+save.image("./output/integrated_analysis.RData")
+```
+
+
+
+
+
+
