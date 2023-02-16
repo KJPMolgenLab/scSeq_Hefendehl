@@ -14,7 +14,7 @@
 
 <title>SS2 (for AG Hefendehl): Integration</title>
 
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -155,11 +155,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -188,8 +192,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -197,16 +201,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -363,7 +360,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -374,8 +371,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -384,13 +381,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-06-27
+<strong>Last updated:</strong> 2023-02-16
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>scSeq_Hefendehl/</code> <span
@@ -500,30 +497,64 @@ run.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongabsolute">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>File paths:</strong> absolute </a>
 </p>
 </div>
-<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div id="strongFilepathsstrongabsolute" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr
-project makes it easier to run your code on other machines.</p>
+<p>
+Using absolute paths to the files within your workflowr project makes it
+difficult for you and others to run your code on a different machine.
+Change the absolute path(s) below to the suggested relative path(s) to
+make your code more reproducible.
+</p>
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th style="text-align:left;">
+absolute
+</th>
+<th style="text-align:left;">
+relative
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+/files/scSeq_Hefendehl/data/ReloadAllData_Hefendehl_Stroke_Dec
+</td>
+<td style="text-align:left;">
+data/ReloadAllData_Hefendehl_Stroke_Dec
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+/files/scSeq_Hefendehl/data/DAM_genelists.RData
+</td>
+<td style="text-align:left;">
+data/DAM_genelists.RData
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreeb003c3ffefe153347a53b01ff95b628a4dc25de5targetblankb003c3fa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreeeaa373d44abba957ff4d3738a8d952454338988dtargetblankeaa373da">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/b003c3ffefe153347a53b01ff95b628a4dc25de5" target="_blank">b003c3f</a>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/eaa373d44abba957ff4d3738a8d952454338988d" target="_blank">eaa373d</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreeb003c3ffefe153347a53b01ff95b628a4dc25de5targetblankb003c3fa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreeeaa373d44abba957ff4d3738a8d952454338988dtargetblankeaa373da"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -533,7 +564,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/b003c3ffefe153347a53b01ff95b628a4dc25de5" target="_blank">b003c3f</a>.
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/eaa373d44abba957ff4d3738a8d952454338988d" target="_blank">eaa373d</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -548,32 +579,35 @@ were generated:
 </p>
 <pre><code>
 Ignored files:
-    Ignored:    .DS_Store
-    Ignored:    .Rhistory
+    Ignored:    .RData
     Ignored:    .Rproj.user/
-    Ignored:    analysis/.Rhistory
+    Ignored:    data/20230203/
+    Ignored:    data/Alignments/
+    Ignored:    data/Cluster.markers_02-02-2023.xlsx
+    Ignored:    data/DAM_genelists.RData
     Ignored:    data/ReloadAllData_Hefendehl_Stroke_Dec'21.RData
     Ignored:    data/Sample_Tables/
+    Ignored:    data/Stroke-SS2_SCT-harmony_Hefendehl.html
     Ignored:    data/counts.csv
     Ignored:    data/genecounts.csv
+    Ignored:    data/microglia-SCT_02-02-23.rds
     Ignored:    data/microglia_protein.rds
     Ignored:    data/samples.integrated.RData
+    Ignored:    data/seu-SCT-harmony_02-02-23.rds
+    Ignored:    data/seu_filtered_nonorm_02-02-23.rds
     Ignored:    data/tx2genes.csv
-    Ignored:    output/Descriptives.Rmd
-    Ignored:    output/Descriptives.docx
+    Ignored:    output/integrated_analysis.RData
 
 Untracked files:
-    Untracked:  workflow_helper.R
+    Untracked:  shinySecret.R
+    Untracked:  wflowhelper.R
 
 Unstaged changes:
-    Modified:   .Rprofile
-    Modified:   .gitattributes
-    Modified:   .gitignore
-    Modified:   README.md
     Modified:   _workflowr.yml
     Modified:   data/README.md
-    Modified:   output/README.md
-    Modified:   scSeq_Hefendehl.Rproj
+    Modified:   geneviewer/Dataset.RData
+    Modified:   geneviewer/app.R
+    Modified:   geneviewer/rsconnect/shinyapps.io/molgenlab/geneviewer.dcf
 
 </code></pre>
 <p>
@@ -619,6 +653,41 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/eaa373d44abba957ff4d3738a8d952454338988d/analysis/00_Original_Analysis.Rmd" target="_blank">eaa373d</a>
+</td>
+<td>
+Andreas Chiocchetti
+</td>
+<td>
+2023-02-16
+</td>
+<td>
+workflowr::wflow_publish(c("./docs/<em>", "./analysis/</em>",
+"./code/*",
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/KJPMolgenLab/scSeq_Hefendehl/776448493ac55dc6d14eefa722acbb0652fe3dfc/docs/00_Original_Analysis.html" target="_blank">7764484</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2022-06-27
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1057,7 +1126,7 @@ first commit
 <pre class="r"><code># Visualize QC metrics as a violin plot
 Idents(plates_hefendehl) &lt;- &quot;Plate&quot;
 VlnPlot(plates_hefendehl, features = c(&quot;nFeature_RNA&quot;, &quot;nCount_RNA&quot;, &quot;percent.mito&quot;,&quot;percent.ribo&quot;), 
-        group.by = &quot;Plate&quot;, pt.size = 1, ncol = 4, )</code></pre>
+        group.by = &quot;Plate&quot;, pt.size = 1, ncol = 4)</code></pre>
 <p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-3-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
@@ -3596,10 +3665,10 @@ achiocch
 </div>
 </div>
 <pre class="r"><code>p5 | p5a</code></pre>
-<pre><code>Warning: Use of `expr_df[[axes[1]]]` is discouraged. Use `.data[[axes[1]]]`
-instead.</code></pre>
-<pre><code>Warning: Use of `expr_df[[axes[2]]]` is discouraged. Use `.data[[axes[2]]]`
-instead.</code></pre>
+<pre><code>Warning: Use of `expr_df[[axes[1]]]` is discouraged.
+ℹ Use `.data[[axes[1]]]` instead.</code></pre>
+<pre><code>Warning: Use of `expr_df[[axes[2]]]` is discouraged.
+ℹ Use `.data[[axes[2]]]` instead.</code></pre>
 <p><img src="figure/00_Original_Analysis.Rmd/unnamed-chunk-9-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
@@ -4283,6 +4352,8 @@ achiocch
 </table>
 </div>
 </div>
+<pre class="r"><code>save(list=c(&quot;DAM_up&quot;, &quot;DAM_down&quot;,&quot;Stage2_DAM_down&quot;, &quot;Stage2_DAM_up&quot;,
+            &quot;DAM2_up_1&quot;, &quot;DAM2_up_2&quot;, &quot;DAM2_up_3&quot;, &quot;DAM2_down_1&quot;, &quot;DAM2_down_2&quot;,&quot;DAM2_down_3&quot;), file = &quot;/files/scSeq_Hefendehl/data/DAM_genelists.RData&quot;)</code></pre>
 </div>
 <div id="signature-enrichment" class="section level2">
 <h2><strong>Signature enrichment</strong></h2>
@@ -4871,102 +4942,106 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.2.0 (2022-04-22)
-Platform: x86_64-apple-darwin17.0 (64-bit)
-Running under: macOS Big Sur/Monterey 10.16
+<pre><code>R version 4.2.2 (2022-10-31)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 22.04.1 LTS
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
 
 locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 
 attached base packages:
 [1] stats4    stats     graphics  grDevices utils     datasets  methods  
 [8] base     
 
 other attached packages:
- [1] scales_1.2.0                pheatmap_1.0.12            
- [3] EnhancedVolcano_1.14.0      ggrepel_0.9.1              
- [5] SingleR_1.10.0              SummarizedExperiment_1.26.1
- [7] Biobase_2.56.0              GenomicRanges_1.48.0       
- [9] GenomeInfoDb_1.32.2         IRanges_2.30.0             
-[11] S4Vectors_0.34.0            BiocGenerics_0.42.0        
-[13] MatrixGenerics_1.8.0        matrixStats_0.62.0         
-[15] ggplot2_3.3.6               sp_1.5-0                   
-[17] SeuratObject_4.1.0          Seurat_4.1.1               
-[19] workflowr_1.7.0            
+ [1] scales_1.2.1                pheatmap_1.0.12            
+ [3] EnhancedVolcano_1.16.0      ggrepel_0.9.3              
+ [5] SingleR_2.0.0               SummarizedExperiment_1.28.0
+ [7] Biobase_2.58.0              GenomicRanges_1.50.2       
+ [9] GenomeInfoDb_1.34.9         IRanges_2.32.0             
+[11] S4Vectors_0.36.1            BiocGenerics_0.44.0        
+[13] MatrixGenerics_1.10.0       matrixStats_0.63.0         
+[15] ggplot2_3.4.1               SeuratObject_4.1.3         
+[17] Seurat_4.3.0                workflowr_1.7.0            
 
 loaded via a namespace (and not attached):
-  [1] plyr_1.8.7                igraph_1.3.2             
-  [3] lazyeval_0.2.2            splines_4.2.0            
-  [5] BiocParallel_1.30.3       listenv_0.8.0            
-  [7] scattermore_0.8           digest_0.6.29            
-  [9] htmltools_0.5.2           fansi_1.0.3              
- [11] magrittr_2.0.3            ScaledMatrix_1.4.0       
- [13] tensor_1.5                cluster_2.1.3            
- [15] ROCR_1.0-11               globals_0.15.0           
- [17] spatstat.sparse_2.1-1     colorspace_2.0-3         
- [19] xfun_0.31                 dplyr_1.0.9              
- [21] callr_3.7.0               crayon_1.5.1             
- [23] RCurl_1.98-1.7            jsonlite_1.8.0           
- [25] progressr_0.10.1          spatstat.data_2.2-0      
- [27] survival_3.3-1            zoo_1.8-10               
- [29] glue_1.6.2                polyclip_1.10-0          
- [31] gtable_0.3.0              zlibbioc_1.42.0          
- [33] XVector_0.36.0            leiden_0.4.2             
- [35] DelayedArray_0.22.0       BiocSingular_1.12.0      
- [37] future.apply_1.9.0        abind_1.4-5              
- [39] DBI_1.1.3                 spatstat.random_2.2-0    
- [41] miniUI_0.1.1.1            Rcpp_1.0.8.3             
- [43] viridisLite_0.4.0         xtable_1.8-4             
- [45] reticulate_1.25           spatstat.core_2.4-4      
- [47] rsvd_1.0.5                htmlwidgets_1.5.4        
- [49] httr_1.4.3                RColorBrewer_1.1-3       
- [51] ellipsis_0.3.2            ica_1.0-2                
- [53] farver_2.1.0              pkgconfig_2.0.3          
- [55] sass_0.4.1                uwot_0.1.11              
- [57] deldir_1.0-6              utf8_1.2.2               
- [59] labeling_0.4.2            tidyselect_1.1.2         
- [61] rlang_1.0.2               reshape2_1.4.4           
- [63] later_1.3.0               munsell_0.5.0            
- [65] tools_4.2.0               cli_3.3.0                
- [67] generics_0.1.2            ggridges_0.5.3           
- [69] evaluate_0.15             stringr_1.4.0            
- [71] fastmap_1.1.0             yaml_2.3.5               
- [73] goftest_1.2-3             processx_3.6.1           
- [75] knitr_1.39                fs_1.5.2                 
- [77] fitdistrplus_1.1-8        purrr_0.3.4              
- [79] RANN_2.6.1                sparseMatrixStats_1.8.0  
- [81] pbapply_1.5-0             future_1.26.1            
- [83] nlme_3.1-158              whisker_0.4              
- [85] mime_0.12                 compiler_4.2.0           
- [87] rstudioapi_0.13           plotly_4.10.0            
- [89] png_0.1-7                 spatstat.utils_2.3-1     
- [91] tibble_3.1.7              bslib_0.3.1              
- [93] stringi_1.7.6             highr_0.9                
- [95] ps_1.7.1                  rgeos_0.5-9              
- [97] lattice_0.20-45           Matrix_1.4-1             
- [99] vctrs_0.4.1               pillar_1.7.0             
-[101] lifecycle_1.0.1           spatstat.geom_2.4-0      
+  [1] plyr_1.8.8                igraph_1.4.0             
+  [3] lazyeval_0.2.2            sp_1.6-0                 
+  [5] splines_4.2.2             BiocParallel_1.32.5      
+  [7] listenv_0.9.0             scattermore_0.8          
+  [9] digest_0.6.31             htmltools_0.5.4          
+ [11] fansi_1.0.4               magrittr_2.0.3           
+ [13] ScaledMatrix_1.6.0        tensor_1.5               
+ [15] cluster_2.1.4             ROCR_1.0-11              
+ [17] globals_0.16.2            spatstat.sparse_3.0-0    
+ [19] colorspace_2.1-0          xfun_0.37                
+ [21] dplyr_1.1.0               callr_3.7.3              
+ [23] RCurl_1.98-1.10           jsonlite_1.8.4           
+ [25] progressr_0.13.0          spatstat.data_3.0-0      
+ [27] survival_3.5-3            zoo_1.8-11               
+ [29] glue_1.6.2                polyclip_1.10-4          
+ [31] gtable_0.3.1              zlibbioc_1.44.0          
+ [33] XVector_0.38.0            leiden_0.4.3             
+ [35] DelayedArray_0.24.0       BiocSingular_1.14.0      
+ [37] future.apply_1.10.0       abind_1.4-5              
+ [39] spatstat.random_3.1-3     miniUI_0.1.1.1           
+ [41] Rcpp_1.0.10               viridisLite_0.4.1        
+ [43] xtable_1.8-4              reticulate_1.28          
+ [45] rsvd_1.0.5                htmlwidgets_1.6.1        
+ [47] httr_1.4.4                RColorBrewer_1.1-3       
+ [49] ellipsis_0.3.2            ica_1.0-3                
+ [51] farver_2.1.1              pkgconfig_2.0.3          
+ [53] sass_0.4.5                uwot_0.1.14              
+ [55] deldir_1.0-6              utf8_1.2.3               
+ [57] labeling_0.4.2            tidyselect_1.2.0         
+ [59] rlang_1.0.6               reshape2_1.4.4           
+ [61] later_1.3.0               munsell_0.5.0            
+ [63] tools_4.2.2               cachem_1.0.6             
+ [65] cli_3.6.0                 generics_0.1.3           
+ [67] ggridges_0.5.4            evaluate_0.20            
+ [69] stringr_1.5.0             fastmap_1.1.0            
+ [71] yaml_2.3.7                goftest_1.2-3            
+ [73] processx_3.8.0            knitr_1.42               
+ [75] fs_1.6.1                  fitdistrplus_1.1-8       
+ [77] purrr_1.0.1               RANN_2.6.1               
+ [79] sparseMatrixStats_1.10.0  pbapply_1.7-0            
+ [81] future_1.31.0             nlme_3.1-162             
+ [83] whisker_0.4.1             mime_0.12                
+ [85] ggrastr_1.0.1             compiler_4.2.2           
+ [87] rstudioapi_0.14           beeswarm_0.4.0           
+ [89] plotly_4.10.1             png_0.1-8                
+ [91] spatstat.utils_3.0-1      tibble_3.1.8             
+ [93] bslib_0.4.2               stringi_1.7.12           
+ [95] highr_0.10                ps_1.7.2                 
+ [97] lattice_0.20-45           Matrix_1.5-3             
+ [99] vctrs_0.5.2               pillar_1.8.1             
+[101] lifecycle_1.0.3           spatstat.geom_3.0-6      
 [103] lmtest_0.9-40             jquerylib_0.1.4          
-[105] BiocNeighbors_1.14.0      RcppAnnoy_0.0.19         
-[107] data.table_1.14.2         cowplot_1.1.1            
-[109] bitops_1.0-7              irlba_2.3.5              
-[111] httpuv_1.6.5              patchwork_1.1.1          
-[113] R6_2.5.1                  promises_1.2.0.1         
-[115] KernSmooth_2.23-20        gridExtra_2.3            
-[117] parallelly_1.32.0         codetools_0.2-18         
-[119] MASS_7.3-57               assertthat_0.2.1         
-[121] rprojroot_2.0.3           withr_2.5.0              
-[123] sctransform_0.3.3         GenomeInfoDbData_1.2.8   
-[125] mgcv_1.8-40               parallel_4.2.0           
-[127] beachmat_2.12.0           grid_4.2.0               
-[129] rpart_4.1.16              tidyr_1.2.0              
-[131] DelayedMatrixStats_1.18.0 rmarkdown_2.14           
-[133] Rtsne_0.16                git2r_0.30.1             
-[135] getPass_0.2-2             shiny_1.7.1              </code></pre>
+[105] RcppAnnoy_0.0.20          data.table_1.14.6        
+[107] cowplot_1.1.1             bitops_1.0-7             
+[109] irlba_2.3.5.1             httpuv_1.6.9             
+[111] patchwork_1.1.2           R6_2.5.1                 
+[113] promises_1.2.0.1          KernSmooth_2.23-20       
+[115] gridExtra_2.3             vipor_0.4.5              
+[117] parallelly_1.34.0         codetools_0.2-19         
+[119] MASS_7.3-58.2             rprojroot_2.0.3          
+[121] withr_2.5.0               sctransform_0.3.5        
+[123] GenomeInfoDbData_1.2.9    parallel_4.2.2           
+[125] beachmat_2.14.0           grid_4.2.2               
+[127] tidyr_1.3.0               DelayedMatrixStats_1.20.0
+[129] rmarkdown_2.20            Rtsne_0.16               
+[131] git2r_0.31.0              getPass_0.2-2            
+[133] spatstat.explore_3.0-6    shiny_1.7.4              
+[135] ggbeeswarm_0.7.1         </code></pre>
 </div>
 </div>
 </div>
