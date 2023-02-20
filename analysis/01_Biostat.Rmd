@@ -21,7 +21,10 @@ library(viridis)
 library(DT)
 library(slingshot)
 library(SingleCellExperiment)
+```
 
+
+```{r load, include=F}
 load("./output/integrated_analysis.RData")
 source("./code/custom_functions.R")
 
@@ -382,9 +385,11 @@ get results table [here](LMER_Microglia_2.xlsx)
 
 ### Microglia_3
 ```{r Microglia_3, message=F, warning=FALSE}
-res_output=generate_output("Microglia_3")
-res_output[["results_sig"]] %>% display_tab()
-res_output[["plot"]]
+idx=samplemeta$Celltype=="Microglia_3"
+table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx])
+
+table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %>% fisher.test()
+
 ```
 Data sources and their abbreviations are: [Gene Ontology](http://geneontology.org/) (GO or by branch GO:MF, GO:BP, GO:CC)[KEGG](https://www.genome.jp/kegg/) (KEGG) [TRANSFAC](https://genexplain.com/transfac/) (TF) [miRTarBase](https://mirtarbase.cuhk.edu.cn/~miRTarBase/miRTarBase_2019/php/index.php) (MIRNA) [CORUM](https://mips.helmholtz-muenchen.de/corum/) (CORUM) [Human phenotype ontology](http://hpo.jax.org/app/) (HP) [Human Protein Atlas](https://www.proteinatlas.org/) (HPA)
 

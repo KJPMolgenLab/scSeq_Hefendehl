@@ -53,6 +53,8 @@ knitr::opts_chunk$set(fig.height=8, fig.width=15)
 plates_hefendehl<-readRDS("./data/20230203/seu-SCT-harmony_02-02-23.rds")
 samples.integrated <- plates_hefendehl
 
+
+
 ```
 
 
@@ -92,14 +94,23 @@ Idents(samples.integrated) <- "Plate"
 DimPlot(samples.integrated, reduction = "harmony", group.by = "Mouse_ID")
 DimHeatmap(samples.integrated, dims = 1:2, cells = 200, balanced = TRUE)
 
+FeaturePlot(samples.integrated, reduction = "umap", features = c("Aif1", "Ptprc"), dims = c(1,2))
+
+
+## filter by Microglia Exclude Cells negative for Markers (Aif1 and CD45)
+excl = (samples.integrated@assays$RNA@counts["Aif1", ]==0 |
+          samples.integrated@assays$RNA@counts["Ptprc", ]==0)
+
+samples.integrated <- samples.integrated[,!excl]
+
 ```
 
 PCA, tSNE and UMAP from the first 30 dimensions and with a resolution of 0.8
 
 ```{r message=FALSE, warning=FALSE,}
 # Visualization
-Idents(samples.integrated) <- "seurat_clusters"
 
+Idents(samples.integrated) <- "seurat_clusters"
 DimPlot(samples.integrated, reduction = "umap", split.by = "Treatment")
 ```
 
@@ -265,6 +276,7 @@ a1 | b1 | c1
 ```{r Marker genes, message=FALSE, warning=FALSE, fig.width=8, fig.height=8}
 
 Idents(samples.integrated) <- samples.integrated$seurat_clusters
+samples.integrated=PrepSCTFindMarkers(samples.integrated)
 
 markers <- FindAllMarkers(object = samples.integrated, 
                           only.pos = TRUE,
@@ -287,7 +299,7 @@ SingleR is an automatic annotation method for (scRNAseq) data (Aran et al. 2019)
 **Immgen reference**
 
 
-```{r SingleR: Immgen, echo=FALSE, results='hide',message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=4}
+```{r SingleR: Immgen, echo=FALSE, results='hide',message=FALSE,warning=FALSE,   fig.width=8, fig.height=4}
 
 # Based on clusters
 
@@ -316,7 +328,7 @@ DimPlot(samples.integrated,group.by ="Immgen_sc_labels", label = F ) + NoLegend(
 **MouseRNA-Seq reference**
 Section Skipped as pred.mouseRNA object is not available 
 
-```{r SingleR: MouseRNA-Seq, echo=FALSE, results='hide',message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=4}
+```{r SingleR: MouseRNA-Seq, echo=FALSE, results='hide',message=FALSE,warning=FALSE,   fig.width=8, fig.height=4}
 
 # Based on clusters
 
@@ -409,6 +421,7 @@ ggplot(cluster_percent_Cell, aes(fill=Genotype_Treatment, y=Frequency, x=Immgen_
 Renaming Clusters
 
 ```{r}
+Idents(samples.integrated) = "Celltype"
 DimPlot(samples.integrated, reduction = "umap", label=T) + NoLegend()+ theme_classic()
 ```
 
@@ -510,9 +523,7 @@ log fold-change of the average expression between the two groups: Positive value
 
 #### **WT vs App**
 
-
-
-```{r general DEGs WT vs APPPS1, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=8}
+```{r general DEGs WT vs APPPS1, echo=FALSE, message=FALSE,warning=FALSE,   fig.width=8, fig.height=8}
 
 Idents(samples.microglia) <- "Genotype"
 
@@ -591,7 +602,7 @@ DT::datatable(restab, extensions = "Buttons",
 #### **WT vs MX04+**
 log fold-chage of the average expression between the two groups: Positive values indicate that the gene is more highly expressed in the Methoxy positive group
 
-```{r echo=FALSE, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=8}
+```{r echo=FALSE, echo=FALSE, message=FALSE,warning=FALSE,   fig.width=8, fig.height=8}
 Idents(samples.microglia) <- "Methoxy" 
 markers_WtvsMX <- FindMarkers(samples.microglia, ident.1 = "pos")
 
@@ -652,7 +663,7 @@ DT::datatable(restab, extensions = "Buttons",
 
 #### **MX04+ vs MX04- in APPPS1 cohort only**
 
-```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=8}
+```{r echo=FALSE, message=FALSE,warning=FALSE,   fig.width=8, fig.height=8}
 samples.microglia.app <- samples.microglia[,samples.microglia$Genotype=="APPPS1"]
 
 samples.microglia.app <- SCTransform(samples.microglia.app)
@@ -722,7 +733,7 @@ DT::datatable(restab, extensions = "Buttons",
 
 #### **WT_Ctrl vs WT_Stroke**
 
-```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=8}
+```{r echo=FALSE, message=FALSE,warning=FALSE,  fig.width=8, fig.height=8}
 
 samples.microglia.WT <- samples.microglia[,samples.microglia$Genotype=="WT"]
 
@@ -761,8 +772,6 @@ DT::datatable(sig.markers_StrokeWT, extensions = "Buttons",
               ))
 
 
-
-
 genelist=split(rownames(sig.markers_StrokeWT), f = sig.markers_StrokeWT$avg_log2FC>0)
 genelist = genelist[c("FALSE", "TRUE")]
 names(genelist) = c("WT_Stroke_down", "WT_Stroke_up")
@@ -790,7 +799,7 @@ DT::datatable(restab, extensions = "Buttons",
 
 #### **APP_Ctrl vs APP_Stroke**
 
-```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=8}
+```{r echo=FALSE, message=FALSE,warning=FALSE,   fig.width=8, fig.height=8}
 
 Idents(samples.microglia.app) <- "Treatment"
 markers_StrokeAPPPS <- FindMarkers(samples.microglia.app, ident.1 = "Stroke")
@@ -853,7 +862,7 @@ DT::datatable(restab, extensions = "Buttons",
 
 #### **WT_Ctrl vs APP_Ctrl**
 
-```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+```{r echo=FALSE, message=FALSE,warning=FALSE,   fig.height=8, fig.width=8}
 
 samples.microglia.Ctrl <- samples.microglia[,samples.microglia$Treatment=="Ctrl"]
 
@@ -923,7 +932,7 @@ DT::datatable(restab, extensions = "Buttons",
 #### **WT_Stroke vs APP_Stroke**
 
 
-```{r echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.width=8, fig.height=8} 
+```{r echo=FALSE, message=FALSE,warning=FALSE,   fig.width=8, fig.height=8} 
 
 
 samples.microglia.Stroke <- samples.microglia[,samples.microglia$Treatment=="Stroke"]
@@ -997,7 +1006,7 @@ log fold-chage of the average expression between the two groups: Positive values
 #### **Microglia_0**
 
 
-```{r DEGs GSEA_output_ctrl Microglia_0, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+```{r DEGs GSEA_output_ctrl Microglia_0, echo=FALSE, message=FALSE,warning=FALSE,   fig.height=8, fig.width=8}
 
 Idents(samples.microglia)="seurat_clusters"
 markers.Microglia_0 = FindMarkers(samples.microglia, ident.1 = "0")
@@ -1057,7 +1066,7 @@ DT::datatable(restab, extensions = "Buttons",
 
 #### **Microglia_1**
 
-```{r DEGs GSEA_output_ctrl Microglia_1, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+```{r DEGs GSEA_output_ctrl Microglia_1, echo=FALSE, message=FALSE,warning=FALSE,   fig.height=8, fig.width=8}
 
 Idents(samples.microglia)="seurat_clusters"
 markers.Microglia_1 = FindMarkers(samples.microglia, ident.1 = "1")
@@ -1115,7 +1124,7 @@ DT::datatable(restab, extensions = "Buttons",
 
 
 #### **Microglia_2**
-```{r DEGs GSEA_output_ctrl Microglia_2, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+```{r DEGs GSEA_output_ctrl Microglia_2, echo=FALSE, message=FALSE,warning=FALSE,   fig.height=8, fig.width=8}
 
 Idents(samples.microglia)="seurat_clusters"
 markers.Microglia_2 = FindMarkers(samples.microglia, ident.1 = "2")
@@ -1174,7 +1183,7 @@ DT::datatable(restab, extensions = "Buttons",
 
 
 #### **Microglia_3**
-```{r DEGs GSEA_output_ctrl Microglia_3, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+```{r DEGs GSEA_output_ctrl Microglia_3, echo=FALSE, message=FALSE,warning=FALSE,   fig.height=8, fig.width=8}
 
 Idents(samples.microglia)="seurat_clusters"
 markers.Microglia_3 = FindMarkers(samples.microglia, ident.1 = "3")
@@ -1233,7 +1242,7 @@ DT::datatable(restab, extensions = "Buttons",
 
 
 #### **Microglia_4**
-```{r DEGs GSEA_output_ctrl Microglia_4, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+```{r DEGs GSEA_output_ctrl Microglia_4, echo=FALSE, message=FALSE,warning=FALSE,   fig.height=8, fig.width=8}
 
 Idents(samples.microglia)="seurat_clusters"
 markers.Microglia_4 = FindMarkers(samples.microglia, ident.1 = "4")
@@ -1292,7 +1301,7 @@ DT::datatable(restab, extensions = "Buttons",
 
 
 #### **Microglia_5**
-```{r DEGs GSEA_output_ctrl Microglia_5, echo=FALSE, message=FALSE,warning=FALSE, eval=FALSE, fig.height=8, fig.width=8}
+```{r DEGs GSEA_output_ctrl Microglia_5, echo=FALSE, message=FALSE,warning=FALSE,   fig.height=8, fig.width=8}
 
 Idents(samples.microglia)="seurat_clusters"
 markers.Microglia_5 = FindMarkers(samples.microglia, ident.1 = "5")
