@@ -35,6 +35,7 @@ trimmed_scaled <- function(vec){
 }
 
 
+
 ```
 
 
@@ -43,6 +44,10 @@ trimmed_scaled <- function(vec){
 #get sample data
 samples.integrated@meta.data %>% as.data.frame() -> samplemeta
 
+
+spacial_data= samples.microglia@meta.data %>% as.data.frame() %>% select(contains("spatial"))
+
+samplemeta <- cbind(samplemeta, spacial_data[rownames(samplemeta),])
 
 # convert to correct data type 
 
@@ -89,6 +94,11 @@ table(Genotype=samplemeta$Genotype_corr, Treatment=samplemeta$Treatment) %>% as.
 table(Genotype=samplemeta$Genotype_corr, Celltype=samplemeta$Celltype) %>% 
   as.data.frame() %>% display_tab()
 
+## add spatial cell types 
+table(Genotype=samplemeta$Genotype_corr, Sp_Controls=samplemeta$Control_spatial_binary) %>% 
+  as.data.frame() %>% display_tab()
+table(Genotype=samplemeta$Genotype_corr, Sp_Stroke=samplemeta$Stroke_spatial_binary) %>% 
+  as.data.frame() %>% display_tab()
 
 table(Genotype=samplemeta$Genotype_corr, 
       Celltype=samplemeta$Celltype, Treatment=samplemeta$Treatment
@@ -104,7 +114,7 @@ sce <- slingshot(sce, clusterLabels = 'Celltype', reducedDim = 'UMAP')
 samplemeta$Pseudotime <- sce$slingPseudotime_1
 samples.integrated@meta.data = samplemeta
 
-variables=c("Celltype","Sex", "Age","Genotype_corr", "Treatment", "condition","Phase", "Pseudotime","Brain_region","nCount_RNA","pseudoaligned_reads", "percent.mt", "percent.rp", "Mouse_ID")
+variables=c("Celltype","Sex", "Age","Genotype_corr", "Treatment", "condition","Phase","Control_spatial_binary","Stroke_spatial_binary", "Pseudotime","Brain_region","nCount_RNA","pseudoaligned_reads", "percent.mt", "percent.rp", "Mouse_ID")
 
 ```
 
@@ -116,6 +126,22 @@ export_table <- createTable(res)
 options(width = 10000)
 export2md(export_table)
 export2xls(export_table,paste0(home,"/docs/Descriptives.xlsx"))
+
+## compare Binary Spatial Controls 
+res = compareGroups(Control_spatial_binary~., data = samplemeta[,variables], max.ylev = 10)
+#summary(res)
+export_table <- createTable(res)
+options(width = 10000)
+export2md(export_table)
+export2xls(export_table,paste0(home,"/docs/Descriptives_sp_Control.xlsx"))
+
+## compare Binary Spatial  Stroke
+res = compareGroups(Stroke_spatial_binary~., data = samplemeta[,variables], max.ylev = 10)
+#summary(res)
+export_table <- createTable(res)
+options(width = 10000)
+export2md(export_table)
+export2xls(export_table,paste0(home,"/docs/Descriptives_sp_Stroke.xlsx"))
 
 ```
 
@@ -171,6 +197,22 @@ sumstatCelltype = counts %>% t() %>%
 names(sumstatCelltype) <- paste0("mean",sumstatCelltype[1,])
 sumstatCelltype<-sumstatCelltype[-1,]
 
+sumstat_spStroke = counts %>% t() %>%  
+  aggregate(by=samplemeta["Stroke_spatial_binary"], mean) %>% 
+  t() %>% as.data.frame()
+
+names(sumstat_spStroke) <- paste0("mean_spStrk",sumstat_spStroke[1,])
+sumstat_spStroke<-sumstat_spStroke[-1,]
+
+
+sumstat_spCtrl = counts %>% t() %>%  
+  aggregate(by=samplemeta["Control_spatial_binary"], mean) %>% 
+  t() %>% as.data.frame()
+
+names(sumstat_spCtrl) <- paste0("mean_spStrk",sumstat_spCtrl[1,])
+sumstat_spCtrl<-sumstat_spCtrl[-1,]
+
+
 
 Geno.Treatment_kruskal=apply(counts,1, function(x){
   res = kruskal.test(unlist(x)~samplemeta$corrGenotype_Treatment) %>% unlist()
@@ -185,8 +227,26 @@ Celltype_kruskal=apply(counts,1, function(x){
 })
 
 Celltype_kruskal_fdr = p.adjust(Celltype_kruskal, method = "fdr")
+                                
+                                
+Control_spatial_binary_kruskal=apply(counts,1, function(x){
+  res = kruskal.test(unlist(x)~samplemeta$Control_spatial_binary) %>% unlist()
+  return(as.numeric(res["p.value"]))
+})
+Control_spatial_binary_kruskal_fdr = p.adjust(Control_spatial_binary_kruskal, method = "fdr")
 
-summarytab=cbind(sumstat, Geno.Treatment_kruskal, Geno.Treatment_kruskal_fdr , sumstatCelltype, Celltype_kruskal, Celltype_kruskal_fdr)
+Stroke_spatial_binary_kruskal=apply(counts,1, function(x){
+  res = kruskal.test(unlist(x)~samplemeta$Stroke_spatial_binary) %>% unlist()
+  return(as.numeric(res["p.value"]))
+})
+
+Stroke_spatial_binary_kruskal_fdr = p.adjust(Stroke_spatial_binary_kruskal, method = "fdr")
+
+
+summarytab=cbind(sumstat, Geno.Treatment_kruskal, Geno.Treatment_kruskal_fdr , 
+                 sumstatCelltype, Celltype_kruskal, Celltype_kruskal_fdr, 
+                 sumstat_spCtrl, Control_spatial_binary_kruskal, Control_spatial_binary_kruskal_fdr,
+                 sumstat_spStroke,Stroke_spatial_binary_kruskal,Stroke_spatial_binary_kruskal_fdr)
 
 summarytab %>% display_tab()
 
@@ -217,6 +277,12 @@ colors=viridis(255)
 cellcol = Dark8[1:nlevels(samplemeta$Celltype)]
 names(cellcol) = levels(samplemeta$Celltype)
 
+Stroke_sp = Dark8[1:nlevels(samplemeta$Stroke_spatial_binary)]
+names(Stroke_sp) = levels(samplemeta$Stroke_spatial_binary)
+
+Ctrl_sp = Dark8[1:nlevels(samplemeta$Control_spatial_binary)]
+names(Ctrl_sp) = levels(samplemeta$Control_spatial_binary)
+
 genotypecol = brewer.pal(4,"Accent")[c(1:nlevels(samplemeta$Genotype_corr))]
 names(genotypecol) = levels(samplemeta$Genotype_corr)
 
@@ -240,10 +306,12 @@ ann_colors = list(
   Brain_region = braincol,
   Celltype=cellcol,
   Treatment=strokecol, 
-  Age=Agecol
-)
+  Age=Agecol, 
+  Control_spatial_binary = Ctrl_sp,
+  Stroke_spatial_binary =Stroke_sp)
 
-labels = samplemeta[,c("Genotype_corr","Mouse_ID", "Age", "Brain_region", "Celltype", "Treatment")] %>%  
+labels = samplemeta[,c("Genotype_corr","Mouse_ID", "Age", "Brain_region", "Celltype", 
+                       "Control_spatial_binary","Stroke_spatial_binary","Treatment")] %>%  
   mutate_all(as.character) %>% as.data.frame()
 rownames(labels)=rownames(samplemeta)
 
@@ -307,7 +375,7 @@ getres=function(Celltype="Specify",
   
   
   
-  labels = samplemeta[samplemeta$Celltype==Celltype,c("Treatment","Age", "Genotype_corr","Mouse_ID", "Brain_region", "Celltype")] %>%  
+  labels = samplemeta[samplemeta$Celltype==Celltype,c("Treatment","Age", "Genotype_corr","Mouse_ID", "Brain_region", "Celltype","Control_spatial_binary", "Stroke_spatial_binary")] %>%  
     mutate_all(as.character) %>% as.data.frame()
 
   
@@ -335,10 +403,70 @@ getres=function(Celltype="Specify",
   
 }
 
-generate_output=function(CT="Celltype", ...){
+getresspatio=function(Celltype="Specify", 
+                Hypothesis="~1+Sex+Genotype_corr*Treatment", 
+                Target="Genotype_corrAPPPS1+:TreatmentStroke",
+                Randomeffect=NULL){
+  
+  idx=NA
+  if(Celltype =="Stroke_spatial_binary"){
+    idx=samplemeta$Stroke_spatial_binary==T
+  
+  }
+  if(Celltype =="Control_spatial_binary"){
+    idx=samplemeta$Control_spatial_binary==T
+    }
+  
+  idx[is.na(idx)]=F
+
+  res=comparison_rand(designform =Hypothesis, 
+                       randomeffect = Randomeffect, 
+                       Samples = idx, 
+                       log_cpm = log2_cpm, 
+                       samplesdata = samplemeta,
+                       target=Target)
+  
+  
+  
+  labels = samplemeta[idx,c("Treatment","Age", "Genotype_corr","Mouse_ID", "Brain_region", "Celltype", "Control_spatial_binary", "Stroke_spatial_binary")] %>%  
+    mutate_all(as.character) %>% as.data.frame()
+
+  
+  labels=labels %>% arrange(Treatment,Genotype_corr)
+  
+  plotdata=log2_cpm[res$adj.P.Val<0.05,rownames(labels)]
+  plotdata = apply(plotdata, 2, trimmed_scaled)
+  
+  
+  
+  pheatmap(plotdata,
+           #clustering_method = "ward.D2",
+           cluster_cols = F,
+           cluster_rows  = T,
+           scale ="row",
+           show_rownames=F, show_colnames = F,
+           legend=T,
+           border_color = NA, 
+           #annotation_row = labels,
+           annotation_col = labels,
+           annotation_colors = ann_colors,
+           col = colors, 
+           breaks = seq(-2,2, length.out=254),
+           main = "D62 Distances normalized log2 counts")
+  
+  return(res)
+  
+}
+
+generate_output=function(CT="Celltype",mode="Celltype", ...){
   respath=paste0(home, "/docs/LMER_",CT,".xlsx")
   
-  analysis = getres(Celltype = CT)
+  if(mode == "Spatial"){
+    analysis = getresspatio(Celltype = CT)
+  }
+  if (mode == "Celltype"){
+    analysis = getres(Celltype = CT)}
+  
   analysis_sig = analysis[analysis$adj.P.Val<0.05,]
   analysis_sig %>% display_tab()
   
@@ -456,6 +584,23 @@ table(samplemeta$Treatment[idx], samplemeta$Genotype_corr[idx]) %>% fisher.test(
 
 get results table [here](LMER_T_NK.xlsx)
 
+
+### Control Spacial
+```{r Control_spatial_binary, message=F, warning=FALSE}
+res_output=generate_output(CT = "Control_spatial_binary", mode="Spatial")
+res_output[["results_sig"]] %>% display_tab()
+res_output[["plot"]]
+
+```
+
+### Strole Spatial
+```{r Stroke_spatial_binary, message=F, warning=FALSE}
+res_output=generate_output("Stroke_spatial_binary", mode="Spatial")
+res_output[["results_sig"]] %>% display_tab()
+res_output[["plot"]]
+```
+
+
 ## Pseudotime analysis 
 
 ```{r calculate pseudotime}
@@ -484,7 +629,7 @@ legend("topright", legend=c("WT_Ctrl","APPPS1+_Stroke","WT_Stroke","APPPS1+_Ctrl
 
 ```{r setapp, include=F}
 
-secret="/files/scSeq_Hefendehl/shinySecret.R"
+secret="./shinySecret.R"
 source(secret)
 
 local({

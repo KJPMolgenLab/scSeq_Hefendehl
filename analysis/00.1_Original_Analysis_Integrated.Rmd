@@ -35,6 +35,18 @@ ep_str_wrap <- function(string, width) {
     )
 }
 
+GOplot <- function(gostresult)
+if(is.null(gostresult)){
+  ggplot() +                      # Draw ggplot2 plot with text only
+  annotate("text",
+           x = 1,
+           y = 1,
+           size = 8,
+           label = "no significant GO-terms associated") + 
+  theme_void()
+} else {
+gostplot(gostresult)}
+
 ```
 
 
@@ -94,7 +106,8 @@ Idents(samples.integrated) <- "Plate"
 DimPlot(samples.integrated, reduction = "harmony", group.by = "Mouse_ID")
 DimHeatmap(samples.integrated, dims = 1:2, cells = 200, balanced = TRUE)
 
-FeaturePlot(samples.integrated, reduction = "umap", features = c("Aif1", "Ptprc"), dims = c(1,2))
+FeaturePlot(samples.integrated, reduction = "umap", 
+            features = c("Aif1", "Ptprc"), dims = c(1,2))
 
 
 ## filter by Microglia Exclude Cells negative for Markers (Aif1 and CD45)
@@ -142,18 +155,18 @@ DimPlot(samples.integrated, reduction = "umap", split.by = "Genotype_Treatment",
 First, a score is assigned to each cell (Tirosh et al. 2016), based on its expression of G2/M and S phase markers. These markers should be anticorrelated in their expression levels and cells expression neither are likely not cycling and in G1 phase.
 Note: For downstream cell cylce regression the quantitative scores for G2/M and S phase are used, not the dicrete classification.
 
-```{r cell cycle scoring genes, echo=FALSE, results='hide',message=FALSE,warning=FALSE, fig.width=8, fig.height=4}
+```{r cell cycle scoring 2, echo=FALSE, results='hide',message=FALSE,warning=FALSE, fig.width=4, fig.height=4}
+DimPlot(samples.integrated)+ theme_classic()
+```
+
+
+```{r cell cycle scoring genes 2, echo=FALSE, results='hide',message=FALSE,warning=FALSE, fig.width=8, fig.height=4}
 Idents(samples.integrated) <- "Phase"
 # View cell cycle scores and phase assignment
 head(samples.integrated[[]])
  
 # visualize the distribution of cell cycle markers across
 RidgePlot(samples.integrated, features = c("Pcna", "Top2a", "Mcm6", "Mki67"), ncol = 2)
-```
-
-
-```{r cell cycle scoring, echo=FALSE, results='hide',message=FALSE,warning=FALSE, fig.width=4, fig.height=4}
-DimPlot(samples.integrated)+ theme_classic()
 ```
 
 
@@ -487,6 +500,58 @@ VlnPlot(samples.microglia, features = DAM2_down_1)
 VlnPlot(samples.microglia, features = DAM2_down_2) 
 VlnPlot(samples.microglia, features = DAM2_down_3) 
 ```
+## **points of interest  spatial sequencing**
+
+**Special Seq plotting**
+
+```{r Stage 2 spatial controls, echo=FALSE, results='hide',message=FALSE,warning=FALSE, fig.width=15, fig.height=4}
+spatial_stroke <- openxlsx::read.xlsx("./data/DEG_control_vs_stroke.xlsx", sheet=1)
+
+samples.microglia <- AddModuleScore(object = samples.microglia, 
+                                    features = list(spatial_stroke$X1), name = "Control_spatial")
+
+p4 <- FeaturePlot(object = samples.microglia, features = "Control_spatial1")+scale_color_viridis_c()
+p4a <- DimPlot(object = samples.microglia, reduction = "umap")
+
+phist = ggplot(data = samples.microglia@meta.data, aes(x=Control_spatial1))+
+  geom_density()+geom_vline(xintercept = 0.32)
+  theme_classic()
+
+
+samples.microglia$Control_spatial_binary = as.factor(samples.microglia$Control_spatial1>=0.32)
+
+pbin <- DimPlot(object = samples.microglia, group.by =  "Control_spatial_binary")
+
+phist | p4 | pbin| p4a 
+
+
+```
+
+
+```{r Stage 2 spatial stroke, echo=FALSE, results='hide',message=FALSE,warning=FALSE, fig.width=15, fig.height=4}
+spatial_stroke <- openxlsx::read.xlsx("./data/DEG_control_vs_stroke.xlsx", sheet=2)
+
+samples.microglia <- AddModuleScore(object = samples.microglia, 
+                                    features = list(spatial_stroke$X1), name = "Stroke_spatial")
+
+p4 <- FeaturePlot(object = samples.microglia, features = "Stroke_spatial1")+scale_color_viridis_c()
+p4a <- DimPlot(object = samples.microglia, reduction = "umap")
+
+phist = ggplot(data = samples.microglia@meta.data, aes(x=Stroke_spatial1))+
+  geom_density()+geom_vline(xintercept = 1.7)+
+  theme_classic()
+
+
+samples.microglia$Stroke_spatial_binary = as.factor(samples.microglia$Stroke_spatial1>=1.7)
+
+pbin <- DimPlot(object = samples.microglia, group.by =  "Stroke_spatial_binary")
+
+phist | p4 | pbin| p4a 
+
+
+```
+
+
 
 ## **Renaming clusters**
 
@@ -580,7 +645,7 @@ names(genelist) = c("APPPS1_down", "APPPS1_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -642,7 +707,7 @@ names(genelist) = c("Methoxy_down", "Methoxy_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -708,7 +773,7 @@ names(genelist) = c("MX04pos_APPPS_down", "MX04pos_APPPS_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -778,7 +843,7 @@ names(genelist) = c("WT_Stroke_down", "WT_Stroke_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -840,7 +905,7 @@ names(genelist) = c("APPPS_Stroke_down", "APPPS_Stroke_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -909,7 +974,7 @@ names(genelist) = c("Ctrl_APPPS1_down", "Ctrl_APPPS1_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -980,7 +1045,7 @@ names(genelist) = c("Stroke_APPPS1_down", "Stroke_APPPS1_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -1045,7 +1110,7 @@ names(genelist) = c("Microglia_0_down", "Microglia_0_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -1105,7 +1170,7 @@ names(genelist) = c("Microglia_1_down", "Microglia_1_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -1163,7 +1228,7 @@ names(genelist) = c("Microglia_2_down", "Microglia_2_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -1222,7 +1287,7 @@ names(genelist) = c("Microglia_3_down", "Microglia_3_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -1281,7 +1346,7 @@ names(genelist) = c("Microglia_4_down", "Microglia_4_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -1340,7 +1405,7 @@ names(genelist) = c("Microglia_5_down", "Microglia_5_up")
 
 resgost = gost(genelist, organism = "mmusculus", evcodes = T)
 
-gostplot(resgost)
+GOplot(resgost)
 
 restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
 
@@ -1356,6 +1421,120 @@ DT::datatable(restab, extensions = "Buttons",
                 buttons = c('copy', 'csv', 'excel', 'pdf')
               ))
 
+```
+
+#### **Spatial Subgroup Controls**
+
+```{r DEGs GSEA_output_ctrl Control_spatial, echo=FALSE, message=FALSE,warning=FALSE,   fig.height=8, fig.width=8}
+
+Idents(samples.microglia)="Control_spatial_binary"
+markers.Control_spatial = FindMarkers(samples.microglia, ident.1 = "TRUE")
+
+EnhancedVolcano(markers.Control_spatial,
+                lab = rownames(markers.Control_spatial),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-3, 3), ylim=c(0,55), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Control_spatial",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+sig.markers.Control_spatial <- markers.Control_spatial[abs(markers.Control_spatial$avg_log2FC)>log(1.5,2) 
+                                       &markers.Control_spatial$p_val_adj<0.05,]
+
+DT::datatable(sig.markers.Control_spatial, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Control_spatial markers"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_GenotypeCtrl), f = sig.markers_GenotypeCtrl$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Control_spatial_down", "Control_spatial_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+GOplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Control_spatial_Marker_Enrichment"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+```
+
+```{r DEGs GSEA_output_ctrl Stroke_spatial, echo=FALSE, message=FALSE,warning=FALSE,   fig.height=8, fig.width=8}
+
+Idents(samples.microglia)="Stroke_spatial_binary"
+markers.Stroke_spatial = FindMarkers(samples.microglia, ident.1 = "TRUE")
+
+EnhancedVolcano(markers.Stroke_spatial,
+                lab = rownames(markers.Stroke_spatial),
+                x = 'avg_log2FC', 
+                y = 'p_val', xlim = c(-3, 3), ylim=c(0,55), pCutoff = 0.01,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(P)),
+                title = "DEGs", subtitle = "Stroke_spatial",
+                caption = "p-value cutoff  0.01 \n FC cutoff  1.5")
+
+
+sig.markers.Stroke_spatial <- markers.Stroke_spatial[abs(markers.Stroke_spatial$avg_log2FC)>log(1.5,2) 
+                                       &markers.Stroke_spatial$p_val_adj<0.05,]
+
+DT::datatable(sig.markers.Stroke_spatial, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Stroke_spatial markers"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_GenotypeCtrl), f = sig.markers_GenotypeCtrl$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Stroke_spatial_down", "Stroke_spatial_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+GOplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Stroke_spatial_Marker_Enrichment"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
 ```
 
 
@@ -1403,6 +1582,22 @@ if(length(mg5.markers.Genotype_Treatment)!=0){
 mg5_top20 = mg5.markers.Genotype_Treatment %>% group_by(cluster) %>% top_n(n=20, wt=abs(avg_log2FC))
 mg5_top20chk=T
 } else {mg5_top20chk=F}
+
+sp_ctrl <- samples.microglia[,samples.microglia$Control_spatial_binary==T]
+sp_ctrl <- SCTransform(sp_ctrl)
+sp_ctrl.markers.Genotype_Treatment <- FindAllMarkers(sp_ctrl)
+if(length(sp_ctrl.markers.Genotype_Treatment)!=0){
+sp_ctrl_top20 = sp_ctrl.markers.Genotype_Treatment %>% group_by(cluster) %>% top_n(n=20, wt=abs(avg_log2FC))
+sp_ctrl_top20chk=T
+} else {sp_ctrl_top20chk=F}
+
+sp_stroke <- samples.microglia[,samples.microglia$Stroke_spatial_binary==T]
+sp_stroke <- SCTransform(sp_stroke)
+sp_stroke.markers.Genotype_Treatment <- FindAllMarkers(sp_stroke)
+if(length(sp_stroke.markers.Genotype_Treatment)!=0){
+sp_stroke_top20 = sp_stroke.markers.Genotype_Treatment %>% group_by(cluster) %>% top_n(n=20, wt=abs(avg_log2FC))
+sp_stroke_top20chk=T
+} else {sp_stroke_top20chk=F}
 
 ```
 
@@ -1520,8 +1715,58 @@ DT::datatable(mg5.markers.Genotype_Treatment, extensions = "Buttons",
 ```
 
 
+### **spatial Controls**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, fig.width=8,fig.height=8}
+if(sp_ctrl_top20chk){
+  
+gg = DoHeatmap(sp_ctrl, features = sp_ctrl_top20$gene) +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in Microglia_1")
+print(gg)
+
+DT::datatable(sp_ctrl.markers.Genotype_Treatment, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Genotype_Treatment in Microglia_1"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+} else print("no significant markers identified")
+
+```
+
+### **spatial Stroke**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, fig.width=8,fig.height=8}
+if(sp_stroke_top20chk){
+  
+gg = DoHeatmap(sp_stroke, features = sp_stroke_top20$gene) +
+  ggtitle("Top 20 Marker genes for Genotype_Treatment in Microglia_1")
+print(gg)
+
+DT::datatable(sp_stroke.markers.Genotype_Treatment, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Genotype_Treatment in Microglia_1"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+} else print("no significant markers identified")
+
+```
 
 ```{r}
+
+
+
 save.image("./output/integrated_analysis.RData")
 ```
 
