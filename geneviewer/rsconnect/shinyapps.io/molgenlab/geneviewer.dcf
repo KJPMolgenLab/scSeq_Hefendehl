@@ -5,7 +5,7 @@ account: molgenlab
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5700187
-bundleId: 7456922
+bundleId: 7536133
 url: https://molgenlab.shinyapps.io/geneviewer/
-when: 1689343759.86092
-lastSyncTime: 1689343759.86093
+when: 1691303348.82517
+lastSyncTime: 1691303348.82519

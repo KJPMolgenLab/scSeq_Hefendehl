@@ -2,11 +2,12 @@
 
 input <- c()
 input$gene="Gapdh"
-input$cluster = c("Microglia_1")
+input$cluster = c("Microglia_1", "Microglia_2")
 input$treatment <- c("APPPS1+ Stroke")
 input$condition <- c("Pseudotime")
 
 input$scale <- "no"
 input$switch <- "bygene"
 input$clustplot <- "both"
-
+input$spatial = "Control_spatial_binary"
+input$spatialfilter <- "all"

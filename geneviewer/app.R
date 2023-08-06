@@ -17,162 +17,6 @@ library(DT)
 library(viridis)
 
 
-# ## extract arrage function from ggpubr as issues with loading package on shinyapps.io
-#
-# .get_layout <- function (ncol, nrow, nb.plots)
-# {
-#   if (!is.null(ncol) & !is.null(nrow)) {
-#   }
-#   else if (!is.null(ncol)) {
-#     if (ncol == 1)
-#       nrow = nb.plots
-#   }
-#   else if (!is.null(nrow)) {
-#     if (nrow == 1)
-#       ncol = nb.plots
-#   }
-#   list(ncol = ncol, nrow = nrow)
-# }
-#
-# .nbplots_per_page <- function (ncol = NULL, nrow = NULL)
-# {
-#   if (!is.null(ncol) & !is.null(nrow))
-#     ncol * nrow
-#   else if (!is.null(ncol))
-#     ncol
-#   else if (!is.null(nrow))
-#     nrow
-#   else Inf
-# }
-#
-#
-# .check_legend <- function (legend)
-# {
-#   allowed.values <- c("top", "bottom", "left",
-#                       "right", "none")
-#   if (is.null(legend) | is.numeric(legend))
-#     return(legend)
-#   else if (is.logical(legend)) {
-#     if (legend)
-#       legend <- "top"
-#     else legend <- "none"
-#   }
-#   else if (is.character(legend)) {
-#     legend <- legend[1]
-#     if (!legend %in% allowed.values)
-#       stop("Argument legend should be one of ", .collapse(allowed.values,
-#                                                           sep = ", "))
-#   }
-#   return(legend)
-# }
-#
-#
-# .collapse <- function (x, y = NULL, sep = ".")
-# {
-#   if (missing(y))
-#     paste(x, collapse = sep)
-#   else if (is.null(x) & is.null(y))
-#     return(NULL)
-#   else if (is.null(x))
-#     return(as.character(y))
-#   else if (is.null(y))
-#     return(as.character(x))
-#   else paste0(x, sep, y)
-# }
-#
-#
-# .update_label_pms <- function (font.label, label.x = 0, label.y = 1, hjust = -0.5,
-#                                vjust = 1.5)
-# {
-#   .font <- list(size = 14, color = "black", face = "bold",
-#                 family = NULL)
-#   new.font.names <- names(font.label)
-#   for (i in new.font.names) .font[[i]] <- font.label[[i]]
-#   pms <- .font
-#   list(size = pms$size, family = pms$family, face = pms$face,
-#        color = pms$color, label.x = label.x, label.y = label.y,
-#        hjust = hjust, vjust = vjust)
-# }
-#
-#
-# .plot_grid<- function (plotlist, legend = "top", common.legend.grob = NULL,
-#                                 ...)
-# {
-#   res <- cowplot::plot_grid(plotlist = plotlist, ...)
-#   if (is.null(common.legend.grob))
-#     return(res)
-#   else {
-#     leg <- common.legend.grob
-#     lheight <- sum(leg$height)
-#     lwidth <- sum(leg$width)
-#   }
-#   arrangeGrob <- gridExtra::arrangeGrob
-#   unit.c <- grid::unit.c
-#   .unit <- grid::unit(1, "npc")
-#   res <- switch(legend, top = arrangeGrob(leg, res, ncol = 1,
-#                                           heights = unit.c(lheight, .unit - lheight)), bottom = arrangeGrob(res,
-#                                                                                                             leg, ncol = 1, heights = unit.c(unit(1, "npc") -
-#                                                                                                                                               lheight, lheight)), left = arrangeGrob(leg, res,
-#                                                                                                                                                                                      ncol = 2, widths = unit.c(lwidth, .unit - lwidth)), right = arrangeGrob(res,
-#                                                                                                                                                                                                                                                              leg, ncol = 2, widths = unit.c(.unit - lwidth, lwidth)))
-#   p <- cowplot::ggdraw() + cowplot::draw_grob(grid::grobTree(res))
-#   p
-# }
-#
-#
-# ggarrange<-function (..., plotlist = NULL, ncol = NULL, nrow = NULL, labels = NULL,
-#            label.x = 0, label.y = 1, hjust = -0.5, vjust = 1.5, font.label = list(size = 14,
-#                                                                                   color = "black", face = "bold", family = NULL), align = c("none",
-#                                                                                                                                             "h", "v", "hv"), widths = 1, heights = 1, legend = NULL,
-#            common.legend = FALSE, legend.grob = NULL)
-# {
-#   plots <- c(list(...), plotlist)
-#   align <- match.arg(align)
-#   nb.plots <- length(plots)
-#   page.layout <- .get_layout(ncol, nrow, nb.plots)
-#   ncol <- page.layout$ncol
-#   nrow <- page.layout$nrow
-#   nb.plots.per.page <- .nbplots_per_page(ncol, nrow)
-#   if (!is.null(legend.grob))
-#     common.legend <- TRUE
-#   if (is.null(legend) & common.legend)
-#     legend <- "top"
-#   legend <- .check_legend(legend)
-#   if (!is.null(legend))
-#     plots <- purrr::map(plots, function(x) {
-#       if (!is.null(x))
-#         x + theme(legend.position = legend)
-#       else x
-#     })
-#   if (common.legend) {
-#     if (is.null(legend.grob))
-#       legend.grob <- get_legend(plots)
-#     plots <- purrr::map(plots, function(x) {
-#       if (!is.null(x))
-#         x + theme(legend.position = "none")
-#       else x
-#     })
-#   }
-#   if (nb.plots > nb.plots.per.page) {
-#     plots <- split(plots, ceiling(seq_along(plots)/nb.plots.per.page))
-#   }
-#   else plots <- list(plots)
-#   .lab <- .update_label_pms(font.label, label.x = label.x,
-#                             label.y = label.y, hjust = hjust, vjust = vjust)
-#   res <- purrr::map(plots, .plot_grid, ncol = ncol, nrow = nrow,
-#                     labels = labels, label_size = .lab$size, label_fontfamily = .lab$family,
-#                     label_fontface = .lab$face, label_colour = .lab$color,
-#                     label_x = .lab$label.x, label_y = .lab$label.y, hjust = .lab$hjust,
-#                     vjust = .lab$vjust, align = align, rel_widths = widths,
-#                     rel_heights = heights, legend = legend, common.legend.grob = legend.grob)
-#   if (length(res) == 1)
-#     res <- res[[1]]
-#   class(res) <- c(class(res), "ggarrange")
-#   res
-# }
-
-
-
 trimmed_scaled <- function(vec){
   m <- max(vec, na.rm=T)
   vec[vec>quantile(vec,.95)] = m
@@ -212,10 +56,15 @@ ui <- fluidPage(
                                   "APPPS1+ Stroke",
                                   "WT Ctrl"),
                        multiple = T)),
-    column(2,
+    column(1,
            radioButtons("scale",
                         "Scale:",
                         c("yes", "no"), selected="no")),
+    column(1,
+           radioButtons("spatialfilter",
+                        "Spatial:",
+                        c("all", "Stroke", "Control"),
+                        selected=c("all"))),
     column(2,
            radioButtons("switch",
                         "grid-type",
@@ -226,32 +75,43 @@ ui <- fluidPage(
            radioButtons("clustplot",
                         "cluster-type",
                         c("t-sne", "UMAP", "both"),
-                        selected="both")),
-    hr(),
-    tabsetPanel(type = "tabs",
-                tabPanel("Boxplots",
-                         plotOutput("distPlot")),
-                tabPanel("Stats",
-                         DT::dataTableOutput("distTable")),
+                        selected="both"))),
+  hr(),
+  tabsetPanel(type = "tabs",
+              tabPanel("Boxplots",
+                       plotOutput("distPlot")),
+              tabPanel("Stats",
+                       DT::dataTableOutput("distTable")),
 
-                tabPanel(title="Gene Maps",
-                         plotOutput("MapPlots")),
+              tabPanel(title="Gene Maps",
+                       plotOutput("MapPlots")),
 
-                tabPanel(title="Feature Maps",
-                         selectInput("condition",
-                                     "Feature",multiple=F,
-                                     c("nFeature_RNA","Mouse_ID","Genotype",
-                                       "Age","Sex","Treatment","Brain_region",
-                                       "total_reads","Plate","percent.mito","percent.ribo",
-                                       "S.Score","G2M.Score","Phase","Celltype",
-                                       "Genotype_corr","methoxy","corrGenotype_Treatment",
-                                       "Pseudotime"),
-                                     selected="Celltype"),
-                         plotOutput("MapPlots_Feature")
-                )
-    )
+              tabPanel(title="Feature Maps",
+                       selectInput("condition",
+                                   "Feature",multiple=F,
+                                   c("nFeature_RNA","Mouse_ID","Genotype",
+                                     "Age","Sex","Treatment","Brain_region",
+                                     "total_reads","Plate","percent.mito","percent.ribo",
+                                     "S.Score","G2M.Score","Phase","Celltype",
+                                     "Genotype_corr","methoxy","corrGenotype_Treatment",
+                                     "Pseudotime",
+                                     "Control_spatial_binary", "Stroke_spatial_binary"),
+                                   selected="Celltype"),
+                       plotOutput("MapPlots_Feature")
+              ),
+              tabPanel(title="SpatialPlots",
+                       selectInput("spatial",
+                                   "Feature",multiple=F,
+                                   c("Control_spatial_binary", "Stroke_spatial_binary"),
+                                   selected="Stroke_spatial_binary"),
+                       plotOutput("SpatialPlots_Feature")),
+              tabPanel(title="SpatialStats",
+                       DT::dataTableOutput("SpatialTab_Feature")
+              )
+
   )
 )
+
 
 
 # Define server logic required to draw a histogram
@@ -272,6 +132,15 @@ server <- function(input, output) {
     if(input$scale == "yes"){
       plotdata[,input$gene] = scale(plotdata[,input$gene])
     }
+    plotdata_all = plotdata
+    if(input$spatialfilter=="Stroke"){
+      plotdata = plotdata[plotdata$Stroke_spatial_binary, ]
+    }
+
+    if(input$spatialfilter=="Control"){
+      plotdata = plotdata[plotdata$Control_spatial_binary, ]
+    }
+
     plotdata <- plotdata %>% reshape2::melt(., direction = "long",
                                             value.name = "counts",
                                             variable.name="gene",
@@ -302,7 +171,7 @@ server <- function(input, output) {
                                 c("APPPS1+ Stroke", "WT Stroke"),
                                 c("WT Stroke","WT Ctrl"))
         gp <- gp + ggpubr:::stat_compare_means(comparison=my_comparisons,size = 3,
-                                             label = "p.adj")
+                                               label = "p.adj")
         n <- sum(filteridx)
         if(length(input$cluster)>1){
           comparison_all <- ggpubr:::compare_means(counts ~ corrGenotype_Treatment,
@@ -363,7 +232,7 @@ server <- function(input, output) {
 
         my_comparisons <- apply(tmp,1, c, simplify = F)
         gp <- gp + ggpubr:::stat_compare_means(comparison=my_comparisons,label = "p.adj",
-                                             hide.ns = T, size = 3)
+                                               hide.ns = T, size = 3)
         n<-sum(filteridx)
 
         if(length(input$treatment)>1){
@@ -419,7 +288,8 @@ server <- function(input, output) {
                                         c("15","50", "100" ,"All")
                       ),dom = 'Blfrtip',
                       buttons = c('copy', 'csv', 'excel', 'pdf')
-                    )))
+                    ))
+    )
 
   })
   observe({
@@ -433,16 +303,27 @@ server <- function(input, output) {
     }
     req(input$gene)
     req(input$cluster)
-    filteridx <-  metadata$Celltype %in% input$cluster & metadata$corrGenotype_Treatment %in% input$treatment
+
     tmp <- apply(t(counts[input$gene,]), 2, trimmed_scaled)
     rownames(tmp) = colnames(counts)
     plotdata <- tmp %>% as.data.frame()
     plotdata <- cbind(plotdata, metadata[rownames(plotdata),])
 
+    if(input$spatialfilter=="Stroke"){
+      plotdata = plotdata[plotdata$Stroke_spatial_binary, ]
+    }
+
+    if(input$spatialfilter=="Control"){
+      plotdata = plotdata[plotdata$Control_spatial_binary, ]
+    }
+
+    plotdata_all = plotdata
+
     plotdata <- plotdata %>% reshape2::melt(., direction = "long",
                                             value.name = "counts",
                                             variable.name="gene",
                                             measure.vars = input$gene)
+    filteridx <-  plotdata$Celltype %in% input$cluster & plotdata$corrGenotype_Treatment %in% input$treatment
 
     plotdata = plotdata[filteridx, ]
 
@@ -459,14 +340,14 @@ server <- function(input, output) {
     }
     if(input$clustplot=="UMAP"){
       gp2<-ggplot(plotdata, aes(x=as.numeric(UMAP_1),
-                              y=as.numeric(UMAP_2))) +
+                                y=as.numeric(UMAP_2))) +
         geom_point(aes(colour=scale(counts)))+facet_wrap(vars(gene))+theme_bw()+
         ylab("UMAP_1")+xlab("UMAP_2")+ labs(colour="scaled reads")+scale_color_viridis(direction = -1)
     }
 
     if(input$clustplot=="t-sne"){
       gp2<-ggplot(plotdata, aes(x=as.numeric(tSNE_1),
-                              y=as.numeric(tSNE_2))) +
+                                y=as.numeric(tSNE_2))) +
         geom_point(aes(colour=scale(counts)))+facet_wrap(vars(gene))+theme_bw()+
         ylab("tSNE_1")+xlab("tSNE_2")+ labs(colour="scaled reads")+scale_color_viridis(direction = -1)
 
@@ -503,6 +384,56 @@ server <- function(input, output) {
 
 
     output$MapPlots_Feature <- renderPlot(p2)
+
+    plotdata_all <- plotdata_all %>% reshape2::melt(., direction = "long",
+                                                    value.name = "counts",
+                                                    variable.name="gene",
+                                                    measure.vars = input$gene)
+
+    filteridx <-  plotdata_all$Celltype %in% input$cluster & plotdata_all$corrGenotype_Treatment %in% input$treatment
+    plotdata_all= plotdata_all[filteridx,]
+    plotdata_all$counts=plotdata_all$counts %>% as.numeric()
+    gp_spatial<-ggplot(plotdata_all, aes(x=get(input$spatial), y=counts, fill=get(input$spatial))) +
+      geom_boxplot(outlier.shape = NA)+geom_jitter(size=1,width=0.05, aes(colour = methoxy))+
+      facet_grid(cols=vars(Celltype), rows=vars(gene), scales="free")+
+      scale_color_manual(values = c("MX04+" = "black", "MX04+" = "gray"))+
+      theme_bw()+labs(y="log(count +1)", x=input$spatial, fill=input$spatial)+
+      theme(axis.text.x=element_blank(),
+            axis.ticks.x=element_blank(), legend.position = "top")
+
+
+    my_comparisons <- list( c("FALSE", "TRUE"))
+    gp_spatial <- gp_spatial + ggpubr:::stat_compare_means(comparison=my_comparisons,size = 3,
+                                                           label = "p.adj")
+    if(length(input$cluster)>1){
+      comparison_all <- ggpubr:::compare_means(as.formula(paste0("counts ~", input$spatial)),
+                                               data = plotdata_all, method = "wilcox.test",
+                                               group.by = c("gene", "Celltype"))
+      restab_spatial <- as.data.frame(comparison_all)[,c("gene", "Celltype","group1", "group2","p","p.adj")]
+    }else {
+      comparison_all <- ggpubr:::compare_means(counts ~ corrGenotype_Treatment,
+                                               data = plotdata, method = "wilcox.test",
+                                               group.by = c("gene"))
+      restab_spatial <- as.data.frame(comparison_all)[,c("gene","group1", "group2","p","p.adj")]
+      restab_spatial$Celltype <- input$cluster
+      restab_spatial <- restab_spatial[,c("gene", "Celltype","group1", "group2","p","p.adj")]
+
+    }
+
+
+    output$SpatialPlots_Feature <- renderPlot(gp_spatial, height = min(2400, 500*floor(sqrt(length(input$gene)))))
+    output$SpatialTab_Feature <- DT::renderDataTable(
+      DT::datatable(restab_spatial, extensions = "Buttons",
+                    filter="top",
+                    options = list(
+                      pageLength = 15,
+                      info = FALSE,
+                      lengthMenu = list(c(15,50, 100, -1),
+                                        c("15","50", "100" ,"All")
+                      ),dom = 'Blfrtip',
+                      buttons = c('copy', 'csv', 'excel', 'pdf')
+                    )))
+
 
 
   })
