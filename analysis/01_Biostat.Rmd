@@ -629,7 +629,8 @@ legend("topright", legend=c("WT_Ctrl","APPPS1+_Stroke","WT_Stroke","APPPS1+_Ctrl
 
 ```{r setapp, include=F}
 
-secret="./shinySecret.R"
+secret="../shinySecret.R" #change to "./shinySecret.R" if using git secret
+
 source(secret)
 
 local({
@@ -650,11 +651,9 @@ samplemeta= cbind(samplemeta, samples.integrated@reductions$umap@cell.embeddings
 save(list=c("samplemeta", "counts"), file=paste0(home, "/geneviewer/Dataset.RData"))
 
 
-
 rsconnect::setAccountInfo(name='molgenlab',
                           token='86875F8B6550C3A26488035E69B1F18D',
                           secret=shinySECRET)
-
 
 rsconnect::deployApp(paste0(home, "/geneviewer"), forceUpdate = T)
 
