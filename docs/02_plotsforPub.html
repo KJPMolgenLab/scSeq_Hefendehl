@@ -361,7 +361,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -372,8 +372,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -382,13 +382,13 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-08-06
+<strong>Last updated:</strong> 2023-08-07
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>scSeq_Hefendehl/</code> <span
@@ -411,21 +411,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -516,15 +513,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltree1943617c581003d52771933ef062065b1b8b3f62targetblank1943617a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreee103c55e5a38da552b1c90bea42e06dfd15252actargetblanke103c55a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/1943617c581003d52771933ef062065b1b8b3f62" target="_blank">1943617</a>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/e103c55e5a38da552b1c90bea42e06dfd15252ac" target="_blank">e103c55</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltree1943617c581003d52771933ef062065b1b8b3f62targetblank1943617a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreee103c55e5a38da552b1c90bea42e06dfd15252actargetblanke103c55a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -534,7 +531,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/1943617c581003d52771933ef062065b1b8b3f62" target="_blank">1943617</a>.
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/e103c55e5a38da552b1c90bea42e06dfd15252ac" target="_blank">e103c55</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -567,15 +564,15 @@ Ignored files:
     Ignored:    data/seu-SCT-harmony_02-02-23.rds
     Ignored:    data/seu_filtered_nonorm_02-02-23.rds
     Ignored:    data/tx2genes.csv
+    Ignored:    output/CrossFCplot.pdf
+    Ignored:    output/CrossFCplot.svg
     Ignored:    output/integrated_analysis.RData
     Ignored:    output/integrated_analysis.RDataTmp
 
 Untracked files:
-    Untracked:  analysis/02_plotsforPub.Rmd
     Untracked:  shinySecret.R
 
 Unstaged changes:
-    Modified:   analysis/01_Biostat.Rmd
     Modified:   geneviewer/Dataset.RData
     Modified:   geneviewer/rsconnect/shinyapps.io/molgenlab/geneviewer.dcf
     Modified:   wflowhelper.R
@@ -593,10 +590,74 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/02_plotsforPub.Rmd</code>) and
+HTML (<code>docs/02_plotsforPub.html</code>) files. If you’ve configured
+a remote Git repository (see <code>?wflow_git_remote</code>), click on
+the hyperlinks in the table below to view the files as they were in that
+past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/d2da6832ce43431ce97c369a69fff9c4c174079e/analysis/02_plotsforPub.Rmd" target="_blank">d2da683</a>
+</td>
+<td>
+Andreas Chiocchetti
+</td>
+<td>
+2023-08-06
+</td>
+<td>
+update markdowns
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/KJPMolgenLab/scSeq_Hefendehl/d2da6832ce43431ce97c369a69fff9c4c174079e/docs/02_plotsforPub.html" target="_blank">d2da683</a>
+</td>
+<td>
+Andreas Chiocchetti
+</td>
+<td>
+2023-08-06
+</td>
+<td>
+update markdowns
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -829,111 +890,112 @@ other attached packages:
 [33] matrixStats_0.63.0          GenomicRanges_1.50.2       
 [35] GenomeInfoDb_1.34.9         IRanges_2.32.0             
 [37] S4Vectors_0.36.1            BiocGenerics_0.44.0        
-[39] limma_3.54.1               
+[39] limma_3.54.1                workflowr_1.7.0            
 
 loaded via a namespace (and not attached):
-  [1] scattermore_0.8           coda_0.19-4              
-  [3] bit64_4.0.5               knitr_1.42               
-  [5] dygraphs_1.1.1.6          irlba_2.3.5.1            
-  [7] DelayedArray_0.24.0       inline_0.3.19            
-  [9] KEGGREST_1.38.0           RCurl_1.98-1.10          
- [11] generics_0.1.3            ScaledMatrix_1.6.0       
- [13] callr_3.7.3               cowplot_1.1.1            
- [15] RSQLite_2.2.20            mice_3.15.0              
- [17] RANN_2.6.1                future_1.31.0            
- [19] chron_2.3-59              bit_4.0.5                
- [21] tzdb_0.3.0                spatstat.data_3.0-0      
- [23] webshot_0.5.4             xml2_1.3.3               
- [25] lubridate_1.9.2           httpuv_1.6.9             
- [27] StanHeaders_2.21.0-7      assertthat_0.2.1         
- [29] gargle_1.3.0              xfun_0.37                
- [31] rJava_1.0-6               bayesplot_1.10.0         
- [33] hms_1.1.2                 jquerylib_0.1.4          
- [35] evaluate_0.20             promises_1.2.0.1         
- [37] fansi_1.0.4               dbplyr_2.3.0             
- [39] readxl_1.4.2              igraph_1.4.0             
- [41] DBI_1.1.3                 geneplotter_1.76.0       
- [43] Rsolnp_1.16               htmlwidgets_1.6.1        
- [45] tensorA_0.36.2            spatstat.geom_3.0-6      
- [47] googledrive_2.0.0         ellipsis_0.3.2           
- [49] crosstalk_1.2.0           backports_1.4.1          
- [51] markdown_1.5              annotate_1.76.0          
- [53] RcppParallel_5.1.6        deldir_1.0-6             
- [55] sparseMatrixStats_1.10.0  vctrs_0.5.2              
- [57] ROCR_1.0-11               abind_1.4-5              
- [59] cachem_1.0.6              withr_2.5.0              
- [61] HardyWeinberg_1.7.5       progressr_0.13.0         
- [63] checkmate_2.1.0           sctransform_0.3.5        
- [65] prettyunits_1.1.1         xts_0.12.2               
- [67] goftest_1.2-3             svglite_2.1.1            
- [69] cluster_2.1.4             lazyeval_0.2.2           
- [71] crayon_1.5.2              crul_1.3                 
- [73] spatstat.explore_3.0-6    pkgconfig_2.0.3          
- [75] nlme_3.1-162              nnet_7.3-18              
- [77] rlang_1.0.6               globals_0.16.2           
- [79] lifecycle_1.0.3           miniUI_0.1.1.1           
- [81] colourpicker_1.2.0        httpcode_0.3.0           
- [83] modelr_0.1.10             rsvd_1.0.5               
- [85] distributional_0.3.1      cellranger_1.1.0         
- [87] rprojroot_2.0.3           polyclip_1.10-4          
- [89] lmtest_0.9-40             flextable_0.8.5          
- [91] Matrix_1.5-3              loo_2.5.1                
- [93] zoo_1.8-11                reprex_2.0.2             
- [95] base64enc_0.1-3           processx_3.8.0           
- [97] ggridges_0.5.4            googlesheets4_1.0.1      
- [99] png_0.1-8                 bitops_1.0-7             
-[101] KernSmooth_2.23-20        Biostrings_2.66.0        
-[103] blob_1.2.3                DelayedMatrixStats_1.20.0
-[105] workflowr_1.7.0           parallelly_1.34.0        
-[107] spatstat.random_3.1-3     shinystan_2.6.0          
-[109] beachmat_2.14.0           scales_1.2.1             
-[111] memoise_2.0.1             magrittr_2.0.3           
-[113] plyr_1.8.8                ica_1.0-3                
-[115] threejs_0.3.3             zlibbioc_1.44.0          
-[117] compiler_4.2.2            rstantools_2.2.0         
-[119] fitdistrplus_1.1-8        cli_3.6.0                
-[121] XVector_0.38.0            listenv_0.9.0            
-[123] ps_1.7.2                  Brobdingnag_1.2-9        
-[125] patchwork_1.1.2           pbapply_1.7-0            
-[127] MASS_7.3-58.2             tidyselect_1.2.0         
-[129] stringi_1.7.12            yaml_2.3.7               
-[131] BiocSingular_1.14.0       askpass_1.1              
-[133] locfit_1.5-9.7            bridgesampling_1.1-2     
-[135] ggrepel_0.9.3             grid_4.2.2               
-[137] sass_0.4.5                tools_4.2.2              
-[139] timechange_0.2.0          future.apply_1.10.0      
-[141] parallel_4.2.2            rstudioapi_0.14          
-[143] uuid_1.1-0                git2r_0.31.0             
-[145] gridExtra_2.3             farver_2.1.1             
-[147] posterior_1.3.1           Rtsne_0.16               
-[149] digest_0.6.31             shiny_1.7.4              
-[151] gfonts_0.2.0              broom_1.0.3              
-[153] later_1.3.0               writexl_1.4.2            
-[155] RcppAnnoy_0.0.20          httr_1.4.4               
-[157] gdtools_0.3.0             AnnotationDbi_1.60.0     
-[159] colorspace_2.1-0          rvest_1.0.3              
-[161] XML_3.99-0.13             fs_1.6.1                 
-[163] tensor_1.5                reticulate_1.28          
-[165] truncnorm_1.0-8           splines_4.2.2            
-[167] uwot_0.1.14               spatstat.utils_3.0-1     
-[169] xlsxjars_0.6.1            sp_1.6-0                 
-[171] shinythemes_1.2.0         plotly_4.10.1            
-[173] systemfonts_1.0.4         xtable_1.8-4             
-[175] jsonlite_1.8.4            rstan_2.21.8             
-[177] R6_2.5.1                  pillar_1.8.1             
-[179] htmltools_0.5.4           mime_0.12                
-[181] glue_1.6.2                fastmap_1.1.0            
-[183] BiocParallel_1.32.5       codetools_0.2-19         
-[185] pkgbuild_1.4.0            mvtnorm_1.1-3            
-[187] utf8_1.2.3                lattice_0.20-45          
-[189] bslib_0.4.2               spatstat.sparse_3.0-0    
-[191] curl_5.0.0                leiden_0.4.3             
-[193] gtools_3.9.4              officer_0.5.2            
-[195] shinyjs_2.1.0             zip_2.2.2                
-[197] openssl_2.0.5             survival_3.5-3           
-[199] rmarkdown_2.20            munsell_0.5.0            
-[201] GenomeInfoDbData_1.2.9    haven_2.5.1              
-[203] reshape2_1.4.4            gtable_0.3.1             </code></pre>
+  [1] rsvd_1.0.5                ica_1.0-3                
+  [3] svglite_2.1.1             ps_1.7.2                 
+  [5] lmtest_0.9-40             rprojroot_2.0.3          
+  [7] crayon_1.5.2              MASS_7.3-58.2            
+  [9] nlme_3.1-162              backports_1.4.1          
+ [11] posterior_1.3.1           reprex_2.0.2             
+ [13] colourpicker_1.2.0        rlang_1.0.6              
+ [15] XVector_0.38.0            ROCR_1.0-11              
+ [17] readxl_1.4.2              irlba_2.3.5.1            
+ [19] callr_3.7.3               flextable_0.8.5          
+ [21] BiocParallel_1.32.5       bit64_4.0.5              
+ [23] glue_1.6.2                loo_2.5.1                
+ [25] sctransform_0.3.5         rstan_2.21.8             
+ [27] parallel_4.2.2            processx_3.8.0           
+ [29] spatstat.sparse_3.0-0     AnnotationDbi_1.60.0     
+ [31] spatstat.geom_3.0-6       haven_2.5.1              
+ [33] tidyselect_1.2.0          fitdistrplus_1.1-8       
+ [35] XML_3.99-0.13             zoo_1.8-11               
+ [37] distributional_0.3.1      chron_2.3-59             
+ [39] xtable_1.8-4              magrittr_2.0.3           
+ [41] evaluate_0.20             gdtools_0.3.0            
+ [43] cli_3.6.0                 zlibbioc_1.44.0          
+ [45] rstudioapi_0.14           miniUI_0.1.1.1           
+ [47] sp_1.6-0                  whisker_0.4.1            
+ [49] bslib_0.4.2               shinystan_2.6.0          
+ [51] shiny_1.7.4               BiocSingular_1.14.0      
+ [53] xfun_0.37                 askpass_1.1              
+ [55] inline_0.3.19             pkgbuild_1.4.0           
+ [57] cluster_2.1.4             bridgesampling_1.1-2     
+ [59] gfonts_0.2.0              KEGGREST_1.38.0          
+ [61] Brobdingnag_1.2-9         ggrepel_0.9.3            
+ [63] threejs_0.3.3             listenv_0.9.0            
+ [65] xlsxjars_0.6.1            Biostrings_2.66.0        
+ [67] png_0.1-8                 future_1.31.0            
+ [69] withr_2.5.0               bitops_1.0-7             
+ [71] plyr_1.8.8                cellranger_1.1.0         
+ [73] coda_0.19-4               pillar_1.8.1             
+ [75] RcppParallel_5.1.6        cachem_1.0.6             
+ [77] fs_1.6.1                  DelayedMatrixStats_1.20.0
+ [79] xts_0.12.2                vctrs_0.5.2              
+ [81] ellipsis_0.3.2            generics_0.1.3           
+ [83] dygraphs_1.1.1.6          tools_4.2.2              
+ [85] munsell_0.5.0             DelayedArray_0.24.0      
+ [87] fastmap_1.1.0             compiler_4.2.2           
+ [89] abind_1.4-5               httpuv_1.6.9             
+ [91] plotly_4.10.1             rJava_1.0-6              
+ [93] GenomeInfoDbData_1.2.9    gridExtra_2.3            
+ [95] lattice_0.20-45           deldir_1.0-6             
+ [97] utf8_1.2.3                later_1.3.0              
+ [99] jsonlite_1.8.4            scales_1.2.1             
+[101] ScaledMatrix_1.6.0        pbapply_1.7-0            
+[103] sparseMatrixStats_1.10.0  lazyeval_0.2.2           
+[105] promises_1.2.0.1          goftest_1.2-3            
+[107] spatstat.utils_3.0-1      reticulate_1.28          
+[109] checkmate_2.1.0           rmarkdown_2.20           
+[111] cowplot_1.1.1             webshot_0.5.4            
+[113] Rtsne_0.16                uwot_0.1.14              
+[115] igraph_1.4.0              survival_3.5-3           
+[117] yaml_2.3.7                systemfonts_1.0.4        
+[119] bayesplot_1.10.0          htmltools_0.5.4          
+[121] rstantools_2.2.0          memoise_2.0.1            
+[123] locfit_1.5-9.7            digest_0.6.31            
+[125] assertthat_0.2.1          mime_0.12                
+[127] RSQLite_2.2.20            future.apply_1.10.0      
+[129] blob_1.2.3                shinythemes_1.2.0        
+[131] splines_4.2.2             googledrive_2.0.0        
+[133] RCurl_1.98-1.10           broom_1.0.3              
+[135] hms_1.1.2                 modelr_0.1.10            
+[137] colorspace_2.1-0          base64enc_0.1-3          
+[139] nnet_7.3-18               sass_0.4.5               
+[141] RANN_2.6.1                mvtnorm_1.1-3            
+[143] fansi_1.0.4               tzdb_0.3.0               
+[145] truncnorm_1.0-8           parallelly_1.34.0        
+[147] R6_2.5.1                  grid_4.2.2               
+[149] crul_1.3                  ggridges_0.5.4           
+[151] lifecycle_1.0.3           StanHeaders_2.21.0-7     
+[153] zip_2.2.2                 writexl_1.4.2            
+[155] curl_5.0.0                googlesheets4_1.0.1      
+[157] leiden_0.4.3              jquerylib_0.1.4          
+[159] Matrix_1.5-3              RcppAnnoy_0.0.20         
+[161] spatstat.explore_3.0-6    htmlwidgets_1.6.1        
+[163] officer_0.5.2             beachmat_2.14.0          
+[165] polyclip_1.10-4           markdown_1.5             
+[167] crosstalk_1.2.0           timechange_0.2.0         
+[169] rvest_1.0.3               globals_0.16.2           
+[171] openssl_2.0.5             patchwork_1.1.2          
+[173] spatstat.random_3.1-3     tensorA_0.36.2           
+[175] progressr_0.13.0          codetools_0.2-19         
+[177] lubridate_1.9.2           gtools_3.9.4             
+[179] getPass_0.2-2             prettyunits_1.1.1        
+[181] dbplyr_2.3.0              gtable_0.3.1             
+[183] DBI_1.1.3                 git2r_0.31.0             
+[185] tensor_1.5                httr_1.4.4               
+[187] KernSmooth_2.23-20        stringi_1.7.12           
+[189] reshape2_1.4.4            farver_2.1.1             
+[191] uuid_1.1-0                annotate_1.76.0          
+[193] mice_3.15.0               xml2_1.3.3               
+[195] shinyjs_2.1.0             geneplotter_1.76.0       
+[197] scattermore_0.8           bit_4.0.5                
+[199] spatstat.data_3.0-0       pkgconfig_2.0.3          
+[201] gargle_1.3.0              HardyWeinberg_1.7.5      
+[203] Rsolnp_1.16               knitr_1.42               
+[205] httpcode_0.3.0           </code></pre>
 </div>
 
 
