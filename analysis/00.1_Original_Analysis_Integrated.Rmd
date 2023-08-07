@@ -135,6 +135,23 @@ p1b<- DimPlot(samples.integrated, reduction = "umap", group.by = "Genotype_Treat
   
 
 p1 + p1a +  p1b
+
+
+```
+```{r, fig.height=6, fig.width=6}
+
+p1b<- DimPlot(samples.integrated, reduction = "umap", group.by = "Genotype_Treatment", 
+              pt.size = 1)
+p1b
+ggsave(file="./docs/UMAP_genotype_treatment.svg", p1b)
+ggsave(file="./docs/UMAP_genotype_treatment.pdf", p1b)
+
+p1b<- DimPlot(samples.integrated[,which(grepl("Micro",samples.integrated@meta.data$Celltype))], reduction = "umap", group.by = "Genotype_Treatment", pt.size=1)
+
+p1b
+ggsave(file="./docs/UMAP_only_Macroglia_genotype_treatment.svg", p1b)
+ggsave(file="./docs/UMAP_only_Macroglia_genotype_treatment.pdf", p1b)
+
 ```
 
 
@@ -437,7 +454,19 @@ Renaming Clusters
 Idents(samples.integrated) = "Celltype"
 DimPlot(samples.integrated, reduction = "umap", label=T) + NoLegend()+ theme_classic()
 ```
+```{r, fig.width=6, fig.height=6}
+p1b<- DimPlot(samples.integrated, group.by = "Celltype", reduction="umap",
+              pt.size =1, label = T)
+p1b
+ggsave(file="./docs/UMAP_Cluster.svg", p1b)
+ggsave(file="./docs/UMAP_Cluster.pdf", p1b)
 
+p1b<- DimPlot(samples.integrated[,which(grepl("Micro",samples.integrated@meta.data$Celltype))], 
+              reduction = "umap", group.by = "Celltype",pt.size =1, label = T)
+p1b
+ggsave(file="./docs/UMAP_only_Macroglia_genotype_treatment.svg", p1b)
+ggsave(file="./docs/UMAP_only_Macroglia_genotype_treatment.pdf", p1b)
+```
 
 # **Zoom into Microglia clusters**
 
@@ -469,7 +498,16 @@ samples.microglia <- AddModuleScore(object = samples.microglia,
 p4 <- FeaturePlot(object = samples.microglia, features = "DAM_score1")+scale_color_viridis_c()
 p4a <- DimPlot(object = samples.microglia, reduction = "umap")
 
-p4 | p4a
+DAM1cutoff = 1
+phist = ggplot(data = samples.microglia@meta.data, aes(x=DAM_score1))+
+  geom_density()+geom_vline(xintercept = DAM1cutoff)+
+  theme_classic()
+
+samples.microglia$DAM1_binary = as.factor(samples.microglia$DAM_score1>=DAM1cutoff)
+
+pbin <- DimPlot(object = samples.microglia, group.by =  "DAM1_binary")
+
+phist | p4 | pbin| p4a 
 
 ```
 
@@ -480,8 +518,16 @@ samples.microglia <- AddModuleScore(object = samples.microglia,
                                     features = DAM2_marker_gene_list, name = "DAM2_score")
 p5 <- FeaturePlot(object = samples.microglia, features = "DAM2_score1")+scale_color_viridis_c()
 p5a <- DimPlot(object = samples.microglia, reduction = "umap")
+DAM2cutoff = 2
+phist = ggplot(data = samples.microglia@meta.data, aes(x=DAM2_score1))+
+  geom_density()+geom_vline(xintercept = DAM2cutoff)+
+  theme_classic()
 
-p5 | p5a
+samples.microglia$DAM2_binary = as.factor(samples.microglia$DAM2_score1>=DAM2cutoff)
+
+pbin <- DimPlot(object = samples.microglia, group.by =  "DAM2_binary")
+
+phist | p5 | pbin| p5a 
 
 ```
 
@@ -552,6 +598,44 @@ phist | p4 | pbin| p4a
 ```
 
 
+## **comparing DAM vs Spatial 
+
+it seems as if the cells identified with the spatial are in fact DAM cells 
+(if a cell is a DAM1 cell there is a 110 fold-higher probability of also being a Stroke spatial or Control Spatial cell than not)
+
+There are just 8 cells in total that are not DAM cells but Stroke/Control spatial cells
+
+```{r}
+
+microgila_only=which(grepl("Microglia", samples.microglia@meta.data$Celltype))
+a = table(DAM1=samples.microglia@meta.data$DAM1_binary[microgila_only], Stroke_spatial=samples.microglia@meta.data$Stroke_spatial_binary[microgila_only])
+
+b = table(DAM2=samples.microglia@meta.data$DAM2_binary[microgila_only], Stroke_spatial=samples.microglia@meta.data$Stroke_spatial_binary[microgila_only])
+
+c = table(DAM1=samples.microglia@meta.data$DAM1_binary[microgila_only], Control_spatial=samples.microglia@meta.data$Control_spatial_binary[microgila_only])
+
+d= table(DAM2=samples.microglia@meta.data$DAM2_binary[microgila_only], Control_spatial=samples.microglia@meta.data$Control_spatial_binary[microgila_only])
+
+
+e= table(Control_spatial=samples.microglia@meta.data$Control_spatial_binary[microgila_only], Stroke_spatial=samples.microglia@meta.data$Stroke_spatial_binary[microgila_only])
+
+
+a
+fisher.test(a)
+
+b
+fisher.test(b)
+
+c
+fisher.test(c)
+
+d
+fisher.test(d)
+
+e
+fisher.test(e)
+
+```
 
 ## **Renaming clusters**
 
@@ -764,9 +848,6 @@ DT::datatable(sig.markers_MXAPP, extensions = "Buttons",
                 buttons = c('copy', 'csv', 'excel', 'pdf')
               ))
 
-
-
-
 genelist=split(rownames(sig.markers_MXAPP), f = sig.markers_MXAPP$avg_log2FC>0)
 genelist = genelist[c("FALSE", "TRUE")]
 names(genelist) = c("MX04pos_APPPS_down", "MX04pos_APPPS_up")
@@ -781,6 +862,254 @@ restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name"
 DT::datatable(restab, extensions = "Buttons",
               filter="top",
               caption = paste0("Effects of MX04pos in APPPS"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+#### **Stroke+ vs Stroke- in Control cohort only**
+
+positive FC indicate the gene is higher expressed in Stroke 
+
+```{r echo=FALSE, message=FALSE,warning=FALSE,   fig.width=8, fig.height=8}
+samples.microglia.ctrl <- samples.microglia[,samples.microglia@meta.data$Genotype=="WT"]
+
+Idents(samples.microglia.ctrl) = "Treatment"
+samples.microglia.ctrl <- SCTransform(samples.microglia.ctrl)
+samples.microglia.ctrl <- RunPCA(samples.microglia.ctrl)
+samples.microglia.ctrl <- RunUMAP(samples.microglia.ctrl, dims = 1:40)
+
+markers_Stroke_CTRL <- FindMarkers(samples.microglia.ctrl, ident.1 = "Stroke", logfc.threshold = 0)
+
+EnhancedVolcano(markers_Stroke_CTRL,
+                lab = rownames(markers_Stroke_CTRL),
+                x = 'avg_log2FC', 
+                y = 'p_val_adj', xlim = c(-1.5, 1.5), ylim=c(0,15), pCutoff = 0.05,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(Padj)),
+                title = "DEGs", subtitle = "MX04+ vs MX04- in APPPS1+",
+                caption = "pval cutoff  0.05 \n FC cutoff  1.5")
+
+
+sig.markers_Stroke_CTRL <- markers_Stroke_CTRL[abs(markers_Stroke_CTRL$avg_log2FC)>log(1.5,2) 
+                                       &markers_Stroke_CTRL$p_val_adj<0.05,]
+
+
+DT::datatable(markers_Stroke_CTRL, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Stroke in Wildtype"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_Stroke_CTRL), f = sig.markers_Stroke_CTRL$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Stroke_WT_down", "Stroke_WT_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+GOplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Stroke in Controls"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+
+#### **Stroke+ vs Stroke- in APPPS1 cohort only**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE,   fig.width=8, fig.height=8}
+samples.microglia.app <- samples.microglia[,samples.microglia$Genotype=="APPPS1"]
+
+Idents(samples.microglia.app) = "Treatment"
+samples.microglia.app <- SCTransform(samples.microglia.app)
+samples.microglia.app <- RunPCA(samples.microglia.app)
+samples.microglia.app <- RunUMAP(samples.microglia.app, dims = 1:40)
+
+markers_Stroke_APP <- FindMarkers(samples.microglia.app, ident.1 = "Stroke",  logfc.threshold = 0)
+
+EnhancedVolcano(markers_Stroke_APP,
+                lab = rownames(markers_Stroke_APP),
+                x = 'avg_log2FC', 
+                y = 'p_val_adj', xlim = c(-1.5, 1.5), ylim=c(0,15), pCutoff = 0.05,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(Padj)),
+                title = "DEGs", subtitle = "MX04+ vs MX04- in APPPS1+",
+                caption = "pval cutoff  0.05 \n FC cutoff  1.5")
+
+
+sig.markers_Stroke_APP <- markers_Stroke_APP[abs(markers_Stroke_APP$avg_log2FC)>log(1.5,2) 
+                                       &markers_Stroke_APP$p_val_adj<0.05,]
+
+
+DT::datatable(markers_Stroke_APP, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Stroke in APPPS1+"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+
+
+
+genelist=split(rownames(sig.markers_Stroke_APP), f = sig.markers_Stroke_APP$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Stroke_APPPS_down", "Stroke_APPPS_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+GOplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Stroke in APPPS"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+```
+
+
+
+#### **FC vs FC plots
+
+
+```{r, fig.height=6, fig.width=6}
+
+overlapgenes=union(rownames(markers_Stroke_APP), rownames(markers_Stroke_CTRL))
+dataset=data.frame(APP_log2FC = markers_Stroke_APP[overlapgenes,]$avg_log2FC, 
+                       WT_log2FC = markers_Stroke_CTRL[overlapgenes,]$avg_log2FC)
+
+isAPP<-abs(dataset$APP_log2FC)>0.58
+isWT<-abs(dataset$WT_log2FC)>0.58
+
+dataset$marker = "no-pref"
+dataset$marker[which(isAPP)] = "APPS1+"
+dataset$marker[which(isWT)] = "WT"
+dataset$marker[which(isWT & isAPP)] = ifelse(abs(dataset$APP_log2FC[which(isWT & isAPP)])>
+                                         abs(dataset$WT_log2FC[which(isWT & isAPP)]), 
+                                       "APPS1+", "WT")
+
+dataset$genes = overlapgenes
+dataset$topgene = F
+
+
+top5APP = order(abs(dataset$APP_log2FC), decreasing = T)[1:5]
+top5WT = order(abs(dataset$WT_log2FC), decreasing = T)[1:5]
+
+dataset$topgene[union(top5APP, top5WT)]=T
+
+
+crossFC_plot = ggplot(data=dataset, 
+       aes(x=APP_log2FC, y=WT_log2FC, color=marker))+
+  geom_point()+theme_classic()+
+  geom_abline(slope = 1, lty=2)+
+  geom_abline(slope = -1, lty=2)+
+  geom_text(data=subset(dataset, topgene), 
+            aes(label=genes), show.legend = FALSE, nudge_y = -0.5)
+
+crossFC_plot
+ggsave(filename = "./output/CrossFCplot.svg", plot=crossFC_plot)
+ggsave(filename = "./output/CrossFCplot.pdf", plot=crossFC_plot)
+
+
+```
+
+
+#### **Stroke+ vs Stroke- in Stroke_binary_cells only**
+
+positive FC indicate the gene is higher expressed in Stroke 
+
+```{r echo=FALSE, message=FALSE,warning=FALSE,   fig.width=8, fig.height=8}
+samples.microglia.strk_bin <- samples.microglia[,samples.microglia@meta.data$Stroke_spatial_binary==T]
+
+Idents(samples.microglia.strk_bin) = "Treatment"
+samples.microglia.strk_bin <- SCTransform(samples.microglia.strk_bin)
+samples.microglia.strk_bin <- RunPCA(samples.microglia.strk_bin)
+samples.microglia.strk_bin <- RunUMAP(samples.microglia.strk_bin, dims = 1:40)
+
+markers_Stroke_Strksptl <- FindMarkers(samples.microglia.strk_bin, 
+                                   ident.1 = "Stroke", 
+                                   logfc.threshold = 0)
+
+EnhancedVolcano(markers_Stroke_Strksptl,
+                lab = rownames(markers_Stroke_Strksptl),
+                x = 'avg_log2FC', 
+                y = 'p_val_adj', xlim = c(-1.5, 1.5), ylim=c(0,15), pCutoff = 0.05,
+                FCcutoff = log(1.5,2),
+                xlab = bquote(~Log[2]~ 'fold change'),ylab = bquote(~-Log[10]~italic(Padj)),
+                title = "DEGs", subtitle = "MX04+ vs MX04- in APPPS1+",
+                caption = "pval cutoff  0.05 \n FC cutoff  1.5")
+
+
+sig.markers_Stroke_Strksptl <- markers_Stroke_Strksptl[abs(markers_Stroke_Strksptl$avg_log2FC)>log(1.5,2) 
+                                       &markers_Stroke_Strksptl$p_val_adj<0.05,]
+
+
+DT::datatable(markers_Stroke_Strksptl, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Stroke in Stroke_spatial cells"),
+              options = list(
+                pageLength = 10,
+                info = FALSE,
+                lengthMenu = list(c(15,50, 100, -1),
+                                  c("15","50", "100" ,"All")
+                ),dom = 'Blfrtip',
+                buttons = c('copy', 'csv', 'excel', 'pdf')
+              ))
+
+genelist=split(rownames(sig.markers_Stroke_Strksptl), f = sig.markers_Stroke_Strksptl$avg_log2FC>0)
+genelist = genelist[c("FALSE", "TRUE")]
+names(genelist) = c("Stroke_WT_down", "Stroke_WT_up")
+
+resgost = gost(genelist, organism = "mmusculus", evcodes = T)
+
+GOplot(resgost)
+
+restab <- resgost$result[,c("query", "p_value", "term_id", "source", "term_name", "intersection")]
+
+
+DT::datatable(restab, extensions = "Buttons",
+              filter="top",
+              caption = paste0("Effects of Stroke in Stroke_spatial"),
               options = list(
                 pageLength = 10,
                 info = FALSE,

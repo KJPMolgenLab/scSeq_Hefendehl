@@ -8,7 +8,6 @@ require("DESeq2")
 require("lm.beta")
 require("viridis")
 
-
 Dark8 = brewer.pal(8, "Dark2")
 Dark8_50 = paste0(brewer.pal(8, "Dark2"), "7D")
 jetcolors = colorRampPalette(c("darkblue", "skyblue", "green",
@@ -39,9 +38,7 @@ table_sumstat_grp = function(DF, columns, groupfactor){
 }
 
 
-
-
-# comparison fucntion of target
+# comparison function of target
 comparison <- function(dds_object, samples, target, randomeffect){
   require(DESeq2)
   require(limma)
@@ -88,15 +85,15 @@ comparison_rand <- function(designform, randomeffect,
   ## with random effects
   if(length(randomeffect)==1){
     design = model.matrix(as.formula(designform), samplesfilt)
-    rande = samplesfilt[,randomeffect]
-    dupcor <- duplicateCorrelation(log_cpm_filt, design, block=rande)
-    fitDupCor <- lmFit(log_cpm_filt, design, block=rande, correlation=dupcor$consensus)
+    rande = samplesfilt[rownames(design),randomeffect]
+    dupcor <- duplicateCorrelation(log_cpm_filt[,rownames(design)], design, block=rande)
+    fitDupCor <- lmFit(log_cpm_filt[,rownames(design)], design, block=rande, correlation=dupcor$consensus)
     fit<- eBayes(fitDupCor)
     A = topTable(fit,n=dim(fit)[1], coef=target)
   }
   if(length(randomeffect)==0){
     design = model.matrix(as.formula(designform), samplesfilt)
-    fitDupCor <- lmFit(log_cpm_filt, design)
+    fitDupCor <- lmFit(log_cpm_filt[,rownames(design)], design)
     fit<- eBayes(fitDupCor)
     A = topTable(fit,n=dim(fit)[1], coef=target)
   }
