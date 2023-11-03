@@ -1,0 +1,1270 @@
+---
+title: "Analyses for Publication"
+author: "AGC"
+date: "2023-09-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(limma)
+library(DESeq2)
+library(tidyverse)
+library(Seurat)
+library(harmony)
+library(SingleR)
+library(data.table)
+library(compareGroups)
+library(brms)
+library(xlsx)
+library(viridis)
+library(DT)
+library(slingshot)
+library(SingleCellExperiment)
+library(ggpubr)
+library(clustree)
+library(RCurl)
+library(AnnotationHub)
+library("WGCNA")
+
+```
+
+```{r, include=FALSE}
+samples.integrated = readRDS("./data/20230203/seu-SCT-harmony_02-02-23.rds")
+source ("/files/scSeq_Hefendehl/code/custom_functions.R")
+
+cc_file <- getURL("https://raw.githubusercontent.com/hbc/tinyatlas/master/cell_cycle/Mus_musculus.csv") 
+cell_cycle_genes <- read.csv(text = cc_file)
+
+ah <- AnnotationHub()
+
+# Access the Ensembl database for organism
+ahDb <- query(ah, 
+              pattern = c("Mus musculus", "EnsDb"), 
+              ignore.case = TRUE)
+
+# Acquire the latest annotation files
+id <- ahDb %>%
+  mcols() %>%
+  rownames() %>%
+  tail(n = 1)
+
+# Download the appropriate Ensembldb database
+edb <- ah[[id]]
+
+# Extract gene-level information from database
+annotations <- genes(edb, 
+                     return.type = "data.frame")
+
+# Select annotations of interest
+annotations <- annotations %>%
+  dplyr::select(gene_id, gene_name, seq_name, gene_biotype, description)
+```
+
+# RNA seq wishlist
+
+## Reclustering of dataset from Desiree
+
+a)  Exclude sex-related genes -- maybe this will already resolve our issues concerning the clustering in terms of biological relevance.
+b)  In case the new clusters are not matching the biological relevance, reclustering based on lists we provide for homeostatic and reactive microglial cells
+
+if aou ywant to save a plot use 
+ggsave(filename = "./docs/PNametheplot.svg", plotobject))
+
+
+### Define Gene lists
+
+```{r}
+
+DAM_up <- c("Itgax","Cst7","Ccl4","Clec7a","Lpl","Siglec1","Spp1","Axl","Apoe","Trem2","Csf1","Lyz2","H2-D1","Tyrobp","Cd74","Gpnmb","B2m","Cd9","Ctsb","Ctsd")
+
+DAM1vsDAM2 = c("Trem2", "Cst7", "Spp1", "Lpl", "Itgax", "Ctsl", "Ctsz", "Cd68", "Axl", "Cd9", "Ccl6", "Csf1")
+
+homeostat.genes=c("P2ry12","P2ry13","Tmem119","Cx3cr1","Selplg","Cd33")
+
+cluster.genes=unique(c(DAM_up, DAM1vsDAM2, homeostat.genes))
+```
+
+### Spatial cell types
+
+```{r}
+distal_dat = openxlsx::read.xlsx("/files/scSeq_Hefendehl/data/Copy of DEG_control_vs_stroke_vs_distal.xlsx", sheet = 1)
+distal_dat <- distal_dat[order(distal_dat$score, decreasing = T)[1:20],]
+distal_genes<- distal_dat$X1
+
+control_dat = openxlsx::read.xlsx("/files/scSeq_Hefendehl/data/Copy of DEG_control_vs_stroke_vs_distal.xlsx", sheet = 2)
+control_dat <- control_dat[order(control_dat$score, decreasing = T)[1:20],]
+control_genes<- control_dat$X1
+
+stroke_dat = openxlsx::read.xlsx("/files/scSeq_Hefendehl/data/Copy of DEG_control_vs_stroke_vs_distal.xlsx", sheet = 3)
+stroke_dat <- stroke_dat[order(stroke_dat$score, decreasing = T)[1:20],]
+stroke_genes<- stroke_dat$X1
+```
+
+c)  Mapping cells of "spatially identified signature" onto the new plots
+
+## Rechecking exclusion of cells
+
+Some cells appear to have a low expression of Aif1 as can be seen in the purple shading. However, some of these cells with the low expression seem to be missing later on (see Clustering example). Please check if really only cells with an expression of 0 Aif1 have been excluded
+
+### inspect unfiltered original RAW data
+
+```{r, fig.width=8,fig.height=4}
+# cluster all cells for visualization purpose prior to exclusion 
+
+DefaultAssay(samples.integrated) = "RNA"
+samples.integrated <- ScaleData(samples.integrated)
+samples.integrated <- FindVariableFeatures(samples.integrated)
+samples.integrated<- RunHarmony(samples.integrated, group.by.vars="Plate", npcs = 50)
+samples.integrated<- RunPCA(samples.integrated, npcs = 50)
+
+ElbowPlot(samples.integrated, ndims = 50)
+samples.integrated <- JackStraw(samples.integrated, assay = "RNA")
+samples.integrated <- ScoreJackStraw(samples.integrated, dims = 1:20)
+JackStrawPlot(samples.integrated, dims = 1:20)
+samples.integrated<- RunUMAP(samples.integrated, reduction = "harmony", dims = 1:20)
+
+a = DimPlot(samples.integrated, reduction = "umap")
+b = FeaturePlot(samples.integrated, reduction = "umap", features = "Aif1")
+b2 = FeaturePlot(samples.integrated, reduction = "umap", features = "Ptprc")
+c = RidgePlot(samples.integrated, features = "Aif1")
+c2 = RidgePlot(samples.integrated, features = "Ptprc")
+
+d = DimPlot(samples.integrated, reduction = "umap", split.by = "Genotype_Treatment", pt.size = 1)
+e = FeaturePlot(samples.integrated, reduction = "umap", features = "Aif1", split.by = "Genotype_Treatment")
+e2 = FeaturePlot(samples.integrated, reduction = "umap", features = "Ptprc", split.by = "Genotype_Treatment")
+```
+
+```{r, fig.width=8,fig.height=4}
+a|b|b2
+c|c2
+```
+
+```{r, fig.width=6,fig.height=3}
+d
+e
+e2
+
+```
+
+```{r, include=FALSE}
+
+reads = samples.integrated@assays$RNA@counts %>% as.data.frame()
+reads = t(reads) %>% as.data.frame()
+
+metadata <- samples.integrated@meta.data
+metadata$Aif1neg = NA
+metadata$Aif1neg <- paste0("Aif1neg_",as.character(reads$Aif1 ==0))
+metadata -> samples.integrated@meta.data
+
+
+table(metadata$Genotype_Treatment, metadata$Aif1neg)
+
+```
+
+### find markers for the Aif1 neg
+
+### exclude cells with low Aif1 expression and X or Y coded genes
+
+#### Exclusion and data harmonization step
+
+```{r, fig.width=4,fig.height=4}
+samples.integrated.filt<- samples.integrated
+
+# no filtering of Aif1 or Ptpcr uncomment section if you want to filter 
+#samples.integrated.filt <- subset(x = samples.integrated.filt, subset = Aif1 > 0)
+#samples.integrated.filt <- subset(x = samples.integrated.filt, subset = Ptprc > 0)
+
+
+
+sex.genes <- rownames(samples.integrated.filt) %in%  annotations$gene_name[grepl("X|Y", annotations$seq_name)]
+samples.integrated.filt<- samples.integrated.filt[!sex.genes,]
+
+
+DefaultAssay(samples.integrated.filt)<- "RNA"
+
+ifnb.list <- SplitObject(samples.integrated, split.by = "Plate")
+ifnb.list <- lapply(X = ifnb.list, FUN = function(x) {
+  x <- NormalizeData(x)
+  x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)
+})
+
+features <- SelectIntegrationFeatures(object.list = ifnb.list)
+
+feat.anchors <- FindIntegrationAnchors(object.list = ifnb.list, anchor.features = features)
+samples.integrated <- IntegrateData(anchorset = feat.anchors)
+
+samples.integrated.filt <- SCTransform(samples.integrated.filt, ncells = 3000)
+samples.integrated.filt <- ScaleData(object = samples.integrated.filt)
+samples.integrated.filt <- FindVariableFeatures(samples.integrated.filt)
+samples.integrated.filt <- RunPCA(samples.integrated.filt, npcs = 50)
+samples.integrated.filt <- RunHarmony(samples.integrated.filt, group.by.vars="Plate")
+ElbowPlot(samples.integrated.filt, ndims = 50, reduction = "harmony")
+```
+
+#### Re-optimize clustering
+
+large difference in cell distirbution between the genptypes
+
+```{r, fig.width=4,fig.height=4}
+
+reslist= seq(0.2,1.2,0.2)
+
+DefaultAssay(samples.integrated.filt)<- "SCT"
+samples.integrated.filt.target <- RunUMAP(samples.integrated.filt, reduction = "pca",  features = cluster.genes) %>% 
+  FindNeighbors(features=cluster.genes) %>% FindClusters(features=cluster.genes, resolution = reslist)
+
+library(clustree)
+clustree(samples.integrated.filt.target, prefix = "SCT_snn_res.")
+
+Idents(samples.integrated.filt.target) = "SCT_snn_res.0.6"
+DimPlot(samples.integrated.filt.target)
+DimPlot(samples.integrated.filt.target, split.by = "Genotype_Treatment")
+FeaturePlot(samples.integrated.filt.target,features = homeostat.genes)
+
+```
+
+#### All gegenes based clustering
+
+```{r}
+
+reslist= seq(0.2,1.2,0.2)
+
+
+DefaultAssay(samples.integrated.filt)<- "SCT"
+samples.integrated.filt <- RunUMAP(samples.integrated.filt, reduction = "pca", dims=1:15) %>% 
+  FindNeighbors() %>% FindClusters(resolution = reslist)
+
+clustree(samples.integrated.filt, prefix = "SCT_snn_res.")
+
+Idents(samples.integrated.filt) = "SCT_snn_res.0.6"
+DimPlot(samples.integrated.filt)
+DimPlot(samples.integrated.filt, split.by = "Genotype_Treatment")
+FeaturePlot(samples.integrated.filt,features = homeostat.genes)
+```
+
+```{r}
+samples.integrated.filt <- RunUMAP(samples.integrated.filt, reduction = "pca", dims=1:15) %>% 
+  FindNeighbors() %>% FindClusters(resolution = 0.6)
+
+DimPlot(samples.integrated.filt, group.by = "seurat_clusters", pt.size =1, label = T) + NoLegend()
+DimPlot(samples.integrated.filt, reduction = "umap", split.by = "Plate", pt.size = 1)
+DimPlot(samples.integrated.filt, reduction = "umap", split.by = "Genotype_Treatment", pt.size =1)
+
+```
+
+#### Cell cycle scoring
+
+```{r}
+cell_cycle_markers <- dplyr::left_join(cell_cycle_genes, annotations, by = c("geneID" = "gene_id"))
+
+# Acquire the S phase genes
+s_genes <- cell_cycle_markers %>%
+  dplyr::filter(phase == "S") %>%
+  pull("gene_name")
+
+# Acquire the G2M phase genes        
+g2m_genes <- cell_cycle_markers %>%
+  dplyr::filter(phase == "G2/M") %>%
+  pull("gene_name")
+
+samples.integrated.filt<-CellCycleScoring(samples.integrated.filt, s.features = s_genes, g2m.features = g2m_genes)
+
+DimPlot(samples.integrated.filt, reduction = "umap", group.by = "Phase", pt.size =1)
+DimPlot(samples.integrated.filt, reduction = "umap", group.by = "Phase", split.by = "Plate", pt.size =1)
+DimPlot(samples.integrated.filt, reduction = "umap", group.by = "Phase", split.by = "Genotype_Treatment", pt.size =1)
+```
+
+#### map cell types
+
+```{r}
+ref.sce.mm <- celldex::MouseRNAseqData()
+sce.filt<- as.SingleCellExperiment(samples.integrated.filt, assay = "SCT")
+
+pred.mouseRNA <- SingleR(test =sce.filt, ref = ref.sce.mm, assay.type.test=1,
+                         labels = ref.sce.mm$label.fine)
+
+table(pred.mouseRNA$labels) #fine tuned cell types
+
+#table(pred.mouseRNA$pruned.labels) #cell type after pruning
+
+samples.integrated.filt$Immgen_sc_labels_agc <- NA
+samples.integrated.filt$Immgen_sc_labels_agc <- pred.mouseRNA$labels
+
+
+plotScoreHeatmap(pred.mouseRNA, show.labels = TRUE,
+                 annotation_col=data.frame(cluster=samples.integrated.filt$seurat_clusters,
+                                           
+                                           row.names=rownames(pred.mouseRNA)))
+
+Idents(samples.integrated.filt)<- "seurat_clusters"
+DimPlot(samples.integrated.filt, reduction="umap", group.by="Immgen_sc_labels_agc", 
+        label = T)
+DimPlot(samples.integrated.filt, reduction="umap", group.by="Immgen_sc_labels_agc", 
+        label = T, split.by = "Genotype_Treatment")
+DimPlot(samples.integrated.filt, reduction="umap", group.by="Immgen_sc_labels_agc", split.by = "Genotype_Treatment",
+        label = T)
+
+```
+
+```{r fig.height=3, fig.width=9}
+
+samples.integrated.filt = samples.integrated.filt[,samples.integrated.filt$Immgen_sc_labels_agc=="Microglia"]
+
+samples.integrated.filt <- RunUMAP(samples.integrated.filt, reduction = "pca", dims=1:15) %>% 
+  FindNeighbors() %>% FindClusters(resolution = 0.6)
+
+
+DimPlot(samples.integrated.filt, reduction="umap", label = T)
+
+n = length(unique(samples.integrated.filt$seurat_clusters))
+samples.integrated.filt$labels<- factor(Idents(samples.integrated.filt), 
+                                        levels = c(0:(n-1)), labels=paste0("Microglia", 0:(n-1))
+                                            )
+
+Idents(samples.integrated.filt) = "labels"
+```
+
+```{r}
+DimPlot(samples.integrated.filt, group.by = "labels", reduction="umap", label = T)
+```
+
+## Comparison of DEGs in DAMs between treatments/genotypes
+
+5)  Subcluster overlaps
+
+We will provide gene lists for different previously described microglia subclusters including homeostatic, DAM 1/DAM2 and IRM identification list. Please generate a Venn diagram or similar to see how big the overlap of our cells of interest (identified in the scDataset via the spatial transcriptomics list) is with the individual subclusters,
+
+#### define DAM
+
+Profiles based on genelist provided by Jan Hoffmann
+
+NOT done: Alterantive DAM profiles based on Cell. 2017 Jun 15;169(7):1276-1290.e17. doi: 10.1016/j.cell.2017.05.018)
+
+##### DAM1
+
+```{r, fig.width=12, fig.height=4}
+#load("./data/DAM_genelists.RData")
+DefaultAssay(samples.integrated.filt) = "SCT"
+
+samples.integrated.filt.target<- AddModuleScore(object = samples.integrated.filt.target, 
+                                          features = list(DAM_up), name = "DAM_score")
+
+#FeaturePlot(samples.integrated.filt.target, features = "DAM_score1")+scale_color_viridis_c()
+
+samples.integrated.filt <- AddModuleScore(object = samples.integrated.filt, 
+                                          features = list(DAM_up), name = "DAM_score")
+
+p4 <- FeaturePlot(object = samples.integrated.filt, features = "DAM_score1")+scale_color_viridis_c()
+p4a <- DimPlot(object = samples.integrated.filt, reduction = "umap")
+
+DAMcutoff = 1.5
+phist = ggplot(data = samples.integrated.filt@meta.data, aes(x=DAM_score1))+
+  geom_density()+geom_vline(xintercept = DAMcutoff)+
+  theme_classic()
+
+samples.integrated.filt$DAM_binary = as.factor(samples.integrated.filt$DAM_score1>=DAMcutoff)
+pbin <- DimPlot(object = samples.integrated.filt, group.by =  "DAM_binary")
+phist | p4 | pbin| p4a
+
+prop.table(table(DAMs=samples.integrated.filt$DAM_binary, Clusters=samples.integrated.filt$labels), margin = 2)
+
+DimPlot(object = samples.integrated.filt, group.by =  "DAM_binary", split.by = "Genotype_Treatment")
+
+```
+
+```{r, fig.width=12, fig.height=4}
+
+samples.integrated.filt <- AddModuleScore(object = samples.integrated.filt, 
+                                          features = list(DAM1vsDAM2), name = "DAM2_score")
+p4 <- FeaturePlot(object = samples.integrated.filt, features = "DAM2_score1")+scale_color_viridis_c()
+p4a <- DimPlot(object = samples.integrated.filt, reduction = "umap")
+
+DAM2cutoff = 1.5
+phist = ggplot(data = samples.integrated.filt@meta.data, aes(x=DAM2_score1))+
+  geom_density()+geom_vline(xintercept = DAM2cutoff)+
+  theme_classic()
+
+samples.integrated.filt$DAM2_binary = as.factor(samples.integrated.filt$DAM2_score1>=DAM2cutoff)
+pbin <- DimPlot(object = samples.integrated.filt, group.by =  "DAM2_binary")
+phist | p4 | pbin| p4a
+
+prop.table(table(DAM2_AGC=samples.integrated.filt$DAM2_binary, Clusters=samples.integrated.filt$labels), margin = 2)
+prop.table(table(DAM2_AGC=samples.integrated.filt$DAM2_binary, DAMs=samples.integrated.filt$DAM_binary), margin = 2)
+```
+
+```{r}
+ggplot(samples.integrated.filt@meta.data, aes(x=DAM2_score1, y=DAM_score1))+
+  geom_density_2d_filled()+geom_point(col="#FFFFFF55")+theme_classic()+ggtitle("all cells")
+
+ggplot(samples.integrated.filt@meta.data[samples.integrated.filt$DAM_binary==TRUE,], aes(x=DAM2_score1, y=DAM_score1))+geom_density_2d_filled()+geom_point(col="#FFFFFF55")+theme_classic()+ggtitle("DAMs only")
+```
+
+proportion tables show percebtages of DAM cells per condition
+
+```{r}
+metadata=samples.integrated.filt@meta.data
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$DAM_binary)
+restab
+prop.table(restab, margin = 1)
+chisq.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+library(chisq.posthoc.test)
+chisq.posthoc.test(restab)
+
+#To Do Pairwise 
+
+
+```
+
+### a) DAMs in APPPS1 vs. DAMs in APPPS1 + stroke -- Venn diagram, or similar
+
+```{r}
+metadata=samples.integrated.filt@meta.data[samples.integrated.filt$Genotype == "APPPS1", ]
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$DAM_binary)
+restab
+prop.table(restab, margin = 1)
+fisher.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+
+
+```
+
+### b) DAMs in WT+Stroke vs. DAMs in APPPS1 + stroke -- Venn diagram, or similar
+
+```{r}
+metadata=samples.integrated.filt@meta.data[samples.integrated.filt$Genotype == "WT", ]
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$DAM_binary)
+restab
+prop.table(restab, margin = 1)
+fisher.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+```
+
+### c) Separation of DAMs into DAM1 and DAM2 (with a provided gene list), repetition of a) and b) to see if our cells on interest overlap more with one or the other profile
+
+```{r}
+
+metadata=samples.integrated.filt@meta.data[samples.integrated.filt$DAM_binary==TRUE,]
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAM2=metadata$DAM2_binary)
+restab
+prop.table(restab, margin = 1)
+chisq.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAM2, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+library(chisq.posthoc.test)
+chisq.posthoc.test(restab)
+
+
+```
+
+```{r}
+
+metadata=samples.integrated.filt@meta.data[(samples.integrated.filt$DAM_binary==TRUE) & (samples.integrated.filt$Genotype=="APPPS1"),]
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAM2=metadata$DAM2_binary)
+restab
+prop.table(restab, margin = 1)
+chisq.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAM2, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+```
+
+```{r}
+
+metadata=samples.integrated.filt@meta.data[(samples.integrated.filt$DAM_binary==TRUE) & (samples.integrated.filt$Genotype=="WT"),]
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAM2=metadata$DAM2_binary)
+restab
+prop.table(restab, margin = 1)
+chisq.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAM2, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+
+
+```
+
+## Homeostatic Cells
+
+```{r fig.width=8, fig.height=24}
+
+# list from Jan Hofmann 
+RidgePlot(samples.integrated.filt, features = homeostat.genes, ncol = 2)
+```
+
+```{r, fig.width=12, fig.height=4}
+
+FeaturePlot(samples.integrated.filt, features = homeostat.genes)
+
+samples.integrated.filt <- AddModuleScore(object = samples.integrated.filt, 
+                                          features = list(homeostat.genes), name = "Homeo_score")
+
+p4 <- FeaturePlot(object = samples.integrated.filt, features = "Homeo_score1")+scale_color_viridis_c()
+p4a <- DimPlot(object = samples.integrated.filt, reduction = "umap")
+
+Homeocutff = 2.4
+phist = ggplot(data = samples.integrated.filt@meta.data, aes(x=Homeo_score1))+
+  geom_density()+geom_vline(xintercept = Homeocutff)+theme_classic()
+
+samples.integrated.filt$Homeo_binary = as.factor(samples.integrated.filt$Homeo_score1>=Homeocutff)
+pbin <- DimPlot(object = samples.integrated.filt, group.by =  "Homeo_binary")
+phist | p4 | pbin| p4a
+
+prop.table(table(Homeo=samples.integrated.filt$Homeo_binary, Clusters=samples.integrated.filt$labels), margin = 2)
+
+```
+
+```{r}
+ggplot(samples.integrated.filt@meta.data, aes(x=Homeo_score1, y=DAM_score1))+
+  geom_density_2d_filled()+geom_point(col="#FFFFFF55")+theme_classic()+ggtitle("all cells")
+
+ggplot(samples.integrated.filt@meta.data[samples.integrated.filt$DAM_binary==TRUE,], aes(x=Homeo_score1, y=DAM_score1))+geom_density_2d_filled()+geom_point(col="#FFFFFF55")+theme_classic()+ggtitle("DAMs only")
+
+```
+
+### d) Homeostatic microglia (with provided gene list) in APPPS1 vs. Homeostatic microglia in APPPS1 + stroke -- Venn diagram, or similar
+
+proportion tables show percebtages of Homeostatic cells per condition
+
+```{r}
+metadata=samples.integrated.filt@meta.data
+restab = table(GT_Treat = metadata$Genotype_Treatment, Homeo=metadata$Homeo_binary)
+restab
+prop.table(restab, margin = 1)
+chisq.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=Homeo, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+
+chisq.posthoc.test(restab)
+
+
+```
+
+### e) Homeostatic microglia in WT+Stroke vs. Homeostatic microglia in APPPS1 + stroke -- Venn diagram, or similar
+
+```{r}
+metadata=samples.integrated.filt@meta.data[samples.integrated.filt$Genotype=="APPPS1",]
+restab = table(GT_Treat = metadata$Genotype_Treatment, Homeo=metadata$Homeo_binary)
+restab
+prop.table(restab, margin = 1)
+chisq.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=Homeo, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+metadata=samples.integrated.filt@meta.data[samples.integrated.filt$Genotype=="WT",]
+restab = table(GT_Treat = metadata$Genotype_Treatment, Homeo=metadata$Homeo_binary)
+restab
+prop.table(restab, margin = 1)
+chisq.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=Homeo, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+### Spatial cell types 
+
+
+Idents(samples.integrated.filt) = "Genotype_Treatment"
+DoHeatmap(samples.integrated.filt, assay = "RNA", features = c(distal_genes, control_genes, stroke_genes))
+
+DoHeatmap(samples.integrated.filt, assay = "RNA",features = c(distal_genes))
+
+DoHeatmap(samples.integrated.filt, assay = "RNA",features = c(control_genes))
+
+DoHeatmap(samples.integrated.filt, assay = "RNA",features = c(stroke_genes))
+
+
+FeaturePlot(samples.integrated.filt, features = "Apoe")
+
+```
+
+##### DISTAL
+
+```{r, fig.width=12, fig.height=4}
+#load("./data/DAM_genelists.RData")
+DefaultAssay(samples.integrated.filt) = "SCT"
+
+samples.integrated.filt <- AddModuleScore(object = samples.integrated.filt, 
+                                          features = list(distal_genes), name = "Distal")
+
+
+p4 <- FeaturePlot(object = samples.integrated.filt, features = "Distal1")+scale_color_viridis_c()
+p4a <- DimPlot(object = samples.integrated.filt, reduction = "umap")
+
+Distalcutoff = 0.2
+phist = ggplot(data = samples.integrated.filt@meta.data, aes(x=Distal1))+
+  geom_density()+geom_vline(xintercept = Distalcutoff)+
+  theme_classic()
+
+samples.integrated.filt$Distal_binary = as.factor(samples.integrated.filt$Distal1>=Distalcutoff)
+pbin <- DimPlot(object = samples.integrated.filt, group.by =  "Distal_binary")
+phist | p4 | pbin| p4a
+
+prop.table(table(Distals=samples.integrated.filt$Distal_binary, Clusters=samples.integrated.filt$labels), margin = 2)
+
+DimPlot(object = samples.integrated.filt, group.by =  "Distal_binary", split.by = "Genotype_Treatment")
+
+```
+
+```{r, fig.width=12, fig.height=4}
+#load("./data/DAM_genelists.RData")
+DefaultAssay(samples.integrated.filt) = "SCT"
+
+samples.integrated.filt <- AddModuleScore(object = samples.integrated.filt, 
+                                          features = list(control_genes), name = "Control")
+
+
+p4 <- FeaturePlot(object = samples.integrated.filt, features = "Control1")+scale_color_viridis_c()
+p4a <- DimPlot(object = samples.integrated.filt, reduction = "umap")
+
+Controlcutoff = 0.1
+phist = ggplot(data = samples.integrated.filt@meta.data, aes(x=Control1))+
+  geom_density()+geom_vline(xintercept = Controlcutoff)+
+  theme_classic()
+
+samples.integrated.filt$Control_binary = as.factor(samples.integrated.filt$Control1>=Controlcutoff)
+pbin <- DimPlot(object = samples.integrated.filt, group.by =  "Control_binary")
+phist | p4 | pbin| p4a
+
+prop.table(table(Controls=samples.integrated.filt$Control_binary, Clusters=samples.integrated.filt$labels), margin = 2)
+
+DimPlot(object = samples.integrated.filt, group.by =  "Control_binary", split.by = "Genotype_Treatment")
+
+```
+
+```{r, fig.width=12, fig.height=4}
+#load("./data/DAM_genelists.RData")
+DefaultAssay(samples.integrated.filt) = "SCT"
+
+samples.integrated.filt <- AddModuleScore(object = samples.integrated.filt, 
+                                          features = list(stroke_genes), name = "Stroke")
+
+
+p4 <- FeaturePlot(object = samples.integrated.filt, features = "Stroke1")+scale_color_viridis_c()
+p4a <- DimPlot(object = samples.integrated.filt, reduction = "umap")
+
+Strokecutoff = 2
+phist = ggplot(data = samples.integrated.filt@meta.data, aes(x=Stroke1))+
+  geom_density()+geom_vline(xintercept = Strokecutoff)+
+  theme_classic()
+
+samples.integrated.filt$Stroke_binary = as.factor(samples.integrated.filt$Stroke1>=Strokecutoff)
+pbin <- DimPlot(object = samples.integrated.filt, group.by =  "Stroke_binary")
+phist | p4 | pbin| p4a
+
+prop.table(table(Strokes=samples.integrated.filt$Stroke_binary, Clusters=samples.integrated.filt$labels), margin = 2)
+
+DimPlot(object = samples.integrated.filt, group.by =  "Stroke_binary", split.by = "Genotype_Treatment")
+
+```
+
+```{r}
+ggplot(samples.integrated.filt@meta.data, aes(x=Stroke1, y=Control1))+
+  geom_density_2d_filled()+geom_point(col="#FFFFFF55")+theme_classic()+ggtitle("all cells")
+
+ggplot(samples.integrated.filt@meta.data[samples.integrated.filt$Stroke_binary==TRUE,], aes(x=Stroke1, y=Control1))+geom_density_2d_filled()+geom_point(col="#FFFFFF55")+theme_classic()+ggtitle("Strokes only")
+```
+
+proportion tables show percebtages of DAM cells per condition
+
+### Distals binary proportions
+
+```{r}
+metadata=samples.integrated.filt@meta.data
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$Distal_binary)
+restab
+prop.table(restab, margin = 1)
+chisq.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+library(chisq.posthoc.test)
+chisq.posthoc.test(restab)
+
+#To Do Pairwise 
+
+
+```
+
+### a) Distals in APPPS1 vs. DAMs in APPPS1 + stroke -- Venn diagram, or similar
+
+```{r}
+metadata=samples.integrated.filt@meta.data[samples.integrated.filt$Genotype == "APPPS1", ]
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$Distal_binary)
+restab
+prop.table(restab, margin = 1)
+fisher.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+
+
+```
+
+### b) Distals in WT+Stroke vs. DAMs in APPPS1 + stroke -- Venn diagram, or similar
+
+```{r}
+metadata=samples.integrated.filt@meta.data[samples.integrated.filt$Genotype == "WT", ]
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$Distal_binary)
+restab
+prop.table(restab, margin = 1)
+fisher.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+```
+
+### Controls binary proportions
+
+```{r}
+metadata=samples.integrated.filt@meta.data
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$Control_binary)
+restab
+prop.table(restab, margin = 1)
+chisq.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+library(chisq.posthoc.test)
+chisq.posthoc.test(restab)
+
+#To Do Pairwise 
+
+
+```
+
+### a) Controls in APPPS1 vs. DAMs in APPPS1 + stroke -- Venn diagram, or similar
+
+```{r}
+metadata=samples.integrated.filt@meta.data[samples.integrated.filt$Genotype == "APPPS1", ]
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$Control_binary)
+restab
+prop.table(restab, margin = 1)
+fisher.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+
+
+```
+
+### b) Controls in WT+Stroke vs. DAMs in APPPS1 + stroke -- Venn diagram, or similar
+
+```{r}
+metadata=samples.integrated.filt@meta.data[samples.integrated.filt$Genotype == "WT", ]
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$Control_binary)
+restab
+prop.table(restab, margin = 1)
+fisher.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+```
+
+### Strokes binary proportions
+
+```{r}
+metadata=samples.integrated.filt@meta.data
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$Stroke_binary)
+restab
+prop.table(restab, margin = 1)
+chisq.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+library(chisq.posthoc.test)
+chisq.posthoc.test(restab)
+
+#To Do Pairwise 
+
+
+```
+
+### a) Strokes in APPPS1 vs. DAMs in APPPS1 + stroke -- Venn diagram, or similar
+
+```{r}
+metadata=samples.integrated.filt@meta.data[samples.integrated.filt$Genotype == "APPPS1", ]
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$Stroke_binary)
+restab
+prop.table(restab, margin = 1)
+fisher.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+```
+
+### b) Strokes in WT+Stroke vs. DAMs in APPPS1 + stroke -- Venn diagram, or similar
+
+```{r}
+metadata=samples.integrated.filt@meta.data[samples.integrated.filt$Genotype == "WT", ]
+restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$Stroke_binary)
+restab
+prop.table(restab, margin = 1)
+fisher.test(restab)
+
+ggplot(as.data.frame(restab), 
+       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+  geom_bar(position="fill", stat="identity")+theme_classic()
+
+```
+
+### Alernative appraoch to identify cell types (assuming the cell types are mutaully exclusive)
+
+
+```{r}
+library(scSorter)
+
+annodf = data.frame(Type = "Stroke", Marker = stroke_genes)
+annodf = rbind(annodf, data.frame(Type = "Control", Marker = control_genes))
+annodf = rbind(annodf, data.frame(Type = "Distal", Marker = distal_genes))
+spatialtypes = scSorter(samples.integrated.filt@assays$SCT@counts, annodf)
+
+samples.integrated.filt@meta.data <- cbind(as.data.frame(samples.integrated.filt@meta.data), PredType = spatialtypes$Pred_Type)
+
+DimPlot(samples.integrated.filt, group.by = "PredType", split.by = "Genotype_Treatment")
+
+crosstab = table(Condition = samples.integrated.filt$Genotype_Treatment, Spatial_Type = samples.integrated.filt$PredType)
+
+
+ggplot(as.data.frame(crosstab), aes(fill=Spatial_Type, x=Condition, y=Freq)) + geom_bar(position="fill", stat="identity")+theme_classic()
+crosstab
+chisq.test(crosstab)
+
+ggplot(as.data.frame(crosstab[1:2,]), aes(fill=Spatial_Type, x=Condition, y=Freq)) + geom_bar(position="fill", stat="identity")+theme_classic()
+crosstab[1:2,]
+chisq.test(crosstab[1:2,])
+
+ggplot(as.data.frame(crosstab[3:4,]), aes(fill=Spatial_Type, x=Condition, y=Freq)) + geom_bar(position="fill", stat="identity")+theme_classic()
+crosstab[3:4,]
+chisq.test(crosstab[3:4,])
+
+```
+
+
+### DEG cpmparing conditions overall
+
+##### WT Stroke vs no Stroke
+
+```{r}
+
+#Idents(samples.integrated.filt) <- "Aif1neg"
+
+#DEG_Aif1neg <-FindMarkers(samples.integrated.filt, 
+#                                  ident.1 = "Aif1neg_TRUE", ident.2 = "Aif1neg_FALSE", 
+#                                 test.use = "LR", logfc.threshold = 0, only.pos = T)
+
+
+#DoHeatmap(samples.integrated, assay = "RNA", features = rownames(DEG_Aif1neg)[1:20])
+
+
+
+Idents(samples.integrated.filt) <- "Genotype_Treatment"
+DimPlot(samples.integrated.filt)
+DEG_Wt_CtrlvsSTroke <-FindMarkers(samples.integrated.filt, 
+                                  ident.1 = "WT_Ctrl", ident.2 = "WT_Stroke", 
+                                  test.use = "LR", logfc.threshold = 0)
+
+display_tab(DEG_Wt_CtrlvsSTroke)
+```
+
+#### APPPS1 Stroke vs no Stroke
+
+```{r}
+DEG_APSSS_CtrlvsSTroke <-FindMarkers(samples.integrated.filt, 
+                                     ident.1 = "APPPS1_Ctrl", ident.2 = "APPPS1_Stroke", 
+                                     test.use = "LR", logfc.threshold = 0)
+
+
+display_tab(DEG_APSSS_CtrlvsSTroke)
+```
+
+#### Scatterplot of DEGs of all four conditions, see <https://www.nature.com/articles/s41593-023-01355-y> ; see Fig 1e
+
+## Todo Check ident roles
+
+```{r}
+genelist_both= intersect(rownames(DEG_Wt_CtrlvsSTroke), rownames(DEG_APSSS_CtrlvsSTroke))
+
+plotdata=data.frame(WT=DEG_Wt_CtrlvsSTroke[genelist_both,]$avg_log2FC, APPPS1 = DEG_APSSS_CtrlvsSTroke[genelist_both,]$avg_log2FC)
+rownames(plotdata) = genelist_both
+
+plotdata$label = rownames(plotdata)
+n=5
+plotdata$label[! c(1:nrow(plotdata)) %in% 
+                 c(
+                   order(abs(plotdata$WT), decreasing = T)[1:n], 
+                   order(abs(plotdata$APPPS1), decreasing = T)[1:n])]=""
+
+
+plotdata$col="WT"
+apps1=abs(plotdata$APPPS1)>abs(plotdata$WT)
+plotdata$col[ apps1]="APPPS1"
+plotdata$col[(abs(plotdata$APPPS1)<0.25) & (abs(plotdata$WT)<0.25)] <- NA
+ggplot(plotdata, aes(x=WT, y=APPPS1, color=col, label=label))+geom_point(alpha=0.7)+
+  geom_text(vjust=-0.7, color="black")+geom_abline(slope=-1, intercept=0, lty=2)+geom_abline(slope=1, intercept=0, lty=2)+theme_classic()+ggtitle("log_FC")
+
+```
+
+```{r}
+DEG_Strokebins_Wt_CtrlvsSTroke <-FindMarkers(samples.integrated.filt, subset.ident = "Stroke_bin", subset="TRUE", 
+                                  ident.1 = "WT_Ctrl", ident.2 = "WT_Stroke", 
+                                  test.use = "LR", logfc.threshold = 0)
+
+display_tab(DEG_Strokebins_Wt_CtrlvsSTroke)
+
+DEG_Strokebins_Appps1_CtrlvsSTroke <-FindMarkers(samples.integrated.filt, subset.ident = "Stroke_bin", subset="TRUE", 
+                                  ident.1 = "APPPS1_Ctrl", ident.2 = "APPPS1_Stroke", 
+                                  test.use = "LR", logfc.threshold = 0)
+
+display_tab(DEG_Strokebins_Appps1_CtrlvsSTroke)
+
+genelist_both= intersect(rownames(DEG_Strokebins_Appps1_CtrlvsSTroke), rownames(DEG_Strokebins_Wt_CtrlvsSTroke))
+
+plotdata=data.frame(WT=DEG_Strokebins_Wt_CtrlvsSTroke[genelist_both,]$avg_log2FC, APPPS1 = DEG_Strokebins_Appps1_CtrlvsSTroke[genelist_both,]$avg_log2FC)
+rownames(plotdata) = genelist_both
+
+plotdata$label = rownames(plotdata)
+n=5
+plotdata$label[! c(1:nrow(plotdata)) %in% 
+                 c(
+                   order(abs(plotdata$WT), decreasing = T)[1:n], 
+                   order(abs(plotdata$APPPS1), decreasing = T)[1:n])]=""
+
+plotdata$col="WT"
+apps1=abs(plotdata$APPPS1)>abs(plotdata$WT)
+plotdata$col[ apps1]="APPPS1"
+plotdata$col[(abs(plotdata$APPPS1)<0.25) & (abs(plotdata$WT)<0.25)] <- NA
+ggplot(plotdata, aes(x=WT, y=APPPS1, color=col, label=label))+geom_point(alpha=0.7)+
+  geom_text(vjust=-0.7, color="black")+geom_abline(slope=-1, intercept=0, lty=2)+geom_abline(slope=1, intercept=0, lty=2)+theme_classic()+ggtitle("log_FC_Stroke_bins")
+
+```
+
+### Dot plot showing top markers for condition clusters, same paper Fig 2f
+
+```{r, fig.width=6, fig.height=2}
+
+reads = samples.integrated.filt@assays$SCT@counts
+
+reads.filt= reads[cluster.genes,]
+
+datatoplot_mean = aggregate(t(reads.filt), list(samples.integrated.filt$labels), mean, na.rm=T) %>% as.data.frame() %>% column_to_rownames("Group.1") %>% scale()
+
+
+
+datatoplot_mean=melt(datatoplot_mean)
+
+colnames(datatoplot_mean) = c("Microglia", "Gene", "Scaled_mean")
+
+datatoplot_perc = aggregate(t(reads.filt), list(samples.integrated.filt$labels), 
+                            function(x){length(which(x>0))/length(x)})
+
+datatoplot_perc=melt(datatoplot_perc, value.name = "perc")
+
+datatoplot = cbind(datatoplot_mean, perc=datatoplot_perc$perc)
+
+p <- ggplot(datatoplot, aes(x=Gene, y=Microglia, col=Scaled_mean, size=perc))+geom_point()+
+    theme_classic()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+p 
+
+
+```
+
+### Pseudotime analysis
+
+```{r}
+samples.integrated.filt.meta = samples.integrated.filt@meta.data
+sce.microglia=as.SingleCellExperiment(samples.integrated.filt)
+sce.microglia <- slingshot(sce.microglia, clusterLabels = 'labels', reducedDim = 'UMAP', start.clus="Microglia2")
+
+samples.integrated.filt.meta$Pseudotime_1 <- sce.microglia$slingPseudotime_1
+samples.integrated.filt.meta$Pseudotime_2 <- sce.microglia$slingPseudotime_2
+samples.integrated.filt.meta$Pseudotime_3 <- sce.microglia$slingPseudotime_3
+
+
+dataset = data.frame(reducedDim(sce.microglia, "UMAP"), 
+                     cluster = as.character(sce.microglia$labels), 
+                     DAMs = as.character(sce.microglia$DAM_binary))
+
+curves <- slingCurves(sce.microglia, as.df=T)
+
+p = ggplot(dataset, aes(x=UMAP_1, y=UMAP_2))+
+  geom_point(aes(col = cluster), size=2)+
+  geom_point(data=subset(dataset, dataset$DAMs==T), aes(fill=DAMs), pch=21, size=0.7)+
+  scale_fill_manual(values="black")
+curves = curves %>% arrange(Lineage, Order)
+
+p = p + geom_path(data = curves, aes(group = Lineage), lwd=1, lineend = "butt",)+theme_classic()
+
+curves_arrows = curves %>% group_by(Lineage) %>%  mutate(xend = lead(UMAP_1), yend = lead(UMAP_2))
+
+curves_arrows = curves_arrows[curves_arrows$Order %in% seq(10,150, by=floor((150-10)/10)),]
+
+p = p + geom_segment(data = curves_arrows,
+                     aes(x = UMAP_1, y = UMAP_2, xend = xend, yend = yend),
+                     linewidth=0.5, 
+                     arrow = arrow(length=unit(0.3, "cm"), type="closed"))
+p
+
+ggsave(filename = "./docs/Pseudotime_linages.svg", p)
+ggsave(filename = "./docs/Pseudotime_linages.pdf", p)
+
+```
+
+### Marker for DAM onyl DEG for APPPS1_Ctrl vs APPPS_1 Stroke; WT_STroke vs APPPS1_Stroke
+
+### WGCNA
+
+In the paper <https://www.nature.com/articles/s41586-018-0023-4> this analysis was used to generate different modules of gene lists that can then be mapped onto different treatment/genotypes within one experiment (see Figure 4). This is an analysis that can be done in Seurat <https://smorabit.github.io/tutorials/9_scWGCNA_tutorial/> Which could be very cool for our data. In the paper they also have 3 different conditions in 2 genotypes.
+
+avoid running this section as it takes very long 
+
+```{r}
+
+
+nclusters <- length(unique(samples.integrated.filt$labels))
+genes.use <- rownames(samples.integrated.filt)
+targets <- samples.integrated.filt@meta.data
+
+group <- as.factor(samples.integrated.filt$Genotype_Treatment)
+
+
+datExpr <- as.data.frame(GetAssayData(samples.integrated.filt, assay='RNA', slot='data')[genes.use,])
+datExpr <- as.data.frame(t(datExpr))
+
+powers = c(seq(1,10,by=1), seq(12,30, by=2));
+
+
+enableWGCNAThreads(nThreads = 16)
+
+
+# Call the network topology analysis function for each set in turn
+powerTable = list(
+  data = pickSoftThreshold(
+    datExpr,
+    powerVector=powers,
+    verbose = 100,
+    networkType="signed",
+    corFnc="bicor"
+  )[[2]]
+);
+
+
+colors = c("blue", "red","black")
+# Will plot these columns of the returned scale free analysis tables
+plotCols = c(2,5,6,7)
+colNames = c("Scale Free Topology Model Fit", "Mean connectivity", "mean connectivity",
+"Max connectivity");
+
+# Get the minima and maxima of the plotted points
+ylim = matrix(NA, nrow = 2, ncol = 4);
+for (col in 1:length(plotCols)){
+  ylim[1, col] = min(ylim[1, col], powerTable$data[, plotCols[col]], na.rm = TRUE);
+  ylim[2, col] = max(ylim[2, col], powerTable$data[, plotCols[col]], na.rm = TRUE);
+}
+
+# Plot the quantities in the chosen columns vs. the soft thresholding power
+par(mfcol = c(2,2));
+par(mar = c(4.2, 4.2 , 2.2, 0.5))
+cex1 = 0.7;
+
+for (col in 1:length(plotCols)){
+  plot(powerTable$data[,1], -sign(powerTable$data[,3])*powerTable$data[,2],
+  xlab="Soft Threshold (power)",ylab=colNames[col],type="n", ylim = ylim[, col],
+  main = colNames[col]);
+  addGrid();
+
+  if (col==1){
+    text(powerTable$data[,1], -sign(powerTable$data[,3])*powerTable$data[,2],
+    labels=powers,cex=cex1,col=colors[1]);
+  } else
+  text(powerTable$data[,1], powerTable$data[,plotCols[col]],
+  labels=powers,cex=cex1,col=colors[1]);
+  if (col==1){
+    legend("bottomright", legend = 'Metacells', col = colors, pch = 20) ;
+  } else
+  legend("topright", legend = 'Metacells', col = colors, pch = 20) ;
+}
+
+softPower=14
+
+nSets = 1
+setLabels = 'OCS'
+shortLabels = setLabels
+
+multiExpr <- list()
+multiExpr[['ODC']] <- list(data=datExpr)
+
+checkSets(multiExpr) # check data size
+
+# construct network
+net=blockwiseConsensusModules(multiExpr, blocks = NULL,
+                                         maxBlockSize = 30000, ## This should be set to a smaller size if the user has limited RAM
+                                         randomSeed = 12345,
+                                         corType = "pearson",
+                                         power = softPower,
+                                         consensusQuantile = 0.3,
+                                         networkType = "signed",
+                                         TOMType = "unsigned",
+                                         TOMDenom = "min",
+                                         scaleTOMs = TRUE, scaleQuantile = 0.8,
+                                         sampleForScaling = TRUE, sampleForScalingFactor = 1000,
+                                         useDiskCache = TRUE, chunkSize = NULL,
+                                         deepSplit = 4,
+                                         pamStage=FALSE,
+                                         detectCutHeight = 0.995, minModuleSize = 50,
+                                         mergeCutHeight = 0.2,
+                                         saveConsensusTOMs = TRUE,
+                                         consensusTOMFilePattern = "ConsensusTOM-block.%b.rda")
+
+consMEs = net$multiMEs;
+moduleLabels = net$colors;
+
+
+# Convert the numeric labels to color labels
+moduleColors = as.character(moduleLabels)
+consTree = net$dendrograms[[1]];
+
+# module eigengenes
+MEs=moduleEigengenes(multiExpr[[1]]$data, colors = moduleColors, nPC=1)$eigengenes
+MEs=orderMEs(MEs)
+meInfo<-data.frame(rownames(datExpr), MEs)
+colnames(meInfo)[1]= "SampleID"
+
+# intramodular connectivity
+KMEs<-signedKME(datExpr, MEs,outputColumnName = "kME",corFnc = "bicor")
+
+# compile into a module metadata table
+geneInfo=as.data.frame(cbind(colnames(datExpr),moduleColors, KMEs))
+
+# how many modules did we get?
+nmodules <- length(unique(moduleColors))
+
+# merged gene symbol column
+colnames(geneInfo)[1]= "GeneSymbol"
+colnames(geneInfo)[2]= "Initially.Assigned.Module.Color"
+
+# save info
+write.csv(geneInfo,file=paste0('/files/scSeq_Hefendehl/output/geneInfoSigned.csv'))
+
+PCvalues=MEs
+
+save.image("/files/scSeq_Hefendehl/output/tmp.RData")
+```
+
+you can load all the objects by uncommenting and runing this section
+
+```{r}
+#load("/files/scSeq_Hefendehl/output/tmp.RData")
+
+```
+
+
+```{r, fig.width=88, fig.height=16}
+WGCNA::plotDendroAndColors(consTree, moduleColors[net$goodGenes], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05,
+main = paste0("Microglia  gene dendrogram and module colors"))
+
+
+## Todo adjust 
+plot_df <- cbind(dplyr::select(targets, c(Genotype, Treatment)), PCvalues)
+plot_df <- reshape2::melt(plot_df, id.vars = c('Genotype', 'Treatment'))
+plot_df$Genotype <- factor(plot_df$Genotype, levels=c('APPPS1', 'WT'))
+
+colors <- sub('ME', '', as.character(levels(plot_df$variable)))
+p <- ggplot(plot_df, aes(x=variable, y=value, fill=Treatment)) +
+  geom_boxplot(notch=FALSE) +
+  RotatedAxis() + ylab('Module Eigengene') + xlab('') +
+  theme(
+    axis.text.x=element_blank(),
+    axis.ticks.x=element_blank(),
+  )
+
+# plot width and height:
+w=2*nmodules; 
+h=2*nclusters;
+
+p <- p + facet_wrap(Genotype~variable, scales='free', ncol=nmodules)+theme_classic()
+
+p
+```
+
+
+```{r, fig.width=8, fig.height=8}
+reslist = list()
+for(M in unique(plot_df$variable)){
+
+  Mdata = plot_df[plot_df$variable==M,]
+  fit= lm(value~Genotype*Treatment, data = Mdata)
+  resfit = summary(fit)
+  reslist[[M]] <- c(Genotype_Treatment = resfit$coefficients["GenotypeWT:TreatmentStroke", "Pr(>|t|)"])
+
+  }
+
+ME_avg <- plot_df %>% dplyr::group_by(variable, Treatment, Genotype) %>% summarise(avg_Eigenmodule = mean(value)) 
+ME_avg$pval=unlist(reslist[ME_avg$variable])
+ME_avg$pval_ast=convertpvaltostars(ME_avg$pval)
+ME_avg$Genotype_Treatment = paste0(ME_avg$Genotype, ME_avg$Treatment)
+ME_avg$Module = paste0(ME_avg$pval_ast, ME_avg$variable)
+
+ggplot(ME_avg, aes(x=Genotype_Treatment, y=Module, fill=avg_Eigenmodule))+geom_tile()+scale_fill_viridis()+theme_classic()
+```
+
+
+```{r, fig.width=8, fig.height=80}
+genelist = split(names(net$colors), net$colors)
+Gores = getGOresults(geneset = genelist, genereference = names(net$colors), organism = "mmusculus")
+display_tab(Gores)
+GOplot(Gores)
+```
+
+
+
+## To DO
+
+4)  The Svg file works, we can edit in Illustrator, thanks. Could you please add the "Celltype" and "Genotype_Treatment" clusters just for the microglia clusters without mac/mono and granulocytes?
+
+#### Look for genes that are up/down-regulated along pseudotime, for the re-clustered cells (Same paper Fig 2G/H)
+
+done after agreeing in pseudotime trajectories
+
+10) Can you try to extract just the clustering tree of the hierarchical clustering and label it accordingly to make it potentially less "busy"? (of "stroke_spatial_binary" and "distal_spatial_binary")
