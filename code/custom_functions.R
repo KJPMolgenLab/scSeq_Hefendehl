@@ -103,12 +103,13 @@ comparison_rand <- function(designform, randomeffect,
 
 # go profiler function
 getGOresults = function(geneset, genereference, organism = "mmusculus",
+                        domain_scope="custom",
                         sources=c("GO:BP", "GO:MF", "GO:CC", "KEGG", "TF",
                                   "MIRNA","CORUM", "HP", "HPA")){
   require(gprofiler2)
   resgo = gost(geneset, organism =organism,
                correction_method = "gSCS",
-               domain_scope = "custom",
+               domain_scope = domain_scope,
                sources = sources,
                evcodes = TRUE,
                custom_bg = genereference,

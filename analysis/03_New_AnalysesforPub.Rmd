@@ -69,8 +69,8 @@ annotations <- annotations %>%
 a)  Exclude sex-related genes -- maybe this will already resolve our issues concerning the clustering in terms of biological relevance.
 b)  In case the new clusters are not matching the biological relevance, reclustering based on lists we provide for homeostatic and reactive microglial cells
 
-if aou ywant to save a plot use 
-ggsave(filename = "./docs/PNametheplot.svg", plotobject))
+if you want to save a plot use 
+ggsave(filename = "./output/PNametheplot.svg", plotobject))
 
 
 ### Define Gene lists
@@ -89,16 +89,18 @@ cluster.genes=unique(c(DAM_up, DAM1vsDAM2, homeostat.genes))
 ### Spatial cell types
 
 ```{r}
+ngenes = 50
+
 distal_dat = openxlsx::read.xlsx("/files/scSeq_Hefendehl/data/Copy of DEG_control_vs_stroke_vs_distal.xlsx", sheet = 1)
-distal_dat <- distal_dat[order(distal_dat$score, decreasing = T)[1:20],]
+distal_dat <- distal_dat[order(distal_dat$score, decreasing = T)[1:ngenes],]
 distal_genes<- distal_dat$X1
 
 control_dat = openxlsx::read.xlsx("/files/scSeq_Hefendehl/data/Copy of DEG_control_vs_stroke_vs_distal.xlsx", sheet = 2)
-control_dat <- control_dat[order(control_dat$score, decreasing = T)[1:20],]
+control_dat <- control_dat[order(control_dat$score, decreasing = T)[1:ngenes],]
 control_genes<- control_dat$X1
 
 stroke_dat = openxlsx::read.xlsx("/files/scSeq_Hefendehl/data/Copy of DEG_control_vs_stroke_vs_distal.xlsx", sheet = 3)
-stroke_dat <- stroke_dat[order(stroke_dat$score, decreasing = T)[1:20],]
+stroke_dat <- stroke_dat[order(stroke_dat$score, decreasing = T)[1:ngenes],]
 stroke_genes<- stroke_dat$X1
 ```
 
@@ -139,6 +141,9 @@ e2 = FeaturePlot(samples.integrated, reduction = "umap", features = "Ptprc", spl
 ```{r, fig.width=8,fig.height=4}
 a|b|b2
 c|c2
+
+getwd() # checks where you are run it directly in the console not here 
+ggsave("./output/cluster_desiree_orginal.pdf", a)
 ```
 
 ```{r, fig.width=6,fig.height=3}
@@ -200,7 +205,11 @@ samples.integrated.filt <- ScaleData(object = samples.integrated.filt)
 samples.integrated.filt <- FindVariableFeatures(samples.integrated.filt)
 samples.integrated.filt <- RunPCA(samples.integrated.filt, npcs = 50)
 samples.integrated.filt <- RunHarmony(samples.integrated.filt, group.by.vars="Plate")
-ElbowPlot(samples.integrated.filt, ndims = 50, reduction = "harmony")
+p <- ElbowPlot(samples.integrated.filt, ndims = 50, reduction = "harmony")
+p
+
+ggsave(filename = "./output/Ellbowplot.svg", p)
+
 ```
 
 #### Re-optimize clustering
@@ -801,13 +810,13 @@ ggplot(as.data.frame(restab),
 
 ```{r}
 metadata=samples.integrated.filt@meta.data
-restab = table(GT_Treat = metadata$Genotype_Treatment, DAMs=metadata$Stroke_binary)
+restab = table(GT_Treat = metadata$Genotype_Treatment, Stroke=metadata$Stroke_binary)
 restab
 prop.table(restab, margin = 1)
 chisq.test(restab)
 
 ggplot(as.data.frame(restab), 
-       aes(fill=DAMs, x=GT_Treat, y=Freq))+
+       aes(fill=Stroke, x=GT_Treat, y=Freq))+
   geom_bar(position="fill", stat="identity")+theme_classic()
 
 library(chisq.posthoc.test)
@@ -848,16 +857,17 @@ ggplot(as.data.frame(restab),
 
 ```
 
-### Alernative appraoch to identify cell types (assuming the cell types are mutaully exclusive)
+### Alternative appraoch to identify cell types (assuming the cell types are mutaully exclusive)
 
 
 ```{r}
 library(scSorter)
 
 annodf = data.frame(Type = "Stroke", Marker = stroke_genes)
-annodf = rbind(annodf, data.frame(Type = "Control", Marker = control_genes))
+#annodf = rbind(annodf, data.frame(Type = "Control", Marker = control_genes))
 annodf = rbind(annodf, data.frame(Type = "Distal", Marker = distal_genes))
-spatialtypes = scSorter(samples.integrated.filt@assays$SCT@counts, annodf)
+
+spatialtypes = scSorter(samples.integrated.filt@assays$SCT@counts, annodf) #makes the calling 
 
 samples.integrated.filt@meta.data <- cbind(as.data.frame(samples.integrated.filt@meta.data), PredType = spatialtypes$Pred_Type)
 
@@ -885,6 +895,9 @@ chisq.test(crosstab[3:4,])
 
 ##### WT Stroke vs no Stroke
 
+avg_logFC: log fold-chage of the average expression between the two groups. Positive values indicate that the gene is more highly expressed in the first group
+
+
 ```{r}
 
 #Idents(samples.integrated.filt) <- "Aif1neg"
@@ -897,11 +910,10 @@ chisq.test(crosstab[3:4,])
 #DoHeatmap(samples.integrated, assay = "RNA", features = rownames(DEG_Aif1neg)[1:20])
 
 
-
 Idents(samples.integrated.filt) <- "Genotype_Treatment"
 DimPlot(samples.integrated.filt)
 DEG_Wt_CtrlvsSTroke <-FindMarkers(samples.integrated.filt, 
-                                  ident.1 = "WT_Ctrl", ident.2 = "WT_Stroke", 
+                                  ident.1 = "WT_Stroke", ident.2 = "WT_Ctrl", 
                                   test.use = "LR", logfc.threshold = 0)
 
 display_tab(DEG_Wt_CtrlvsSTroke)
@@ -909,9 +921,12 @@ display_tab(DEG_Wt_CtrlvsSTroke)
 
 #### APPPS1 Stroke vs no Stroke
 
+avg_logFC: log fold-chage of the average expression between the two groups. Positive values indicate that the gene is more highly expressed in the first group
+
+
 ```{r}
 DEG_APSSS_CtrlvsSTroke <-FindMarkers(samples.integrated.filt, 
-                                     ident.1 = "APPPS1_Ctrl", ident.2 = "APPPS1_Stroke", 
+                                     ident.1 = "APPPS1_Stroke", ident.2 = "APPPS1_Ctrl", 
                                      test.use = "LR", logfc.threshold = 0)
 
 
@@ -947,13 +962,13 @@ ggplot(plotdata, aes(x=WT, y=APPPS1, color=col, label=label))+geom_point(alpha=0
 
 ```{r}
 DEG_Strokebins_Wt_CtrlvsSTroke <-FindMarkers(samples.integrated.filt, subset.ident = "Stroke_bin", subset="TRUE", 
-                                  ident.1 = "WT_Ctrl", ident.2 = "WT_Stroke", 
+                                  ident.1 = "WT_Stroke", ident.2 = "WT_Ctrl", 
                                   test.use = "LR", logfc.threshold = 0)
 
 display_tab(DEG_Strokebins_Wt_CtrlvsSTroke)
 
 DEG_Strokebins_Appps1_CtrlvsSTroke <-FindMarkers(samples.integrated.filt, subset.ident = "Stroke_bin", subset="TRUE", 
-                                  ident.1 = "APPPS1_Ctrl", ident.2 = "APPPS1_Stroke", 
+                                  ident.1 = "APPPS1_Stroke", ident.2 = "APPPS1_Control", 
                                   test.use = "LR", logfc.threshold = 0)
 
 display_tab(DEG_Strokebins_Appps1_CtrlvsSTroke)
@@ -1049,6 +1064,7 @@ p
 ggsave(filename = "./docs/Pseudotime_linages.svg", p)
 ggsave(filename = "./docs/Pseudotime_linages.pdf", p)
 
+
 ```
 
 ### Marker for DAM onyl DEG for APPPS1_Ctrl vs APPPS_1 Stroke; WT_STroke vs APPPS1_Stroke
@@ -1056,6 +1072,8 @@ ggsave(filename = "./docs/Pseudotime_linages.pdf", p)
 ### WGCNA
 
 In the paper <https://www.nature.com/articles/s41586-018-0023-4> this analysis was used to generate different modules of gene lists that can then be mapped onto different treatment/genotypes within one experiment (see Figure 4). This is an analysis that can be done in Seurat <https://smorabit.github.io/tutorials/9_scWGCNA_tutorial/> Which could be very cool for our data. In the paper they also have 3 different conditions in 2 genotypes.
+
+
 
 avoid running this section as it takes very long 
 
@@ -1084,7 +1102,7 @@ powerTable = list(
     datExpr,
     powerVector=powers,
     verbose = 100,
-    networkType="signed",
+    networkType="unsigned",
     corFnc="bicor"
   )[[2]]
 );
@@ -1126,7 +1144,7 @@ for (col in 1:length(plotCols)){
   legend("topright", legend = 'Metacells', col = colors, pch = 20) ;
 }
 
-softPower=14
+softPower=6
 
 nSets = 1
 setLabels = 'OCS'
@@ -1144,8 +1162,8 @@ net=blockwiseConsensusModules(multiExpr, blocks = NULL,
                                          corType = "pearson",
                                          power = softPower,
                                          consensusQuantile = 0.3,
-                                         networkType = "signed",
-                                         TOMType = "unsigned",
+                                         networkType = "unsigned",
+                                         TOMType = "signed",
                                          TOMDenom = "min",
                                          scaleTOMs = TRUE, scaleQuantile = 0.8,
                                          sampleForScaling = TRUE, sampleForScalingFactor = 1000,
@@ -1188,8 +1206,6 @@ colnames(geneInfo)[2]= "Initially.Assigned.Module.Color"
 write.csv(geneInfo,file=paste0('/files/scSeq_Hefendehl/output/geneInfoSigned.csv'))
 
 PCvalues=MEs
-
-save.image("/files/scSeq_Hefendehl/output/tmp.RData")
 ```
 
 you can load all the objects by uncommenting and runing this section
@@ -1200,7 +1216,7 @@ you can load all the objects by uncommenting and runing this section
 ```
 
 
-```{r, fig.width=88, fig.height=16}
+```{r, fig.width=44, fig.height=8}
 WGCNA::plotDendroAndColors(consTree, moduleColors[net$goodGenes], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05,
 main = paste0("Microglia  gene dendrogram and module colors"))
 
@@ -1250,13 +1266,25 @@ ggplot(ME_avg, aes(x=Genotype_Treatment, y=Module, fill=avg_Eigenmodule))+geom_t
 ```
 
 
-```{r, fig.width=8, fig.height=80}
+```{r, fig.width=8, fig.height=60}
 genelist = split(names(net$colors), net$colors)
-Gores = getGOresults(geneset = genelist, genereference = names(net$colors), organism = "mmusculus")
-display_tab(Gores)
-GOplot(Gores)
-```
 
+## ignore not anotated genes 
+
+pvallist = unlist(reslist)
+MOI = gsub("ME", "", names(pvallist)) %>% gsub(".Genotype_Treatment", "", .)
+MOI = MOI[pvallist<0.05]
+Gores = getGOresults(geneset = genelist[MOI], domain_scope = "known",
+                     genereference = NULL, 
+                     organism = "mmusculus")
+
+display_tab(Gores$result)
+gprofiler2::gostplot(Gores)
+
+genelist[["blue"]]
+
+save.image("/files/scSeq_Hefendehl/output/tmp.RData")
+```
 
 
 ## To DO
