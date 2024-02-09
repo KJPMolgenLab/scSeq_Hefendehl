@@ -15,6 +15,5 @@ Here you find all analyses, results and visualizations
 * Follow up analysis with new WT data [view](00.1_Original_Analysis_Integrated.html) <br>*analysis adapted from originalscript of Desiree*
 * Statistical analysis [view](01_Biostat.html) *based on new WT data*
 
-
 * Analyses for Publication [view](03_New_AnalysesforPub.html) *based on Wishlist Sept 2023, includes new preprocessing, fitlering and clustering of cells*
 * Plots for Publication [view](04_plotsforPub.html)
