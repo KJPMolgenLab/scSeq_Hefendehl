@@ -8,28 +8,30 @@ require("DESeq2")
 require("lm.beta")
 require("viridis")
 
-Dark8 = brewer.pal(8, "Dark2")
-Dark8_50 = paste0(brewer.pal(8, "Dark2"), "7D")
-jetcolors = colorRampPalette(c("darkblue", "skyblue", "green",
+Dark8 <- brewer.pal(8, "Dark2")
+
+Dark8_50 <- paste0(brewer.pal(8, "Dark2"), "7D")
+
+jetcolors <- colorRampPalette(c("darkblue", "skyblue", "green",
                                "yellow", "orange", "red", "darkred"))
 
-OBcolors = colorRampPalette(c("darkblue", "skyb lue",
+OBcolors <- colorRampPalette(c("darkblue", "skyb lue",
                               "white",  "orange", "darkorange3"))
 
-display_tab = function(df){
-df %>% DT::datatable(extensions = "Buttons",
-                     filter="top",
-                     options = list(
-                       pageLength = 15,
-                       info = FALSE,
-                       lengthMenu = list(c(15,50, 100, -1),
-                                         c("15","50", "100" ,"All")
-                       ), dom = 'Blfrtip',
-                       buttons = c('csv', 'excel')))
+display_tab <- function(df){
+  df %>% DT::datatable(extensions = "Buttons",
+                       filter="top",
+                       options = list(
+                         pageLength = 15,
+                         info = FALSE,
+                         lengthMenu = list(c(15,50, 100, -1),
+                                           c("15","50", "100" ,"All")
+                         ), dom = 'Blfrtip',
+                         buttons = c('csv', 'excel')))
 }
 
 
-table_sumstat_grp = function(DF, columns, groupfactor){
+table_sumstat_grp <- function(DF, columns, groupfactor){
   tmpdf= DF %>% select(all_of(c(columns, groupfactor)))
   table <- compareGroups(formula(paste0(groupfactor, "~.")), data = tmpdf)
   pvals <- getResults(table, "p.overall")
@@ -37,7 +39,20 @@ table_sumstat_grp = function(DF, columns, groupfactor){
   return(export_table)
 }
 
+# get objcts by space usage
+get_space_usage <- function() {
+  obj_sizes <- sapply(ls(envir = .GlobalEnv), function(x) {
+    object.size(get(x, envir = .GlobalEnv))
+  })
 
+  obj_sizes_sorted <- sort(obj_sizes, decreasing = TRUE)
+
+  df <- data.frame(
+    Object = names(obj_sizes_sorted),
+    Size_MB = round(as.numeric(obj_sizes_sorted) / 1024^2, 2)
+  )
+  return (df)
+}
 # comparison function of target
 comparison <- function(dds_object, samples, target, randomeffect){
   require(DESeq2)
@@ -48,7 +63,7 @@ comparison <- function(dds_object, samples, target, randomeffect){
     samples = colnames(dds_object)
   }
 
-  designform = as.formula(paste0("~ 1+",target))
+  designform <- as.formula(paste0("~ 1+",target))
   dds_filt = dds_object[,samples]
   ## no random effect
   if(length(randomeffect)==0){
@@ -59,9 +74,9 @@ comparison <- function(dds_object, samples, target, randomeffect){
   }
   ## with random effects
   if(length(randomeffect)==1){
-    log_cpm=log2(counts(dds_filt, normalize=T)+1)
-    design = model.matrix( designform, colData(dds_filt))
-    rande = colData(dds_filt)[,randomeffect]
+    log_cpm <-log2(counts(dds_filt, normalize=T)+1)
+    design <- model.matrix( designform, colData(dds_filt))
+    rande <- colData(dds_filt)[,randomeffect]
     dupcor <- duplicateCorrelation(log_cpm, design, block=rande)
     fitDupCor <- lmFit(log_cpm, design, block=rande, correlation=dupcor$consensus)
     fit<- eBayes(fitDupCor)
@@ -102,8 +117,10 @@ comparison_rand <- function(designform, randomeffect,
 
 
 # go profiler function
-getGOresults = function(geneset, genereference, organism = "mmusculus",
+getGOresults = function(geneset, genereference,
+                        organism = "mmusculus",
                         domain_scope="custom",
+                        return_genelist = F,
                         sources=c("GO:BP", "GO:MF", "GO:CC", "KEGG", "TF",
                                   "MIRNA","CORUM", "HP", "HPA")){
   require(gprofiler2)
@@ -111,7 +128,7 @@ getGOresults = function(geneset, genereference, organism = "mmusculus",
                correction_method = "gSCS",
                domain_scope = domain_scope,
                sources = sources,
-               evcodes = TRUE,
+               evcodes = return_genelist,
                custom_bg = genereference,
                numeric_ns = "ENTREZGENE_ACC")
   if(length(resgo) != 0){
@@ -125,9 +142,13 @@ getGOresults = function(geneset, genereference, organism = "mmusculus",
 
 
 GOplot = function(GOtable, N, Title="GO plot"){
-  if(nrow(GOtable)<N){N=nrow(GOtable)}
   GOtable = GOtable[GOtable$parents!="character(0)",]
-  Tabtoplot=GOtable[order(GOtable$p_value, decreasing = F)[1:N],]
+  if(nrow(GOtable)<N){
+    N_to_plot=nrow(GOtable)
+  } else {
+    N_to_plot=N
+    }
+  Tabtoplot=GOtable[order(GOtable$p_value, decreasing = F)[1:N_to_plot],]
   Tabtoplot$log10pvalue=-log10(Tabtoplot$p_value)
   Tabtoplot$genperc=Tabtoplot$intersection_size/Tabtoplot$effective_domain_size
 
@@ -144,7 +165,7 @@ GOplot = function(GOtable, N, Title="GO plot"){
   Tabtoplot$term_name = sapply(Tabtoplot$term_name, wrapit, cutoff=40)
 
   ggplot(Tabtoplot) + geom_point(aes(x =log10pvalue,
-                                     y = N:1,
+                                     y = N_to_plot:1,
                                      size=precision,
                                      colour=genperc),
                                  alpha=0.7) +
@@ -154,7 +175,7 @@ GOplot = function(GOtable, N, Title="GO plot"){
     scale_size(range = c(3, 8))+
     theme_bw(base_size = 12) + ggtitle(Title)+
     theme(plot.title = element_text(hjust = 0.5))+
-    scale_y_continuous(breaks=N:1,
+    scale_y_continuous(breaks=N_to_plot:1,
                        labels=Tabtoplot$term_name)
 }
 
@@ -277,5 +298,28 @@ lm.beta.lmer <- function(mod) {
   sd.x <- apply(getME(mod,"X")[,-1],2,sd)
   sd.y <- sd(getME(mod,"y"))
   b*sd.x/sd.y
+}
+
+gg_qqplot <- function(ps, ci = 0.95) {
+  n  <- length(ps)
+  df <- data.frame(
+    observed = -log10(sort(ps)),
+    expected = -log10(ppoints(n)),
+    clower   = -log10(qbeta(p = (1 - ci) / 2, shape1 = 1:n, shape2 = n:1)),
+    cupper   = -log10(qbeta(p = (1 + ci) / 2, shape1 = 1:n, shape2 = n:1))
+  )
+  log10Pe <- expression(paste("Expected -log"[10], plain(P)))
+  log10Po <- expression(paste("Observed -log"[10], plain(P)))
+  ggplot(df) +
+    geom_ribbon(
+      mapping = aes(x = expected, ymin = clower, ymax = cupper),
+      alpha = 0.1
+    ) +
+    geom_point(aes(expected, observed), shape = 1, size = 3) +
+    geom_abline(intercept = 0, slope = 1, alpha = 0.5) +
+    # geom_line(aes(expected, cupper), linetype = 2, size = 0.5) +
+    # geom_line(aes(expected, clower), linetype = 2, size = 0.5) +
+    xlab(log10Pe) +
+    ylab(log10Po)
 }
 
