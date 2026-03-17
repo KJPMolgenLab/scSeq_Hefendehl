@@ -11,7 +11,7 @@ output:
 
 #options(Seurat.object.assay.version = "v5")
 
-outputdir="/files/scSeq_Hefendehl/output/Res_202602/"
+outputdir="./output/Res_202602/"
 if(!dir.exists(outputdir)) dir.create(outputdir, recursive = T)
 ## don't update matrixStats
 knitr::opts_chunk$set(  
@@ -46,11 +46,11 @@ library(ggrepel)
 
 
 set.seed(1324567)
-source ("/files/scSeq_Hefendehl/code/custom_functions.R")
+source ("./code/custom_functions.R")
 ```
 
 
-```{r load_annotations, cache=T, include=FALSE}
+```{r load_annotations, cache=F, include=FALSE}
 
 
 cc_file <- getURL("https://raw.githubusercontent.com/hbc/tinyatlas/master/cell_cycle/Mus_musculus.csv") 
@@ -86,7 +86,7 @@ annotations <- annotations %>%
 ## metadata additional samples 
 
 
-```{r load_add_meta, cache=T}
+```{r load_add_meta, cache=F}
 # Read Sheet2
 df_raw <- read.xlsx("/files/scSeq_Hefendehl/data/20260126/534_plates_wSexAge.xlsx", sheet = "Sheet2")
 
@@ -172,7 +172,7 @@ write.csv(df_expanded,
 
 
 ## load additonal samples second GT 
-```{r load_add_samples 2nd, cache=T, dependson="load_add_meta"}
+```{r load_add_samples 2nd, cache=F, dependson="load_add_meta"}
 
 files <- list.files("/files/scSeq_Hefendehl/data/20260126/", 
                     pattern = ".*Kallisto.*.csv", 
@@ -216,7 +216,7 @@ for(f in files){
 ```
 
 # load first batch 
-```{r load_add_samples, cache=T, dependson="load_add_samples 2nd"}
+```{r load_add_samples, cache=F, dependson="load_add_samples 2nd"}
 
 Sample_files <- list.files("/files/scSeq_Hefendehl/data/20230203/Sample_Tables/", 
                            pattern = "Sample.*.csv", 
@@ -1003,7 +1003,7 @@ ggsave(filename = paste0(outputdir, "Microglia_Opt_all_genes_AddGenelistintegrat
 
 
 ```{r, fig.width=8, fig.height=7}
-samples.integrated.filt_batch1 <- readRDS("/files/scSeq_Hefendehl/output/SeuratObjectafterProcessing.rds")
+samples.integrated.filt_batch1 <- readRDS("./output/SeuratObjectafterProcessing.rds")
 
 meta <- samples.integrated.filt@meta.data
 meta_B1 <- samples.integrated.filt_batch1@meta.data
@@ -3379,7 +3379,7 @@ colnames(geneInfo)[1]= "GeneSymbol"
 colnames(geneInfo)[2]= "Initially.Assigned.Module.Color"
 
 # save info
-write.csv(geneInfo,file=paste0('/files/scSeq_Hefendehl/output/geneInfoSigned.csv'))
+write.csv(geneInfo,file=paste0(outputdir,'/geneInfoSigned.csv'))
 
 PCvalues=MEs
 ```
