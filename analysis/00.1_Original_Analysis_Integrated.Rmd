@@ -490,7 +490,7 @@ p3 + p3a
 
 **DAM plotting**
 
-```{r Stage 2 DAMs, echo=FALSE, results='hide',message=FALSE,warning=FALSE, fig.width=8, fig.height=4}
+```{r Stage 2 DAMs, echo=FALSE, results='hide',message=FALSE,warning=FALSE, fig.width=12, fig.height=4}
 
 load("./data/DAM_genelists.RData")
 
@@ -512,7 +512,7 @@ phist | p4 | pbin| p4a
 
 ```
 
-```{r,  fig.width=8, fig.height=4}
+```{r,  fig.width=12, fig.height=4}
 
 DAM2_marker_gene_list <- list(Stage2_DAM_up)
 samples.microglia <- AddModuleScore(object = samples.microglia, 
@@ -2094,9 +2094,6 @@ DT::datatable(sp_stroke.markers.Genotype_Treatment, extensions = "Buttons",
 ```
 
 ```{r}
-
-
-
 save.image("./output/integrated_analysis.RData")
 ```
 

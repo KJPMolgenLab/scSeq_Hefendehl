@@ -41,6 +41,8 @@ ep_str_wrap <- function(string, width) {
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(Seurat)
 library(ggplot2)
+library(ggside)
+#library(ggstatplot)
 library(SingleR)
 library(EnhancedVolcano)
 library(pheatmap)
@@ -67,7 +69,6 @@ VlnPlot(plates_hefendehl, features = c("nFeature_RNA", "nCount_RNA", "percent.mi
 plot1 | plot2
 
 ```
-
 
 
 

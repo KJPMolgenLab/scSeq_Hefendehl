@@ -332,7 +332,7 @@ reslist= seq(0.2,1.2,0.2)
 
 
 DefaultAssay(samples.integrated.filt)<- "SCT"
-samples.integrated.filt <- RunUMAP(samples.integrated.filt, reduction = "pca", dims=1:15) %>% 
+samples.integrated.filt <- RunUMAP(samples.integrated.filt, reduction = "pca", dims=1:20) %>% 
   FindNeighbors() %>% FindClusters(resolution = reslist)
 
 clustreeplot<-clustree(samples.integrated.filt, prefix = "SCT_snn_res.")
@@ -354,7 +354,7 @@ ggsave(filename = "/files/scSeq_Hefendehl/output/All_genes_Clusters_byHomeostatg
 ```
 
 ```{r}
-samples.integrated.filt <- RunUMAP(samples.integrated.filt, reduction = "pca", dims=1:15) %>% 
+samples.integrated.filt <- RunUMAP(samples.integrated.filt, reduction = "pca", dims=1:20) %>% 
   FindNeighbors() %>% FindClusters(resolution = 0.6)
 
 a<-DimPlot(samples.integrated.filt, group.by = "seurat_clusters", pt.size =1, label = T) + NoLegend()
@@ -451,7 +451,7 @@ ggsave(filename = "/files/scSeq_Hefendehl/output/Celltypes_Opt_All_genes_all_cel
 
 samples.integrated.filt = samples.integrated.filt[,samples.integrated.filt$Immgen_sc_labels_agc=="Microglia"]
 
-samples.integrated.filt <- RunUMAP(samples.integrated.filt, reduction = "pca", dims=1:15) %>% 
+samples.integrated.filt <- RunUMAP(samples.integrated.filt, reduction = "pca", dims=1:20) %>% 
   FindNeighbors() %>% FindClusters(resolution = 0.6)
 
 
@@ -536,7 +536,7 @@ compareGroups::createTable(res)
 
 compareGroups::createTable(res) %>% export2xls("/files/scSeq_Hefendehl/output/Cellcount_distribution_MouseBygenotype.xlsx") 
 
-res = compareGroups(labels~Mouse_ID, data = metadata, max.ylev = 7)
+res = compareGroups(labels~Mouse_ID, data = metadata, max.ylev = 15, max.xlev = 12)
 
 compareGroups::createTable(res)
 
@@ -895,7 +895,7 @@ Homeocutff = 2
 phist = ggplot(data = samples.integrated.filt@meta.data, aes(x=Homeo_score1))+
   geom_density()+geom_vline(xintercept = Homeocutff)+theme_classic()
 
-samples.integrated.filt$Homeo_binaryF = as.factor(samples.integrated.filt$Homeo_score1>=Homeocutff)
+samples.integrated.filt$Homeo_binary = as.factor(samples.integrated.filt$Homeo_score1>=Homeocutff)
 pbin <- DimPlot(object = samples.integrated.filt, group.by =  "Homeo_binary")
 comb = phist | p4 | pbin| p4a
 
@@ -1713,7 +1713,7 @@ datatoplot_mean = aggregate(t(reads.filt),
 
 
 
-datatoplot_mean=melt(datatoplot_mean)
+datatoplot_mean=reshape2::melt(datatoplot_mean)
 datatoplot_mean$Microglia = factor(gsub("/.*", "", datatoplot_mean$Var1), levels=rev(levels(samples.integrated.filt$labels)))
 datatoplot_mean$Genotype_Treatment = factor(gsub(".*/", "", datatoplot_mean$Var1), levels=c("WT_Ctrl", "WT_Stroke", "APPPS1_Ctrl","APPPS1_Stroke")  )                                
 
@@ -1722,7 +1722,7 @@ colnames(datatoplot_mean) = c("Cluster_Condition", "Gene", "Scaled_mean", "Micro
 datatoplot_perc = aggregate(t(reads.filt), list(paste0(samples.integrated.filt$labels, "/",samples.integrated.filt$Genotype_Treatment)), 
                             function(x){length(which(x>0))/length(x)})
 
-datatoplot_perc=melt(datatoplot_perc, value.name = "perc")
+datatoplot_perc=reshape2::melt(datatoplot_perc, value.name = "perc")
 
 datatoplot = cbind(datatoplot_mean, perc=datatoplot_perc$perc)
 
@@ -1757,7 +1757,7 @@ datatoplot_mean = aggregate(t(reads.filt),
 
 
 
-datatoplot_mean=melt(datatoplot_mean)
+datatoplot_mean=reshape2::melt(datatoplot_mean)
 datatoplot_mean$Microglia = factor(gsub("/.*", "", datatoplot_mean$Var1), levels=rev(levels(samples.integrated.filt$labels)))
 datatoplot_mean$Genotype_Treatment = factor(gsub(".*/", "", datatoplot_mean$Var1), levels=c("WT_Ctrl", "WT_Stroke", "APPPS1_Ctrl","APPPS1_Stroke")  )                                
 
@@ -1766,7 +1766,7 @@ colnames(datatoplot_mean) = c("Cluster_Condition", "Gene", "Scaled_mean", "Micro
 datatoplot_perc = aggregate(t(reads.filt), list(paste0(samples.integrated.filt$labels, "/",samples.integrated.filt$Genotype_Treatment)), 
                             function(x){length(which(x>0))/length(x)})
 
-datatoplot_perc=melt(datatoplot_perc, value.name = "perc")
+datatoplot_perc=reshape2::melt(datatoplot_perc, value.name = "perc")
 
 datatoplot = cbind(datatoplot_mean, perc=datatoplot_perc$perc)
 
@@ -1800,7 +1800,7 @@ datatoplot_mean = aggregate(t(reads.filt),
 
 
 
-datatoplot_mean=melt(datatoplot_mean)
+datatoplot_mean=reshape2::melt(datatoplot_mean)
 datatoplot_mean$Microglia = factor(gsub("/.*", "", datatoplot_mean$Var1), levels=rev(levels(samples.integrated.filt$labels)))
 datatoplot_mean$Genotype_Treatment = factor(gsub(".*/", "", datatoplot_mean$Var1), levels=c("WT_Ctrl", "WT_Stroke", "APPPS1_Ctrl","APPPS1_Stroke")  )                                
 
@@ -1809,7 +1809,7 @@ colnames(datatoplot_mean) = c("Cluster_Condition", "Gene", "Scaled_mean", "Micro
 datatoplot_perc = aggregate(t(reads.filt), list(paste0(samples.integrated.filt$labels, "/",samples.integrated.filt$Genotype_Treatment)), 
                             function(x){length(which(x>0))/length(x)})
 
-datatoplot_perc=melt(datatoplot_perc, value.name = "perc")
+datatoplot_perc=reshape2::melt(datatoplot_perc, value.name = "perc")
 
 datatoplot = cbind(datatoplot_mean, perc=datatoplot_perc$perc)
 
@@ -1837,14 +1837,14 @@ compareCluster <- function(ClusterA = "Microglia6", ClusterB = "Microglia0",
                            comorbid = F){
   if(comorbid){
     resname=paste0(ClusterA,"vs",ClusterB,"_comorbid")
-    DEG_tmp <-FindMarkers(seuratObject, assay="SCT", slot="scale.data",
+    DEG_tmp <-FindMarkers(seuratObject, assay="SCT", # slot="scale.data",
                           subset.ident = "Genotype_Treatment", 
                           subset = "APPPS1_Stroke",
                           ident.1 = ClusterA, ident.2 = ClusterB, 
                           test.use = "LR", logfc.threshold = 0)
   }else {
     resname=paste0(ClusterA,"vs",ClusterB)
-    DEG_tmp <-FindMarkers(seuratObject, assay="SCT", slot="scale.data",
+    DEG_tmp <-FindMarkers(seuratObject, assay="SCT", #slot="scale.data",
                                ident.1 = ClusterA, ident.2 = ClusterB, 
                                test.use = "LR", logfc.threshold = 0)
     }
@@ -1852,7 +1852,7 @@ compareCluster <- function(ClusterA = "Microglia6", ClusterB = "Microglia0",
   #genes_to_label[!genes_to_label %in% rownames(DEG_tmp)]
   q <- gg_qqplot(DEG_tmp$p_val)
   p<- EnhancedVolcano::EnhancedVolcano(DEG_tmp, 
-                                       x = "avg_diff", 
+                                       x = "avg_log2FC", 
                                        y = "p_val_adj", 
                                        lab=rownames(DEG_tmp), 
                                        #selectLab = genes_to_label,
@@ -1862,9 +1862,9 @@ compareCluster <- function(ClusterA = "Microglia6", ClusterB = "Microglia0",
          width = 8,height = 4)
   gene_univers = rownames(seuratObject)
   gogenes=list(
-    genesigall=rownames(DEG_tmp)[DEG_tmp$p_val_adj<0.05&abs(DEG_tmp$avg_diff)>FCcutoff],
-    genesigup=rownames(DEG_tmp)[DEG_tmp$p_val_adj<0.05&DEG_tmp$avg_diff>FCcutoff],
-    genesigdown=rownames(DEG_tmp)[DEG_tmp$p_val_adj<0.05&DEG_tmp$avg_diff<FCcutoff])
+    genesigall=rownames(DEG_tmp)[DEG_tmp$p_val_adj<0.05&abs(DEG_tmp$avg_log2FC)>FCcutoff],
+    genesigup=rownames(DEG_tmp)[DEG_tmp$p_val_adj<0.05&DEG_tmp$avg_log2FC>FCcutoff],
+    genesigdown=rownames(DEG_tmp)[DEG_tmp$p_val_adj<0.05&DEG_tmp$avg_log2FC< -FCcutoff])
   
   Gores = getGOresults(geneset = gogenes, domain_scope = "known",
                        genereference = gene_univers, 
@@ -1889,7 +1889,7 @@ compareCluster <- function(ClusterA = "Microglia6", ClusterB = "Microglia0",
   
   
   ggsave(filename = paste0(output,"DEG_GO_plots",resname,".svg"), 
-         ggarrange(plostlist=plotlist), width = 8, height = 4)
+         ggarrange(plotlist=plotlist), width = 8, height = 4)
          
   return(list(Markers = DEG_tmp, 
               VulcanoPlot=p, 
@@ -2150,8 +2150,7 @@ By default, estimates of the spline coefficients are not returned as they are di
 
 sce.microglia.PT1 <- sce.microglia.PT1[order(sce.microglia.PT1$FDR, decreasing = F),]
 display_tab(as.data.frame(sce.microglia.PT1))
-write.xlsx(as.data.frame(sce.microglia.PT1), 
-           filename = "/files/scSeq_Hefendehl/output/Pseudotime1_genes.xslx")
+write.xlsx(as.data.frame(sce.microglia.PT1), file = "/files/scSeq_Hefendehl/output/Pseudotime1_genes.xlsx")
 PT1_up = sce.microglia.PT1[sce.microglia.PT1$logFC>0,]
 PT1_low = sce.microglia.PT1[sce.microglia.PT1$logFC<0,]
 
@@ -2175,7 +2174,7 @@ ggsave(filename = "/files/scSeq_Hefendehl/output/Pseudotime1_Top10up_down_reg_Ge
 sce.microglia.PT2 <- sce.microglia.PT2[order(sce.microglia.PT2$FDR, decreasing = F),]
 display_tab(as.data.frame(sce.microglia.PT2))
 write.xlsx(as.data.frame(sce.microglia.PT2), 
-           filename = "/files/scSeq_Hefendehl/output/Pseudotime2_genes.xslx")
+           file = "/files/scSeq_Hefendehl/output/Pseudotime2_genes.xlsx")
 
 PT2_up = sce.microglia.PT2[sce.microglia.PT2$logFC>0,]
 PT2_low = sce.microglia.PT2[sce.microglia.PT2$logFC<0,]
@@ -2202,7 +2201,7 @@ ggsave(filename = "/files/scSeq_Hefendehl/output/Pseudotime2_Top10up_down_reg_Ge
 sce.microglia.PT3 <- sce.microglia.PT3[order(sce.microglia.PT3$FDR, decreasing = F),]
 display_tab(as.data.frame(sce.microglia.PT3))
 write.xlsx(as.data.frame(sce.microglia.PT3), 
-           filename = "/files/scSeq_Hefendehl/output/Pseudotime3_genes.xslx")
+           file = "/files/scSeq_Hefendehl/output/Pseudotime3_genes.xlsx")
 
 PT3_up = sce.microglia.PT3[sce.microglia.PT3$logFC>0,]
 PT3_low = sce.microglia.PT3[sce.microglia.PT3$logFC<0,]
@@ -2362,7 +2361,7 @@ ggsave(filename = "/files/scSeq_Hefendehl/output/Pseudotime3_Top10up_down_reg_Ge
 ## monocle 
 
 ```{r}
-library(monocle3)
+#library(monocle3)
 
 
 ```
@@ -2385,7 +2384,7 @@ group <- as.factor(samples.integrated.filt$Genotype_Treatment)
 ```
 
 ```{r fig.width=8, fig.height=6}
-force.recalc = F
+force.recalc = T
 powers = c(seq(1,10,by=1), seq(12,20, by=2));
 
 # skips recalculation of net object as it takes long... 
@@ -2975,7 +2974,7 @@ ggsave("/files/scSeq_Hefendehl/output/Qualityplots.svg", pcomb)
 
 
 ```{r}
-saveRDS(samples.integrated.filt, "/files/scSeq_Hefendehl/output/SeuratObjectafterProcessing_first_bactch.rds")
+saveRDS(samples.integrated.filt, "/files/scSeq_Hefendehl/output/SeuratObjectafterProcessing.rds")
 
 
 
