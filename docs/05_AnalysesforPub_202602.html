@@ -380,7 +380,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -391,8 +391,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -401,13 +401,13 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-03-17
+<strong>Last updated:</strong> 2026-03-18
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>scSeq_Hefendehl/</code> <span
@@ -501,33 +501,16 @@ versions is critical for reproducibility.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
-<div id="strongCachestrongdetected" class="panel-collapse collapse">
+<div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-The following chunks had caches available:
-<ul>
-<li>
-load_add_meta
-</li>
-<li>
-load_add_samples 2nd
-</li>
-<li>
-load_add_samples
-</li>
-<li>
-load_annotations
-</li>
-</ul>
-<p>To ensure reproducibility of the results, delete the cache directory
-<code>05_AnalysesforPub_202602_cache</code> and re-run the analysis. To
-have workflowr automatically delete the cache directory prior to
-building the file, set <code>delete_cache = TRUE</code> when running
-<code>wflow_build()</code> or <code>wflow_publish()</code>.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
 </div>
 </div>
 </div>
@@ -549,15 +532,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltree28134df4c4641ddf6c13880d51c9b23bec8d53a0targetblank28134dfa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreea9c60bfb873519d2d328f0ad987231db9af8a5e3targetblanka9c60bfa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/28134df4c4641ddf6c13880d51c9b23bec8d53a0" target="_blank">28134df</a>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/a9c60bfb873519d2d328f0ad987231db9af8a5e3" target="_blank">a9c60bf</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltree28134df4c4641ddf6c13880d51c9b23bec8d53a0targetblank28134dfa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreea9c60bfb873519d2d328f0ad987231db9af8a5e3targetblanka9c60bfa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -567,7 +550,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/28134df4c4641ddf6c13880d51c9b23bec8d53a0" target="_blank">28134df</a>.
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/a9c60bfb873519d2d328f0ad987231db9af8a5e3" target="_blank">a9c60bf</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -584,7 +567,6 @@ were generated:
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/05_AnalysesforPub_202602_cache/
     Ignored:    analysis/output/
     Ignored:    output/All_genes_Clusters.svg
     Ignored:    output/All_genes_Clusters_byCondition.svg
@@ -836,6 +818,23 @@ Message
 <tbody>
 <tr>
 <td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/KJPMolgenLab/scSeq_Hefendehl/a9c60bfb873519d2d328f0ad987231db9af8a5e3/docs/05_AnalysesforPub_202602.html" target="_blank">a9c60bf</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2026-03-17
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 Rmd
 </td>
 <td>
@@ -929,8 +928,8 @@ Updated Analysis cluster DEX and GO
 <div id="load-first-batch" class="section level1">
 <h1>load first batch</h1>
 <pre><code>            used  (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells  14348440 766.3   25296209 1351.0  25296209 1351.0
-Vcells 120089756 916.3  351090124 2678.7 438846894 3348.2</code></pre>
+Ncells  14348434 766.3   25334616 1353.1  25334616 1353.1
+Vcells 120089679 916.3  351090014 2678.7 438846814 3348.2</code></pre>
 <pre><code>Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
 
 Number of nodes: 3648
@@ -5978,6 +5977,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/a9c60bfb873519d2d328f0ad987231db9af8a5e3/docs/figure/05_AnalysesforPub_202602.Rmd/unnamed-chunk-103-1.png" target="_blank">a9c60bf</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2026-03-17
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/97a85e4cb13d3138a5b8f93d5f08b223344dfbb6/docs/figure/05_AnalysesforPub_202602.Rmd/unnamed-chunk-103-1.png" target="_blank">97a85e4</a>
 </td>
 <td>
@@ -6027,6 +6037,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/a9c60bfb873519d2d328f0ad987231db9af8a5e3/docs/figure/05_AnalysesforPub_202602.Rmd/unnamed-chunk-105-1.png" target="_blank">a9c60bf</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2026-03-17
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/97a85e4cb13d3138a5b8f93d5f08b223344dfbb6/docs/figure/05_AnalysesforPub_202602.Rmd/unnamed-chunk-105-1.png" target="_blank">97a85e4</a>
@@ -34191,8 +34212,8 @@ identified” [1] “Microglia3” [1] “no significant genes identified” [1]
 “Microglia5” [1] “Microglia4” [1] “no significant genes identified” [1]
 “Microglia1” [1] “no significant GO terms identified”</p>
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells  19006950 1015.1   30395450 1623.3  30395450 1623.3
-Vcells 371286585 2832.7  728449918 5557.7 728447851 5557.7</code></pre>
+Ncells  19007252 1015.1   30441539 1625.8  30441539 1625.8
+Vcells 371285075 2832.7  728449690 5557.7 728436964 5557.6</code></pre>
 </div>
 </div>
 <div id="pseudotime-analysis" class="section level2">
@@ -35315,8 +35336,8 @@ achiocch
 </div>
 </div>
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells  18120752  967.8   30395450 1623.3  30395450 1623.3
-Vcells 300477342 2292.5  875040116 6676.1 875040116 6676.1</code></pre>
+Ncells  18121041  967.8   30441539 1625.8  30441539 1625.8
+Vcells 300475825 2292.5  875041149 6676.1 875041149 6676.1</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
