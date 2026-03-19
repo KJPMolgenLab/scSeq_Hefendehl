@@ -43,7 +43,7 @@ Single-cell RNA sequencing analysis of microglial responses in a mouse model of 
 
 ## Table of Contents
 
-[Full Results Output]
+[Full Results Output](scRNA_Analyses_Candlishetal.html)
 
 1. [Overview](#overview)
 2. [Study Design](#study-design)
