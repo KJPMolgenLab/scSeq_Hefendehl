@@ -3,20 +3,21 @@ title: "Home"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
-    toc: false
+    toc: true
 editor_options:
   chunk_output_type: console
 ---
 
-### Accompanying scRNA analytics to 
-# Ischemic injury triggers a protective microglial phenotype in models of Aβ pathology
 
-### Authors
+### Accompanying scRNA analytics to {.unlisted .unnumbered}
+# Ischemic injury triggers a protective microglial phenotype in models of A$\beta$ pathology {.unlisted .unnumbered}
+
+## Authors {.unlisted .unnumbered}
 Authors: Michael Candlish ^1#^, Jan Hofmann ^1#^, Desirée Brösamle ^2,3,4,5^, Annika Haessler ^6^, Murphy DeMeglio ^1^, Angelos Skodras ^2^, Georgi Tushev ^7^, Eloah S. De Biasi ^1^, Stefan Günther ^8^, René Wiegandt ^8^, Heidi Theis ^9^, Elena De Domenico ^9^, Nina Hermann ^2,3,4,5^, K. Peter R. Nilsson ^11^, Marc Beyer ^9,10^, Mario Looso ^8^, Maike Windbergs ^6^, Sigrun Roeber ^12^, Jochen Herms ^13^, Jonas J. Neher ^2,3,4,5^, Andreas G. Chiocchetti ^14^, Jasmin K. Hefendehl ^1^*
 
 ADD PETER AND TINA AND AMPARO
 
-### Affiliations:
+## Affiliations:
 1. Neurovascular Disorders, Institute of Cell Biology and Neuroscience, Biologicum, Goethe University Frankfurt, Max-von-Laue Str. 13, Frankfurt am Main, Germany.
 2. Department of Cellular Neurology, Hertie Institute for Clinical Brain Research, University of Tübingen, Tübingen, Germany. 
 3. Biomedical Center (BMC), Biochemistry, Faculty of Medicine, LMU Munich, Munich, Germany.
@@ -33,7 +34,8 @@ ADD PETER AND TINA AND AMPARO
 14. Department of Child and Adolescent Psychiatry, Psychosomatics and Psychotherapy, University Hospital, Goethe University Frankfurt Germany.
 
 '# These authors contributed equally to this work'
-'* Corresponding author: [hefendehl@bio.uni-frankfurt.de](mailto:hefendehl@bio.uni-frankfurt.de)
+
+'* Corresponding author:' [hefendehl@bio.uni-frankfurt.de](mailto:hefendehl@bio.uni-frankfurt.de)
 
 
 ---
@@ -41,31 +43,18 @@ ADD PETER AND TINA AND AMPARO
 Single-cell RNA sequencing analysis of microglial responses in a mouse model of Alzheimer's disease (APPPS1) with and without ischemic stroke. All analyses are implemented in a single R Markdown document (`scRNA_Analyses_Candlishetal.Rmd`).
 
 
-## Table of Contents
-
-[Full Results Output](scRNA_Analyses_Candlishetal.html)
-
-1. [Overview](#overview)
-2. [Study Design](#study-design)
-3. [Dependencies](#dependencies)
-4. [Pipeline Summary](#pipeline-summary)
-   - [Step 1 — Annotation Setup](#step-1--annotation-setup)
-   - [Step 2 — Data Loading & Metadata](#step-2--data-loading--metadata)
-   - [Step 3 — Quality Control & Filtering](#step-3--quality-control--filtering)
-   - [Step 4 — Batch Integration](#step-4--batch-integration)
-   - [Step 5 — Cell Type Annotation & Microglia Isolation](#step-5--cell-type-annotation--microglia-isolation)
-   - [Step 6 — Microglia Reclustering](#step-6--microglia-reclustering)
-   - [Step 7 — Cell State Scoring](#step-7--cell-state-scoring)
-   - [Step 8 — Differential Gene Expression](#step-8--differential-gene-expression)
-   - [Step 9 — Pseudotime Analysis](#step-9--pseudotime-analysis)
-   - [Step 10 — WGCNA Co-expression Network Analysis](#step-10--wgcna-co-expression-network-analysis)
-   - [Step 11 — Supplementary Visualizations](#step-11--supplementary-visualizations)
-5. [Outputs](#outputs)
-6. [Reproducibility](#reproducibility)
+The following sections gives an overview and explanation of the usage 
+and different steps within the analytcal pipeline 
 
 ---
 
-## Overview
+# Full results
+
+[Full Results Output](scRNA_Analyses_Candlishetal.html)
+
+---
+
+# Pipeline Overview
 
 This pipeline processes plate-based Smart-seq2 single-cell RNA-seq data from mouse brain immune cells (primarily microglia) across two sequencing batches. The goal is to characterize microglial heterogeneity and transcriptional responses in the context of amyloid pathology (APPPS1 genotype) and acute ischemic stroke, alone and in combination.
 
@@ -277,6 +266,9 @@ All results are written to `./output/Res_202602/`. Key output categories include
 A global random seed (`set.seed(1324567)`) is set at the start of the document. The WGCNA section is computationally intensive (can take several hours); results are cached to `.rds` files and reloaded on subsequent runs via `force.recalc` flags. Intermediate Seurat objects are saved and can be loaded directly to resume from mid-pipeline checkpoints.
 
 
+## GO TO FULL RESULTS 
 
+[Full Results Output](scRNA_Analyses_Candlishetal.html)
 
+## Session Info 
 
