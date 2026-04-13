@@ -843,6 +843,14 @@ d <- DimPlot(samples.integrated.filt, reduction = "umap", group.by = "Genotype_T
 e <- DimPlot(samples.integrated.filt, reduction = "umap", group.by = "Gender")
 g <- DimPlot(samples.integrated.filt, reduction = "umap", group.by = "Aif1neg")
 h <- DimPlot(samples.integrated.filt, reduction = "umap", group.by = "Immgen_sc_labels_agc")
+
+samples.integrated.filt[["Immgen_sc_label_short"]] <- ifelse(
+  grepl("Microglia", samples.integrated.filt$Immgen_sc_labels_agc), 
+  "Microglia", NA)
+
+i <- DimPlot(samples.integrated.filt, reduction = "umap", group.by = "Immgen_sc_label_short")
+
+
 ```
 
 
@@ -862,6 +870,9 @@ ggsave(filename = paste0(outputdir, "Microglia_Opt_All_genes_Aif1neg_integrated.
 
 h
 ggsave(filename = paste0(outputdir, "Microglia_Opt_All_genes_Immgen_sc_labels_agc_integrated.pdf"), h)
+
+i
+ggsave(filename = paste0(outputdir, "Microglia_Opt_All_genes_Immgen_sc_labels_summed_integrated.pdf"), i)
 
 ```
 
@@ -2808,6 +2819,8 @@ p = p + geom_segment(data = curves_arrows,
 p
 
 ggsave(filename = paste0(outputdir, "Pseudotime_linages_startMicroglia0_integrated.pdf"), p)
+
+write_rds(p, paste0(outputdir, "Pseudotime_linages_startMicroglia0_integrated.rds"))
 ```
 
 ```{r}
@@ -3646,6 +3659,7 @@ DefaultAssay(samples.integrated.filt) <- "RNA"
 
 BAM = c("Cd36", "Cd38","Lyve1","Cd206","Cd163", "Cd169")
 CAM = c("Emilin2", "Pf4", "Msa4a", "Hp","F5","Mki67")
+Lipid = c("Lipe", "Acnat1", "Lratd1", "Or8b44", "Vmn1r13")
 
 
 
@@ -3675,12 +3689,19 @@ samples.integrated.filt <- AddModuleScore(object = samples.integrated.filt,
                                           assay = "RNA", layer="data",
                                           features = list(CAM), name = "CAM_score")
 
+samples.integrated.filt <- AddModuleScore(object = samples.integrated.filt, 
+                                          assay = "RNA", layer="data",
+                                          features = list(Lipid), name = "Lipid_score")
+
+
 featlist=c("MG_score_Axon_tract_microglia1", 
            "MG_score_Act_resp_microglia1", 
            "MG_score_Cycling_microglia1",  
            "MG_score_INF_resp_microglia1",
            "BAM_score1", 
-           "CAM_score1")
+           "CAM_score1", 
+           "Lipid_score1"
+           )
 
 p <- FeaturePlot_scCustom(samples.integrated.filt, 
                           na_cutoff = 0, reduction="umap",
@@ -3688,7 +3709,7 @@ p <- FeaturePlot_scCustom(samples.integrated.filt,
                           colors_use = viridis_dark_high)
 
 ```
-```{r, fig.width=12, fig.height=14}
+```{r, fig.width=18, fig.height=14}
 p
 
 ggsave(paste0(outputdir, "DimPlots_MGSubtypes_Genes_integrated.pdf"), p)
@@ -3696,14 +3717,15 @@ ggsave(paste0(outputdir, "DimPlots_MGSubtypes_Genes_integrated.pdf"), p)
 ```
 
 
-```{r, fig.width=12, fig.height=12}
+```{r, fig.width=12, fig.height=16}
 p <- RidgePlot(samples.integrated.filt,
                features = c("MG_score_Axon_tract_microglia1", 
                             "MG_score_Act_resp_microglia1", 
                             "MG_score_Cycling_microglia1",  
                             "MG_score_INF_resp_microglia1",
                             "BAM_score1", 
-                            "CAM_score1") , 
+                            "CAM_score1", 
+                            "Lipid_score1") , 
                group.by = "labels", ncol = 2)
 
 p
