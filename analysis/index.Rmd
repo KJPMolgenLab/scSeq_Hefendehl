@@ -10,7 +10,7 @@ editor_options:
 
 
 ### Accompanying scRNA analytics to {.unlisted .unnumbered}
-# Ischemic injury triggers a protective microglial phenotype in models of A$\beta$ pathology {.unlisted .unnumbered}
+# Ischemic injury triggers a protective microglial phenotype in models of A-beta pathology {.unlisted .unnumbered}
 
 ## Authors {.unlisted .unnumbered}
 Authors: Michael Candlish ^1#^, Jan Hofmann ^1#^, Desirée Brösamle ^2,3,4,5^, Annika Haessler ^6^, Murphy DeMeglio ^1^, Angelos Skodras ^2^, Georgi Tushev ^7^, Eloah S. De Biasi ^1^, Stefan Günther ^8^, René Wiegandt ^8^, Heidi Theis ^9^, Elena De Domenico ^9^, Nina Hermann ^2,3,4,5^, K. Peter R. Nilsson ^11^, Marc Beyer ^9,10^, Mario Looso ^8^, Maike Windbergs ^6^, Sigrun Roeber ^12^, Jochen Herms ^13^, Jonas J. Neher ^2,3,4,5^, Andreas G. Chiocchetti ^14^, Jasmin K. Hefendehl ^1^*
