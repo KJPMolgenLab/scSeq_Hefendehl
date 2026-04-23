@@ -1054,7 +1054,7 @@ plotlist = list()
 
 mat <- GetAssayData(samples.integrated.filt, assay = "RNA", slot = "data")
 temp_obj <- samples.integrated.filt
- 
+
 
 for (m in names(genelist)){
   #reads = rowSums(samples.integrated.filt@assays$RNA$counts)
@@ -1066,7 +1066,7 @@ for (m in names(genelist)){
   mat_norm <- t(apply(mat_sel, 1, function(x) (x - min(x)) / (max(x) - min(x) + 1e-9))) %>% as.matrix()
   
   temp_obj@assays$RNA@layers$data[match(targets, rownames(temp_obj)), ] <- mat_norm[targets, colnames(temp_obj)]
-   
+  
   p<-DoHeatmap(temp_obj, features = targets, disp.max = 1,
                group.by = "labels",  assay = "RNA", slot = "data",
                label = F, combine=F) 
@@ -1092,7 +1092,7 @@ for (m in names(genelist)){
   targets <- targets$gene[1:10]
   mat_sel <- mat[targets, , drop = FALSE]
   max_plot <- mean(mat_sel)+2*sd(mat_sel)
-   
+  
   p<-DoHeatmap(samples.integrated.filt, features = targets, disp.max = ceiling(max_plot),
                group.by = "labels",  assay = "RNA", slot = "data",
                label = F, combine=F) 
@@ -1556,7 +1556,7 @@ ggsave(filename = paste0(outputdir, "Microglia_Homeoproportions_per_condition_WT
 ### Spatial cell types
 
 ```{r, fig.height=12,fig.width=5}
- 
+
 
 Idents(samples.integrated.filt) = "Genotype_Treatment"
 DoHeatmap(samples.integrated.filt, slot = "data", features = c(distal_genes, control_genes, Stroke_genes))+ggtitle("spatial genes all")
@@ -2077,7 +2077,7 @@ if(mode=="selected"){
 p <- ggplot(plotdata, aes(x=log2FC_WTCtrl_vs_WTStroke, y=log2FC_APPPS1Ctrl_vs_APPPS1Stroke, label=label))+
   geom_point(aes(colour = collab), alpha=0.7)+ 
   geom_text_repel(box.padding = 0.5, max.overlaps = Inf,
-    color="black")+ 
+                  color="black")+ 
   scale_color_discrete(palette=c( "#56B4E9", "#009E73","#F0E442"))+
   #geom_abline(slope=-1, intercept=0, lty=2)+geom_abline(slope=1, intercept=0, lty=2)+
   theme_classic()+ggtitle("log_FC")
@@ -2305,7 +2305,7 @@ compareCluster <- function(
   openxlsx::write.xlsx(
     Gores$result %>% dplyr::select(-parents),
     file = file.path(output, paste0("DEG_GOlist_", resname, ".xlsx")),
-                     rowNames = TRUE
+    rowNames = TRUE
   )
   
   plotlist <- list()
@@ -2464,13 +2464,13 @@ for(clust in unique(samples.integrated.filt$labels)){
   )
   
   if(any(lapply(gogenes, length)>0)){
-  Gores <- getGOresults(
-    geneset = gogenes,
-    domain_scope = "known",
-    genereference = gene_univers,
-    return_genelist = F,
-    organism = "mmusculus"
-  )
+    Gores <- getGOresults(
+      geneset = gogenes,
+      domain_scope = "known",
+      genereference = gene_univers,
+      return_genelist = F,
+      organism = "mmusculus"
+    )
   } else {
     print("no significant genes identified")
     Gores <- NULL
@@ -2478,48 +2478,48 @@ for(clust in unique(samples.integrated.filt$labels)){
   
   
   if(length(Gores)!=0){
-  openxlsx::write.xlsx(
-    Gores$result %>% dplyr::select(-parents),
-    file = file.path(outputdir, paste0("DEG_GOlist_", resname, ".xlsx")),
-    rowNames = TRUE
-  )
-  plotlist <- list()
-  for (m in unique(Gores$result$query)) {
-    idx <- Gores$result$query == m & grepl("GO", Gores$result$source)
-    
-    if (sum(idx) >= 1) {
-      plotlist[[m]] <- GOplot(Gores$result[idx, ], N = 10, Title = m)
-    } else {
-      plotlist[[m]] <- ggplot() +
-        annotate(
-          "text", x = 10, y = 10, size = 6,
-          label = "no significant GO term\ncheck excel sheet for other enrichments"
-        ) +
-        theme_void() +
-        ggtitle(m)
+    openxlsx::write.xlsx(
+      Gores$result %>% dplyr::select(-parents),
+      file = file.path(outputdir, paste0("DEG_GOlist_", resname, ".xlsx")),
+      rowNames = TRUE
+    )
+    plotlist <- list()
+    for (m in unique(Gores$result$query)) {
+      idx <- Gores$result$query == m & grepl("GO", Gores$result$source)
+      
+      if (sum(idx) >= 1) {
+        plotlist[[m]] <- GOplot(Gores$result[idx, ], N = 10, Title = m)
+      } else {
+        plotlist[[m]] <- ggplot() +
+          annotate(
+            "text", x = 10, y = 10, size = 6,
+            label = "no significant GO term\ncheck excel sheet for other enrichments"
+          ) +
+          theme_void() +
+          ggtitle(m)
+      }
     }
-  }
-  
-  ggsave(
-    filename = file.path(outputdir, paste0("DEG_GO_plots_", resname, ".pdf")),
-    plot = ggarrange(plotlist = plotlist),
-    width = 10, height = 5
-  ) } else {
-    openxlsx::write.xlsx(data.frame(resname="No results identified"),
-    file = file.path(outputdir, paste0("DEG_GOlist_", resname, ".xlsx")))
-    p <- ggplot() +
+    
+    ggsave(
+      filename = file.path(outputdir, paste0("DEG_GO_plots_", resname, ".pdf")),
+      plot = ggarrange(plotlist = plotlist),
+      width = 10, height = 5
+    ) } else {
+      openxlsx::write.xlsx(data.frame(resname="No results identified"),
+                           file = file.path(outputdir, paste0("DEG_GOlist_", resname, ".xlsx")))
+      p <- ggplot() +
         annotate(
           "text", x = 10, y = 10, size = 6,
           label = "no significant enrichments"
         ) +
         theme_void()
-    ggsave(
-    filename = file.path(outputdir, paste0("DEG_GO_plots_", resname, ".pdf")),
-    plot = p,
-    width = 10, height = 5
-  )
-    
-  }
+      ggsave(
+        filename = file.path(outputdir, paste0("DEG_GO_plots_", resname, ".pdf")),
+        plot = p,
+        width = 10, height = 5
+      )
+      
+    }
   
   
 }
@@ -2575,13 +2575,13 @@ for(clust in unique(samples.integrated.filt$labels)){
   )
   
   if(any(lapply(gogenes, length)>0)){
-  Gores <- getGOresults(
-    geneset = gogenes,
-    domain_scope = "known",
-    genereference = gene_univers,
-    return_genelist = F,
-    organism = "mmusculus"
-  )
+    Gores <- getGOresults(
+      geneset = gogenes,
+      domain_scope = "known",
+      genereference = gene_univers,
+      return_genelist = F,
+      organism = "mmusculus"
+    )
   } else {
     print("no significant genes identified")
     Gores <- NULL
@@ -2589,48 +2589,48 @@ for(clust in unique(samples.integrated.filt$labels)){
   
   
   if(length(Gores)!=0){
-  openxlsx::write.xlsx(
-    Gores$result %>% dplyr::select(-parents),
-    file = file.path(outputdir, paste0("DEG_GOlist_", resname, ".xlsx")),
-    rowNames = TRUE
-  )
-  plotlist <- list()
-  for (m in unique(Gores$result$query)) {
-    idx <- Gores$result$query == m & grepl("GO", Gores$result$source)
-    
-    if (sum(idx) >= 1) {
-      plotlist[[m]] <- GOplot(Gores$result[idx, ], N = 10, Title = m)
-    } else {
-      plotlist[[m]] <- ggplot() +
-        annotate(
-          "text", x = 10, y = 10, size = 6,
-          label = "no significant GO term\ncheck excel sheet for other enrichments"
-        ) +
-        theme_void() +
-        ggtitle(m)
+    openxlsx::write.xlsx(
+      Gores$result %>% dplyr::select(-parents),
+      file = file.path(outputdir, paste0("DEG_GOlist_", resname, ".xlsx")),
+      rowNames = TRUE
+    )
+    plotlist <- list()
+    for (m in unique(Gores$result$query)) {
+      idx <- Gores$result$query == m & grepl("GO", Gores$result$source)
+      
+      if (sum(idx) >= 1) {
+        plotlist[[m]] <- GOplot(Gores$result[idx, ], N = 10, Title = m)
+      } else {
+        plotlist[[m]] <- ggplot() +
+          annotate(
+            "text", x = 10, y = 10, size = 6,
+            label = "no significant GO term\ncheck excel sheet for other enrichments"
+          ) +
+          theme_void() +
+          ggtitle(m)
+      }
     }
-  }
-  
-  ggsave(
-    filename = file.path(outputdir, paste0("DEG_GO_plots_", resname, ".pdf")),
-    plot = ggarrange(plotlist = plotlist),
-    width = 10, height = 5
-  ) } else {
-    openxlsx::write.xlsx(data.frame(resname="No results identified"),
-    file = file.path(outputdir, paste0("DEG_GOlist_", resname, ".xlsx")))
-    p <- ggplot() +
+    
+    ggsave(
+      filename = file.path(outputdir, paste0("DEG_GO_plots_", resname, ".pdf")),
+      plot = ggarrange(plotlist = plotlist),
+      width = 10, height = 5
+    ) } else {
+      openxlsx::write.xlsx(data.frame(resname="No results identified"),
+                           file = file.path(outputdir, paste0("DEG_GOlist_", resname, ".xlsx")))
+      p <- ggplot() +
         annotate(
           "text", x = 10, y = 10, size = 6,
           label = "no significant enrichments"
         ) +
         theme_void()
-    ggsave(
-    filename = file.path(outputdir, paste0("DEG_GO_plots_", resname, ".pdf")),
-    plot = p,
-    width = 10, height = 5
-  )
-    
-  }
+      ggsave(
+        filename = file.path(outputdir, paste0("DEG_GO_plots_", resname, ".pdf")),
+        plot = p,
+        width = 10, height = 5
+      )
+      
+    }
   
   
 }
@@ -2687,13 +2687,13 @@ for(clust in unique(samples.integrated.filt$labels)){
   )
   
   if(any(lapply(gogenes, length)>0)){
-  Gores <- getGOresults(
-    geneset = gogenes,
-    domain_scope = "known",
-    genereference = gene_univers,
-    return_genelist = F,
-    organism = "mmusculus"
-  )
+    Gores <- getGOresults(
+      geneset = gogenes,
+      domain_scope = "known",
+      genereference = gene_univers,
+      return_genelist = F,
+      organism = "mmusculus"
+    )
   } else {
     print("no significant genes identified")
     Gores <- NULL
@@ -2701,48 +2701,48 @@ for(clust in unique(samples.integrated.filt$labels)){
   
   
   if(length(Gores)!=0){
-  openxlsx::write.xlsx(
-    Gores$result %>% dplyr::select(-parents),
-    file = file.path(outputdir, paste0("DEG_GOlist_", resname, ".xlsx")),
-    rowNames = TRUE
-  )
-  plotlist <- list()
-  for (m in unique(Gores$result$query)) {
-    idx <- Gores$result$query == m & grepl("GO", Gores$result$source)
-    
-    if (sum(idx) >= 1) {
-      plotlist[[m]] <- GOplot(Gores$result[idx, ], N = 10, Title = m)
-    } else {
-      plotlist[[m]] <- ggplot() +
-        annotate(
-          "text", x = 10, y = 10, size = 6,
-          label = "no significant GO term\ncheck excel sheet for other enrichments"
-        ) +
-        theme_void() +
-        ggtitle(m)
+    openxlsx::write.xlsx(
+      Gores$result %>% dplyr::select(-parents),
+      file = file.path(outputdir, paste0("DEG_GOlist_", resname, ".xlsx")),
+      rowNames = TRUE
+    )
+    plotlist <- list()
+    for (m in unique(Gores$result$query)) {
+      idx <- Gores$result$query == m & grepl("GO", Gores$result$source)
+      
+      if (sum(idx) >= 1) {
+        plotlist[[m]] <- GOplot(Gores$result[idx, ], N = 10, Title = m)
+      } else {
+        plotlist[[m]] <- ggplot() +
+          annotate(
+            "text", x = 10, y = 10, size = 6,
+            label = "no significant GO term\ncheck excel sheet for other enrichments"
+          ) +
+          theme_void() +
+          ggtitle(m)
+      }
     }
-  }
-  
-  ggsave(
-    filename = file.path(outputdir, paste0("DEG_GO_plots_", resname, ".pdf")),
-    plot = ggarrange(plotlist = plotlist),
-    width = 10, height = 5
-  ) } else {
-    openxlsx::write.xlsx(data.frame(resname="No results identified"),
-    file = file.path(outputdir, paste0("DEG_GOlist_", resname, ".xlsx")))
-    p <- ggplot() +
+    
+    ggsave(
+      filename = file.path(outputdir, paste0("DEG_GO_plots_", resname, ".pdf")),
+      plot = ggarrange(plotlist = plotlist),
+      width = 10, height = 5
+    ) } else {
+      openxlsx::write.xlsx(data.frame(resname="No results identified"),
+                           file = file.path(outputdir, paste0("DEG_GOlist_", resname, ".xlsx")))
+      p <- ggplot() +
         annotate(
           "text", x = 10, y = 10, size = 6,
           label = "no significant enrichments"
         ) +
         theme_void()
-    ggsave(
-    filename = file.path(outputdir, paste0("DEG_GO_plots_", resname, ".pdf")),
-    plot = p,
-    width = 10, height = 5
-  )
-    
-  }
+      ggsave(
+        filename = file.path(outputdir, paste0("DEG_GO_plots_", resname, ".pdf")),
+        plot = p,
+        width = 10, height = 5
+      )
+      
+    }
   
   
 }
@@ -3701,7 +3701,7 @@ featlist=c("MG_score_Axon_tract_microglia1",
            "BAM_score1", 
            "CAM_score1", 
            "Lipid_score1"
-           )
+)
 
 p <- FeaturePlot_scCustom(samples.integrated.filt, 
                           na_cutoff = 0, reduction="umap",
@@ -3762,6 +3762,152 @@ ggsave(paste0(outputdir, "Qualityplots_integrated.pdf"), pcomb)
 
 
 ```
+
+
+Panel A — Volcano plot from the bulk integrated DEG (APPPS1+stroke vs. APPPS1 Ctrl). We already have this data in the Excel file. Label and highlight Apoe, C4b, Lipe on the positive side and Tyrobp, Cst7, Ccl6, Siglech on the negative side. This gives the immediate visual punch — the two opposing gene groups are physically separated on the plot, and the significance is explicit.
+Panel B — Split dot plot showing the same key genes (two groups: "DAM effectors" and "lipid-metabolic") across all six clusters, split by APPPS1 Ctrl vs. APPPS1+stroke. Dot size = percent expressing, colour = mean expression. This is the critical panel that proves the shift is cross-cluster, not just a Microglia2 effect.
+
+
+## Addtinal Plot Jasmin 
+
+```{r, fig.width=4, fig.height=6}
+
+genes_to_label_dwn <- c("Siglech", "Ccl6" , "Cst7", "Tyrobp")
+genes_to_label_up <- c("H2-D1", "B2m" , "C4b", "Lipe", "Apoe")
+
+all_genes <- c(genes_to_label_up, genes_to_label_dwn)
+
+all_genes <- c(genes_to_label_up, genes_to_label_dwn)
+
+# Get remaining genes not in all_genes
+rest_genes <- rownames(DEG_APPPS1_CtrlvsStroke)[!rownames(DEG_APPPS1_CtrlvsStroke) %in% all_genes]
+
+# Combine: labeled genes first, then the rest
+df_res <- DEG_APPPS1_CtrlvsStroke[rev(c(all_genes, rest_genes)), ]
+
+df_res <- df_res %>% 
+  mutate(sign = ifelse(df_res$avg_log2FC < 0, "down", 
+                       ifelse(df_res$avg_log2FC > 0, "up", "no.reg")), 
+         sign = ifelse(df_res$p_val_adj > 0.05, "no.reg", sign), 
+         sign = ifelse(rownames(df_res) %in% genes_to_label_up, "up", sign),
+         sign = ifelse(rownames(df_res) %in% genes_to_label_dwn, "down", sign), 
+         goi = ifelse(rownames(df_res) %in% all_genes, 1, 0))
+
+
+library(ggrepel)
+
+panelA  <- ggplot(df_res, aes(x=avg_log2FC, y=-log10(p_val_adj), 
+                              col=sign, alpha=goi, size=as.factor(goi))) + 
+  geom_point() + 
+  theme_minimal() + 
+  geom_hline(yintercept = -log10(0.05), lwd=0.3, linetype="dashed") +
+  geom_vline(xintercept = 0, lwd=0.3, linetype="dashed") +
+  scale_color_manual(name = "",
+                     values = c("up" = "red3", "no.reg" = "gray60", "down" = "royalblue")) +
+  guides(alpha = "none", size = "none") +
+  geom_label_repel(data = df_res[all_genes, ],
+                   aes(label = rownames(df_res[all_genes, ])),
+                   size = 3,
+                   max.overlaps = Inf,
+                   box.padding = 0.5,
+                   point.padding = 0.3,
+                   segment.color = "gray40",
+                   segment.size = 0.3,
+                   min.segment.length = 0,
+                   force = 2,
+                   show.legend = FALSE) +
+  theme(legend.position = "top",
+        legend.justification = "left") + 
+  ggtitle("Bulk differential expression \nall micorglia integrated")
+
+panelA 
+
+```
+
+```{r}
+reads = JoinLayers(samples.integrated.filt, assay = "RNA") %>%    
+  GetAssayData(assay = "RNA", layer="data") 
+
+subset = samples.integrated.filt$Genotype =="APPPS1"
+
+reads.filt= reads[all_genes, subset]
+
+datatoplot_mean = aggregate(t(reads.filt), 
+                            list(paste0(samples.integrated.filt$labels[subset], "/",samples.integrated.filt$Genotype_Treatment[subset])), 
+                            mean, na.rm=T) %>% 
+  as.data.frame() %>% 
+  column_to_rownames("Group.1")
+
+
+
+datatoplot_mean <- datatoplot_mean %>% as.data.frame() %>% 
+  rownames_to_column("Var1") %>%
+  pivot_longer(cols = -Var1, 
+               names_to = "Genes", 
+               values_to = "value")
+datatoplot_mean$Microglia = factor(gsub("/.*", "", datatoplot_mean$Var1), levels=rev(levels(samples.integrated.filt$labels)))
+datatoplot_mean$Genotype_Treatment = factor(gsub(".*/", "", datatoplot_mean$Var1), levels=c("WT_Ctrl", "WT_Stroke", "APPPS1_Ctrl","APPPS1_Stroke")  )                                
+
+colnames(datatoplot_mean) = c("Cluster_Condition", "Gene", "Scaled_mean", "Microglia", "Genotype_Treatment")
+
+datatoplot_perc = aggregate(t(reads.filt), list(paste0(samples.integrated.filt$labels[subset], "/",samples.integrated.filt$Genotype_Treatment[subset])), 
+                            function(x){length(which(x>0))/length(x)})
+
+datatoplot_perc <- datatoplot_perc %>% as.data.frame() %>% 
+  pivot_longer(cols = -Group.1, 
+               names_to = "Genes", 
+               values_to = "perc")
+
+
+datatoplot = cbind(datatoplot_mean, perc=datatoplot_perc$perc)
+
+datatoplot$Microglia <- as.character(datatoplot$Microglia)
+datatoplot$Gene <- factor(datatoplot$Gene, levels=all_genes, labels=all_genes)
+
+
+
+
+
+datatoplot <- datatoplot %>%
+  group_by(Microglia, Gene) %>%
+  mutate(Scaled_Diff = Scaled_mean - mean(Scaled_mean)) %>%
+  ungroup()
+
+
+library(ggh4x)
+Microglia_color_palette <- scales::hue_pal()(nlevels(factor(datatoplot$Microglia)))
+# Define colors for each Microglia level
+strip_colors <- setNames(Microglia_color_palette, levels(factor(datatoplot$Microglia)))
+
+strip <- strip_themed(background_x = elem_list_rect(fill = strip_colors))
+
+
+panelB <- ggplot(datatoplot, aes(x=Genotype_Treatment, y=Gene, col=Scaled_Diff, size=perc)) +
+  geom_point() +
+  scale_size_continuous(range = c(1,7)) +
+  theme_classic() +
+  geom_hline(yintercept = 5.5, lwd=0.5, linetype="dashed", color="gray40")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        strip.text = element_text(face = "bold", color = "white")) +
+  facet_grid2(~Microglia, strip = strip) +
+  scale_color_continuous(palette = colorRampPalette(rev(RColorBrewer::brewer.pal(5,"RdBu")))(100))+
+  ggtitle("Per cluster difference in expression \n normlaized to within cluster mean")
+
+```
+
+
+```{r, fig.width=15, fig.height=6}
+
+
+p<- ggarrange(panelA,panelB, widths = c(1.2,4), labels = c("A", "B"))
+
+ggsave(filename = paste0(outputdir, "APPPS1_Bulk_vs_Microglia_Dotplot_ClusterCondition_Genelists_integrated.pdf"), p, width = 15, height = 6)
+
+
+```
+
+
+
 
 ```{r}
 rm(list=c("reads", "counts", "counts_run2", "counts_run1", 
