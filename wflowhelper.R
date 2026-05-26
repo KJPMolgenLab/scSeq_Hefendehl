@@ -9,4 +9,4 @@ workflowr::wflow_build("./analysis/sc*.Rmd", delete_cache = TRUE)
 workflowr::wflow_publish(c("./docs/*", "./analysis/*.Rmd", "./code/*", "./output/Res_202602/*"), delete_cache = TRUE, message = "Refactoring")
 system("git push origin master")
 
-workflowr::wflow_publish(c("./analysis/*.Rmd"))
+workflowr::wflow_publish(c("./analysis/*.Rmd")) 

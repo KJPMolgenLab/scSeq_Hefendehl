@@ -9,29 +9,30 @@ editor_options:
 ---
 
 
+
 ### Accompanying scRNA analytics to {.unlisted .unnumbered}
 # Ischemic injury triggers a protective microglial phenotype in models of A-beta pathology {.unlisted .unnumbered}
 
 ## Authors {.unlisted .unnumbered}
-Authors: Michael Candlish ^1#^, Jan Hofmann ^1#^, Desirée Brösamle ^2,3,4,5^, Annika Haessler ^6^, Murphy DeMeglio ^1^, Angelos Skodras ^2^, Georgi Tushev ^7^, Eloah S. De Biasi ^1^, Stefan Günther ^8^, René Wiegandt ^8^, Heidi Theis ^9^, Elena De Domenico ^9^, Nina Hermann ^2,3,4,5^, K. Peter R. Nilsson ^11^, Marc Beyer ^9,10^, Mario Looso ^8^, Maike Windbergs ^6^, Sigrun Roeber ^12^, Jochen Herms ^13^, Jonas J. Neher ^2,3,4,5^, Andreas G. Chiocchetti ^14^, Jasmin K. Hefendehl ^1^*
+Authors: Michael Candlish ^1#^, Jan Hofmann ^1#^, Desirée Brösamle ^2,3,4,5^, Annika Haessler ^6^, Murphy DeMeglio ^1^, Angelos Skodras ^2^, Georgi Tushev ^7^, Georgi Tushev ^7^, Eloah S. De Biasi ^1^, Stefan Günther ^8^, René Wiegandt ^8^, Heidi Theis ^9^, Elena De Domenico ^9^, Nina Hermann ^2,3,4,5^, Peter Breunig ^1^, Christina Sauerland ^1^, K. Peter R. Nilsson ^11^, Marc D. Beyer ^9,10^, Mario Looso ^8^, Maike Windbergs ^6^, Sigrun Roeber ^12^, Jochen Herms ^13^, Jonas J. Neher ^2,3,4,5^, Andreas G. Chiocchetti ^14^, Jasmin K. Hefendehl ^1^*
 
 ADD PETER AND TINA AND AMPARO
 
 ## Affiliations:
-1. Neurovascular Disorders, Institute of Cell Biology and Neuroscience, Biologicum, Goethe University Frankfurt, Max-von-Laue Str. 13, Frankfurt am Main, Germany.
-2. Department of Cellular Neurology, Hertie Institute for Clinical Brain Research, University of Tübingen, Tübingen, Germany. 
-3. Biomedical Center (BMC), Biochemistry, Faculty of Medicine, LMU Munich, Munich, Germany.
-4. Neuroimmunology and Neurodegenerative Diseases, German Center for Neurodegenerative Diseases (DZNE), Munich, Germany.
-5. Munich Cluster for Systems Neurology (SyNergy), Munich, Germany.
-6. Institute of Pharmaceutical Technology, Goethe University Frankfurt, Max-von-Laue-Str. 9, Frankfurt am Main, Germany.
-7. Max Planck Institute for Brain Research, Max-von-Laue-Str. 4, Frankfurt am Main, Germany.
-8. Max Planck Institute for Heart and Lung Research, Member of the German Center for Lung Research (DZL), Member of the Cardio-Pulmonary Institute (CPI), Bad Nauheim, Germany.
-9. Platform for Single Cell Genomics and Epigenomics (PRECISE) at the German Center for Neurodegenerative Diseases and the University of Bonn, and West German Genome Center, Bonn, Germany. 
-10. Immunogenomics & Neurodegeneration, German Center for Neurodegenerative Diseases (DZNE), Bonn, Germany.
-11. Department of Physics, Chemistry and Biology, Linköping University, SE-581 83, Linköping, Sweden.
-12. Center of Neuropathology and Prion Research, Faculty of Medicine, LMU Munich, Munich, Germany. 
-13. Center for Neuropathology, Ludwig-Maximilians-University Munich, Munich, Germany.
-14. Department of Child and Adolescent Psychiatry, Psychosomatics and Psychotherapy, University Hospital, Goethe University Frankfurt Germany.
+1 Neurovascular Disorders, Institute of Cell Biology and Neuroscience, Biologicum, Goethe University Frankfurt, Max-von-Laue Str. 13, Frankfurt am Main, Germany.
+2 Department of Cellular Neurology, Hertie Institute for Clinical Brain Research, University of Tübingen, Tübingen, Germany. 
+3 Biomedical Center (BMC), Biochemistry, Faculty of Medicine, LMU Munich, Munich, Germany.
+4 Neuroimmunology and Neurodegenerative Diseases, German Center for Neurodegenerative Diseases (DZNE), Munich, Germany.
+5 Munich Cluster for Systems Neurology (SyNergy), Munich, Germany.
+6 Institute of Pharmaceutical Technology, Goethe University Frankfurt, Max-von-Laue-Str. 9, Frankfurt am Main, Germany.
+7 Max Planck Institute for Brain Research, Max-von-Laue-Str. 4, Frankfurt am Main, Germany.
+8 Max Planck Institute for Heart and Lung Research, Member of the German Center for Lung Research (DZL), Member of the Cardio-Pulmonary Institute (CPI), Bad Nauheim, Germany.
+9 Platform for Single Cell Genomics and Epigenomics (PRECISE) at the German Center for Neurodegenerative Diseases (DZNE), Bonn, Germany. 
+10 Immunogenomics & Neurodegeneration, German Center for Neurodegenerative Diseases (DZNE), Bonn, Germany.
+11 Department of Physics, Chemistry and Biology, Linköping University, SE-581 83, Linköping, Sweden.
+12 Center of Neuropathology and Prion Research, Faculty of Medicine, LMU Munich, Munich, Germany. 
+13 Center for Neuropathology, Ludwig-Maximilians-University Munich, Munich, Germany.
+14 Department of Child and Adolescent Psychiatry, Psychosomatics and Psychotherapy, University Hospital, Goethe University Frankfurt Germany.
 
 '# These authors contributed equally to this work'
 
