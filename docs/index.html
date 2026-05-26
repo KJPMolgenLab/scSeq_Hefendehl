@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -382,9 +382,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>scSeq_Hefendehl/</code> <span
@@ -407,36 +407,33 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreedab0ed8f5a90566459c22f0130102266ca3fe5c3targetblankdab0ed8a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreebc374bc9d7525ad056f76b21deb667ec608e063dtargetblankbc374bca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/dab0ed8f5a90566459c22f0130102266ca3fe5c3" target="_blank">dab0ed8</a>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/bc374bc9d7525ad056f76b21deb667ec608e063d" target="_blank">bc374bc</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreedab0ed8f5a90566459c22f0130102266ca3fe5c3targetblankdab0ed8a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreebc374bc9d7525ad056f76b21deb667ec608e063dtargetblankbc374bca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -446,7 +443,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/dab0ed8f5a90566459c22f0130102266ca3fe5c3" target="_blank">dab0ed8</a>.
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/bc374bc9d7525ad056f76b21deb667ec608e063d" target="_blank">bc374bc</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -471,10 +468,6 @@ Ignored files:
 
 Untracked files:
     Untracked:  README.html
-
-Unstaged changes:
-    Modified:   README.md
-    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -519,6 +512,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/bc374bc9d7525ad056f76b21deb667ec608e063d/analysis/index.Rmd" target="_blank">bc374bc</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2026-05-26
+</td>
+<td>
+update authors and readme
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/KJPMolgenLab/scSeq_Hefendehl/bc374bc9d7525ad056f76b21deb667ec608e063d/docs/index.html" target="_blank">bc374bc</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2026-05-26
+</td>
+<td>
+update authors and readme
+</td>
+</tr>
 <tr>
 <td>
 Rmd
