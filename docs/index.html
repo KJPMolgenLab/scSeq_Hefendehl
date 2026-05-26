@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -378,13 +378,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-04-23
+<strong>Last updated:</strong> 2026-05-26
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>scSeq_Hefendehl/</code> <span
@@ -407,33 +407,36 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltree1cbaf29350189ea641952ebf5c9ff054f12be6f2targetblank1cbaf29a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreedab0ed8f5a90566459c22f0130102266ca3fe5c3targetblankdab0ed8a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/1cbaf29350189ea641952ebf5c9ff054f12be6f2" target="_blank">1cbaf29</a>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/dab0ed8f5a90566459c22f0130102266ca3fe5c3" target="_blank">dab0ed8</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltree1cbaf29350189ea641952ebf5c9ff054f12be6f2targetblank1cbaf29a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomKJPMolgenLabscSeqHefendehltreedab0ed8f5a90566459c22f0130102266ca3fe5c3targetblankdab0ed8a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -443,7 +446,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/1cbaf29350189ea641952ebf5c9ff054f12be6f2" target="_blank">1cbaf29</a>.
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/tree/dab0ed8f5a90566459c22f0130102266ca3fe5c3" target="_blank">dab0ed8</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -466,8 +469,12 @@ Ignored files:
     Ignored:    output/Res_202602/
     Ignored:    output/archive/
 
+Untracked files:
+    Untracked:  README.html
+
 Unstaged changes:
-    Modified:   wflowhelper.R
+    Modified:   README.md
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -512,6 +519,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/KJPMolgenLab/scSeq_Hefendehl/blob/dab0ed8f5a90566459c22f0130102266ca3fe5c3/analysis/index.Rmd" target="_blank">dab0ed8</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2026-05-26
+</td>
+<td>
+update authors and readme
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/KJPMolgenLab/scSeq_Hefendehl/4cae4ad5dac18231a3db1e77c07eb4a75a1015b3/docs/index.html" target="_blank">4cae4ad</a>
+</td>
+<td>
+achiocch
+</td>
+<td>
+2026-04-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1350,20 +1391,21 @@ class="section level1 unlisted unnumbered">
 microglial phenotype in models of A-beta pathology</h1>
 <div id="authors" class="section level2 unlisted unnumbered">
 <h2 class="unlisted unnumbered">Authors</h2>
-<p>Authors: Michael Candlish <sup>1#</sup>, Jan Hofmann <sup>1#</sup>,
-Desirée Brösamle <sup>2,3,4,5</sup>, Annika Haessler <sup>6</sup>,
-Murphy DeMeglio <sup>1</sup>, Angelos Skodras <sup>2</sup>, Georgi
-Tushev <sup>7</sup>, Eloah S. De Biasi <sup>1</sup>, Stefan Günther
-<sup>8</sup>, René Wiegandt <sup>8</sup>, Heidi Theis <sup>9</sup>,
-Elena De Domenico <sup>9</sup>, Nina Hermann <sup>2,3,4,5</sup>, K.
-Peter R. Nilsson <sup>11</sup>, Marc Beyer <sup>9,10</sup>, Mario Looso
-<sup>8</sup>, Maike Windbergs <sup>6</sup>, Sigrun Roeber <sup>12</sup>,
-Jochen Herms <sup>13</sup>, Jonas J. Neher <sup>2,3,4,5</sup>, Andreas
-G. Chiocchetti <sup>14</sup>, Jasmin K. Hefendehl <sup>1</sup>*</p>
-<p>ADD PETER AND TINA AND AMPARO</p>
+<p><strong>Authors:</strong> Michael Candlish <sup>1#</sup>, Jan Hofmann
+<sup>1#</sup>, Desirée Brösamle <sup>2,3,4,5</sup>, Annika Haessler
+<sup>6</sup>, Murphy DeMeglio <sup>1</sup>, Angelos Skodras
+<sup>2</sup>, Georgi Tushev <sup>7</sup>, Eloah S. De Biasi
+<sup>1</sup>, Stefan Günther <sup>8</sup>, René Wiegandt <sup>8</sup>,
+Heidi Theis <sup>9</sup>, Elena De Domenico <sup>9</sup>, Nina Hermann
+<sup>2,3,4,5</sup>, Peter Breunig <sup>1</sup>, Christina Sauerland
+<sup>1</sup>, K. Peter R. Nilsson <sup>11</sup>, Marc D. Beyer
+<sup>9,10</sup>, Mario Looso <sup>8</sup>, Maike Windbergs <sup>6</sup>,
+Sigrun Roeber <sup>12</sup>, Jochen Herms <sup>13</sup>, Jonas J. Neher
+<sup>2,3,4,5</sup>, Andreas G. Chiocchetti <sup>14</sup>, Jasmin K.
+Hefendehl <sup>1</sup>*</p>
 </div>
 <div id="affiliations" class="section level2">
-<h2>Affiliations:</h2>
+<h2>Affiliations</h2>
 <ol style="list-style-type: decimal">
 <li>Neurovascular Disorders, Institute of Cell Biology and Neuroscience,
 Biologicum, Goethe University Frankfurt, Max-von-Laue Str. 13, Frankfurt
@@ -1384,8 +1426,7 @@ Frankfurt am Main, Germany.</li>
 German Center for Lung Research (DZL), Member of the Cardio-Pulmonary
 Institute (CPI), Bad Nauheim, Germany.</li>
 <li>Platform for Single Cell Genomics and Epigenomics (PRECISE) at the
-German Center for Neurodegenerative Diseases and the University of Bonn,
-and West German Genome Center, Bonn, Germany.</li>
+German Center for Neurodegenerative Diseases (DZNE), Bonn, Germany.</li>
 <li>Immunogenomics &amp; Neurodegeneration, German Center for
 Neurodegenerative Diseases (DZNE), Bonn, Germany.</li>
 <li>Department of Physics, Chemistry and Biology, Linköping University,
@@ -1395,11 +1436,11 @@ LMU Munich, Munich, Germany.</li>
 <li>Center for Neuropathology, Ludwig-Maximilians-University Munich,
 Munich, Germany.</li>
 <li>Department of Child and Adolescent Psychiatry, Psychosomatics and
-Psychotherapy, University Hospital, Goethe University Frankfurt
+Psychotherapy, University Hospital, Goethe University Frankfurt,
 Germany.</li>
 </ol>
-<p>‘# These authors contributed equally to this work’</p>
-<p>‘* Corresponding author:’ <a
+<p><sup>#</sup> These authors contributed equally to this work</p>
+<p>* Corresponding author: <a
 href="mailto:hefendehl@bio.uni-frankfurt.de">hefendehl@bio.uni-frankfurt.de</a></p>
 <hr />
 <p>Single-cell RNA sequencing analysis of microglial responses in a
