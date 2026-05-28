@@ -171,7 +171,8 @@ write.csv(df_expanded,
 
 
 
-## load additonal samples second GT 
+## load additional samples second GT 
+
 ```{r load_add_samples 2nd, cache=F, dependson="load_add_meta"}
 
 files <- list.files("/files/scSeq_Hefendehl/data/20260126/", 
@@ -912,7 +913,7 @@ ggsave(filename = paste0(outputdir, "Microglia_Opt_all_genes_AddGenelistintegrat
 
 ```
 
-# Map old clusters 
+# Map initial clusters batch 1
 
 ```{r, fig.width=8, fig.height=7}
 samples.integrated.filt_batch1 <- readRDS("./output/SeuratObjectafterProcessing.rds")
@@ -1957,10 +1958,8 @@ ggsave(filename = paste0(outputdir, "Microglia_Volcano_WTCtrlvsAPPPS1ctrl_integr
 
 
 
-
 ## Scatterplot of DEGs of all four conditions
 
-see <https://www.nature.com/articles/s41593-023-01355-y> ; see Fig 1e
 
 ```{r}
 genelist_both= intersect(rownames(DEG_Wt_CtrlvsStroke), rownames(DEG_APPPS1_CtrlvsStroke))
@@ -2168,7 +2167,7 @@ ggplot(plotdata, aes(x=WT, y=APPPS1, color=col, label=label))+geom_point(alpha=0
 ```
 
 ## DEG comparing Cluster 
-All Clusters versus All Clusters 
+All Clusters versus All Genes versus all Conditions 
 
 ### Define Main analysis pipeline 
 
@@ -3764,11 +3763,7 @@ ggsave(paste0(outputdir, "Qualityplots_integrated.pdf"), pcomb)
 ```
 
 
-Panel A — Volcano plot from the bulk integrated DEG (APPPS1+stroke vs. APPPS1 Ctrl). We already have this data in the Excel file. Label and highlight Apoe, C4b, Lipe on the positive side and Tyrobp, Cst7, Ccl6, Siglech on the negative side. This gives the immediate visual punch — the two opposing gene groups are physically separated on the plot, and the significance is explicit.
-Panel B — Split dot plot showing the same key genes (two groups: "DAM effectors" and "lipid-metabolic") across all six clusters, split by APPPS1 Ctrl vs. APPPS1+stroke. Dot size = percent expressing, colour = mean expression. This is the critical panel that proves the shift is cross-cluster, not just a Microglia2 effect.
-
-
-## Addtinal Plot Jasmin 
+## Additional Plots DEX 
 
 ```{r, fig.width=4, fig.height=6}
 
