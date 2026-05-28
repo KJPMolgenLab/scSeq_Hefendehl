@@ -1,14 +1,14 @@
-# scSeq_Hefendehl
+# scSeq\_Hefendehl
 
 A [workflowr](https://github.com/jdblischak/workflowr) project.
 
----
+***
 
 ## Accompanying scRNA analytics to
 
 ### Ischemic injury triggers a protective microglial phenotype in models of A-beta pathology
 
-**Authors:** Michael Candlish <sup>1#</sup>, Jan Hofmann <sup>1#</sup>, Desirée Brösamle <sup>2,3,4,5</sup>, Annika Haessler <sup>6</sup>, Murphy DeMeglio <sup>1</sup>, Angelos Skodras <sup>2</sup>, Georgi Tushev <sup>7</sup>, Eloah S. De Biasi <sup>1</sup>, Stefan Günther <sup>8</sup>, René Wiegandt <sup>8</sup>, Heidi Theis <sup>9</sup>, Elena De Domenico <sup>9</sup>, Nina Hermann <sup>2,3,4,5</sup>, Peter Breunig <sup>1</sup>, Christina Sauerland <sup>1</sup>, K. Peter R. Nilsson <sup>11</sup>, Marc D. Beyer <sup>9,10</sup>, Mario Looso <sup>8</sup>, Maike Windbergs <sup>6</sup>, Sigrun Roeber <sup>12</sup>, Jochen Herms <sup>13</sup>, Jonas J. Neher <sup>2,3,4,5</sup>, Andreas G. Chiocchetti <sup>14</sup>, Jasmin K. Hefendehl <sup>1</sup>\*
+**Authors:** Michael Candlish <sup>1#</sup>, Jan Hofmann <sup>1#</sup>, Desirée Brösamle <sup>2,3,4,5</sup>, Annika Haessler <sup>6</sup>, Murphy DeMeglio <sup>1</sup>, Angelos Skodras <sup>2</sup>, Georgi Tushev <sup>7</sup>, Eloah S. De Biasi <sup>1</sup>, Stefan Günther <sup>8</sup>, René Wiegandt <sup>8</sup>, Heidi Theis <sup>9</sup>, Elena De Domenico <sup>9</sup>, Nina Sofia Hermann <sup>2,3,4,5</sup>, Peter Breunig <sup>1</sup>, Christina Sauerland <sup>1</sup>, K. Peter R. Nilsson <sup>11</sup>, Marc D. Beyer <sup>9,10</sup>, Mario Looso <sup>8</sup>, Maike Windbergs <sup>6</sup>, Sigrun Roeber <sup>12</sup>, Jochen Herms <sup>13</sup>, Jonas J. Neher <sup>2,3,4,5</sup>, Andreas G. Chiocchetti <sup>14</sup>, Jasmin K. Hefendehl <sup>1</sup>\*
 
 ## Affiliations
 
@@ -27,40 +27,40 @@ A [workflowr](https://github.com/jdblischak/workflowr) project.
 13. Center for Neuropathology, Ludwig-Maximilians-University Munich, Munich, Germany.
 14. Department of Child and Adolescent Psychiatry, Psychosomatics and Psychotherapy, University Hospital, Goethe University Frankfurt, Germany.
 
-<sup>#</sup> These authors contributed equally to this work
+\# These authors contributed equally to this work
 
 \* Corresponding author: [hefendehl@bio.uni-frankfurt.de](mailto:hefendehl@bio.uni-frankfurt.de)
 
----
+***
 
 Single-cell RNA sequencing analysis of microglial responses in a mouse model of Alzheimer's disease (APPPS1) with and without ischemic stroke. All analyses are implemented in a single R Markdown document (`analysis/scRNA_Analyses_Candlishetal.Rmd`).
 
----
+***
 
 ## Full Results
 
 [Full Results Output](https://kjpmolgenlab.github.io/scSeq_Hefendehl/)
 
----
+***
 
 ## Pipeline Overview
 
 This pipeline processes plate-based Smart-seq2 single-cell RNA-seq data from mouse brain immune cells (sorted microglia) across two sequencing batches. The goal is to characterize microglial heterogeneity and transcriptional responses in the context of amyloid pathology (APPPS1 genotype) and acute ischemic stroke, alone and in combination.
 
----
+***
 
 ## Study Design
 
 | Group | Genotype | Treatment |
-|---|---|---|
-| WT_Ctrl | Wild-type | Control |
-| WT_Stroke | Wild-type | Ischemic stroke |
-| APPPS1_Ctrl | APPPS1 (amyloid model) | Control |
-| APPPS1_Stroke | APPPS1 (amyloid model) | Ischemic stroke |
+| ----- | -------- | --------- |
+| WT\_Ctrl | Wild-type | Control |
+| WT\_Stroke | Wild-type | Ischemic stroke |
+| APPPS1\_Ctrl | APPPS1 (amyloid model) | Control |
+| APPPS1\_Stroke | APPPS1 (amyloid model) | Ischemic stroke |
 
 Data were collected across **two sequencing batches** and integrated prior to downstream analysis.
 
----
+***
 
 ## Dependencies
 
@@ -78,40 +78,42 @@ All analyses run in R. The following packages are required:
 
 A custom function library (`./code/custom_functions.R`) provides helper functions including `display_tab()`, `getGOresults()`, `GOplot()`, `gg_qqplot()`, and `convertpvaltostars()`.
 
----
+***
 
 ## Pipeline Summary
 
 ### Step 1 — Annotation Setup
 
-Mouse gene annotations are fetched from Ensembl via `AnnotationHub`, retrieving the most recent `EnsDb` for *Mus musculus*. These are used throughout the pipeline to map Ensembl gene IDs to gene symbols. Cell cycle gene lists (S-phase and G2/M-phase) are downloaded from the Harvard Bioinformatics Core's TinyAtlas repository.
+Mouse gene annotations are fetched from Ensembl via `AnnotationHub`, retrieving the most recent `EnsDb` for <em>Mus musculus</em>. These are used throughout the pipeline to map Ensembl gene IDs to gene symbols. Cell cycle gene lists (S-phase and G2/M-phase) are downloaded from the Harvard Bioinformatics Core's TinyAtlas repository.
 
----
+***
 
 ### Step 2 — Data Loading & Metadata
 
 **Batch 2 (second sequencing run):**
-- Sample metadata (plate, well, genotype, treatment, sex, age, mouse ID) are read from an Excel file and expanded from well-range notation (e.g., `A1–P12`) into individual cell-level entries.
-- Kallisto count matrices are loaded per plate, Ensembl IDs are mapped to gene symbols, and duplicate gene names are resolved by summing counts. Each plate is assembled into a Seurat object.
+
+* Sample metadata (plate, well, genotype, treatment, sex, age, mouse ID) are read from an Excel file and expanded from well-range notation (e.g., `A1–P12`) into individual cell-level entries.
+* Kallisto count matrices are loaded per plate, Ensembl IDs are mapped to gene symbols, and duplicate gene names are resolved by summing counts. Each plate is assembled into a Seurat object.
 
 **Batch 1 (first sequencing run):**
-- Count matrices from two Kallisto alignment runs are merged, gene IDs are converted to symbols, and metadata are joined from per-plate sample tables. A single combined Seurat object is created and split by plate.
+
+* Count matrices from two Kallisto alignment runs are merged, gene IDs are converted to symbols, and metadata are joined from per-plate sample tables. A single combined Seurat object is created and split by plate.
 
 Both batches are then merged into a single Seurat object for joint processing.
 
----
+***
 
 ### Step 3 — Quality Control & Filtering
 
 Mitochondrial read percentage (`percent.mt`) is calculated for all cells. Cells are retained if they pass all of the following thresholds:
 
-- Features detected: **100–7,000 genes**
-- Total counts: **400–3,000,000 UMI**
-- Mitochondrial content: **< 5%**
+* Features detected: **100–7,000 genes**
+* Total counts: **400–3,000,000 UMI**
+* Mitochondrial content: **< 5%**
 
-Genes are additionally filtered to retain only those expressed in **≥ 0.5% of cells**. Pre- and post-filter QC distributions are visualized as violin plots grouped by sequencing plate.
+Genes are additionally filtered to retain only those expressed in <strong>≥ 0.5% of cells</strong>. Pre- and post-filter QC distributions are visualized as violin plots grouped by sequencing plate.
 
----
+***
 
 ### Step 4 — Batch Integration
 
@@ -121,7 +123,7 @@ Integration is performed using **CCA (Canonical Correlation Analysis)** via `Int
 
 A second integration pass using **Harmony** (`RunHarmony`, grouping by sequencing run) is applied after isolating microglia (Step 6) for the final microglia-specific analysis.
 
----
+***
 
 ### Step 5 — Cell Type Annotation & Microglia Isolation
 
@@ -131,7 +133,7 @@ Automated cell type annotation is performed using **SingleR** against the `Mouse
 
 Cell cycle scoring (S-phase and G2/M scores) is applied to the microglia subset using the downloaded cell cycle gene lists.
 
----
+***
 
 ### Step 6 — Microglia Reclustering
 
@@ -143,14 +145,14 @@ UMAP visualizations are produced grouped by cluster, plate, condition, mouse ID,
 
 To facilitate comparison with prior published analyses, cluster labels from the initial Batch 1–only analysis are mapped onto the integrated UMAP.
 
----
+***
 
 ### Step 7 — Cell State Scoring
 
 Module scores are computed with `AddModuleScore` for the following microglial states using published gene signatures:
 
 | State | Key Genes |
-|---|---|
+| ----- | --------- |
 | DAM (Disease-Associated Microglia) | `Itgax`, `Cst7`, `Apoe`, `Trem2`, `Lpl`, `Axl`, `Clec7a`, … |
 | DAM stage 1 (DAM1) | `Tyrobp`, `Ctsb`, `Ctsd`, `Apoe`, `B2m`, `Fth1`, `Lyz2` |
 | DAM stage 2 (DAM2) | `Trem2`, `Axl`, `Cst7`, `Ctsl`, `Lpl`, `Cd9`, `Csf1`, … |
@@ -166,7 +168,7 @@ Additionally, spatial gene signatures derived from companion spatial transcripto
 
 A combined **Homeostatic vs. DAM** classification assigns each cell to one of four mutually exclusive states: Homeostatic, DAM, Both, or Neither.
 
----
+***
 
 ### Step 8 — Differential Gene Expression
 
@@ -174,19 +176,19 @@ A combined **Homeostatic vs. DAM** classification assigns each cell to one of fo
 
 **Condition-level DEG:** Pairwise DEG comparisons are performed between experimental conditions (Wilcoxon, no fold-change pre-filter) for the following contrasts applied within each microglia cluster:
 
-- APPPS1_Stroke vs. WT_Stroke
-- APPPS1_Stroke vs. APPPS1_Ctrl
-- WT_Stroke vs. WT_Ctrl
+* APPPS1\_Stroke vs. WT\_Stroke
+* APPPS1\_Stroke vs. APPPS1\_Ctrl
+* WT\_Stroke vs. WT\_Ctrl
 
 A reusable `compareCluster()` function wraps each comparison, handling: `FindMarkers` execution with error logging, volcano plots (`EnhancedVolcano`) combined with Q-Q plots, and GO enrichment with per-direction gene sets (up-regulated, down-regulated, all significant).
 
-**Cross-condition scatter plots:** Genes significantly regulated in both WT_Stroke and APPPS1_Stroke (vs. respective controls) are plotted as log2FC scatter plots to identify shared and condition-specific transcriptional responses. Selected genes of interest (e.g., `S100a6`, `Apoc4`, `C4b`, `Fn1`) are labelled.
+**Cross-condition scatter plots:** Genes significantly regulated in both WT\_Stroke and APPPS1\_Stroke (vs. respective controls) are plotted as log2FC scatter plots to identify shared and condition-specific transcriptional responses. Selected genes of interest (e.g., `S100a6`, `Apoc4`, `C4b`, `Fn1`) are labelled.
 
 **Dot plots:** Scaled mean expression and percentage-expressed are visualized as bubble dot plots across cluster × condition for DAM marker genes and spatial gene sets.
 
 All DEG results and GO term tables are exported to Excel (`.xlsx`).
 
----
+***
 
 ### Step 9 — Pseudotime Analysis
 
@@ -198,11 +200,11 @@ Pseudotime values for each lineage are transferred back to the Seurat object met
 
 Results (ranked gene tables with log-fold changes and FDR values) are exported per lineage to Excel.
 
----
+***
 
 ### Step 10 — WGCNA Co-expression Network Analysis
 
-Weighted Gene Co-expression Network Analysis (**WGCNA**) is applied to the microglia expression matrix to identify co-regulated gene modules.
+Weighted Gene Co-expression Network Analysis (<strong>WGCNA</strong>) is applied to the microglia expression matrix to identify co-regulated gene modules.
 
 **Pre-processing:** The expression matrix is filtered to genes expressed in > 10% of cells and genes with annotated mouse Entrez IDs (`org.Mm.eg.db`). Network topology analysis (`pickSoftThreshold`) is used to select the soft-thresholding power (set to 3).
 
@@ -214,27 +216,27 @@ Weighted Gene Co-expression Network Analysis (**WGCNA**) is applied to the micro
 
 **GO enrichment:** GO term enrichment is computed for non-grey modules (modules with significant cluster or condition associations) using `gprofiler2`.
 
----
+***
 
 ### Step 11 — Supplementary Visualizations
 
 The following additional visualizations are produced throughout the pipeline:
 
-- UMAP plots colored by cell cycle phase, S-phase score, and G2/M score; pairwise t-tests across clusters.
-- Ridge plots comparing BAM/CAM module scores and microglial subtype scores (`MG_score_*`) across clusters.
-- Final QC violin plots (UMI count, feature count, mitochondrial %) on the filtered microglia object.
-- Proportion bar charts for cluster composition, DAM/homeostatic cell proportions, and spatial gene signature classifications stratified by genotype and treatment.
-- Density contour plots comparing DAM vs. DAM2 scores and DAM vs. homeostatic scores.
-- Custom per-gene beeswarm/violin plots via `barplot_genes()`, allowing visualization of any gene split by condition, cluster, or both.
+* UMAP plots colored by cell cycle phase, S-phase score, and G2/M score; pairwise t-tests across clusters.
+* Ridge plots comparing BAM/CAM module scores and microglial subtype scores (`MG_score_*`) across clusters.
+* Final QC violin plots (UMI count, feature count, mitochondrial %) on the filtered microglia object.
+* Proportion bar charts for cluster composition, DAM/homeostatic cell proportions, and spatial gene signature classifications stratified by genotype and treatment.
+* Density contour plots comparing DAM vs. DAM2 scores and DAM vs. homeostatic scores.
+* Custom per-gene beeswarm/violin plots via `barplot_genes()`, allowing visualization of any gene split by condition, cluster, or both.
 
----
+***
 
 ## Outputs
 
 All results are written to `./output/Res_202602/`. Key output categories include:
 
 | Category | Format |
-|---|---|
+| -------- | ------ |
 | UMAP / DimPlot visualizations | PDF |
 | Feature plots, ridge plots, violin plots | PDF |
 | Volcano plots + Q-Q plots (per DEG comparison) | PDF |
@@ -248,7 +250,7 @@ All results are written to `./output/Res_202602/`. Key output categories include
 | Cell count / cluster proportion tables | `.xlsx` |
 | Processed Seurat object | `.rds` |
 
----
+***
 
 ## Reproducibility
 
