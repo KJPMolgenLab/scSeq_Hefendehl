@@ -14,7 +14,7 @@ editor_options:
 # Ischemic injury triggers a protective microglial phenotype in models of A-beta pathology {.unlisted .unnumbered}
 
 ## Authors {.unlisted .unnumbered}
-**Authors:** Michael Candlish <sup>1#</sup>, Jan Hofmann <sup>1#</sup>, Desirée Brösamle <sup>2,3,4,5</sup>, Annika Haessler <sup>6</sup>, Murphy DeMeglio <sup>1</sup>, Angelos Skodras <sup>2</sup>, Georgi Tushev <sup>7</sup>, Eloah S. De Biasi <sup>1</sup>, Stefan Günther <sup>8</sup>, René Wiegandt <sup>8</sup>, Heidi Theis <sup>9</sup>, Elena De Domenico <sup>9</sup>, Nina Hermann <sup>2,3,4,5</sup>, Peter Breunig <sup>1</sup>, Christina Sauerland <sup>1</sup>, K. Peter R. Nilsson <sup>11</sup>, Marc D. Beyer <sup>9,10</sup>, Mario Looso <sup>8</sup>, Maike Windbergs <sup>6</sup>, Sigrun Roeber <sup>12</sup>, Jochen Herms <sup>13</sup>, Jonas J. Neher <sup>2,3,4,5</sup>, Andreas G. Chiocchetti <sup>14</sup>, Jasmin K. Hefendehl <sup>1</sup>\*
+**Authors:** Michael Candlish <sup>1#</sup>, Jan Hofmann <sup>1#</sup>, Desirée Brösamle <sup>2,3,4,5</sup>, Annika Haessler <sup>6</sup>, Murphy DeMeglio <sup>1</sup>, Angelos Skodras <sup>2</sup>, Georgi Tushev <sup>7</sup>, Eloah S. De Biasi <sup>1</sup>, Stefan Günther <sup>8</sup>, René Wiegandt <sup>8</sup>, Heidi Theis <sup>9</sup>, Elena De Domenico <sup>9</sup>, Nina Sofia Hermann <sup>2,3,4,5</sup>, Peter Breunig <sup>1</sup>, Christina Sauerland <sup>1</sup>, K. Peter R. Nilsson <sup>11</sup>, Marc D. Beyer <sup>9,10</sup>, Mario Looso <sup>8</sup>, Maike Windbergs <sup>6</sup>, Sigrun Roeber <sup>12</sup>, Jochen Herms <sup>13</sup>, Jonas J. Neher <sup>2,3,4,5</sup>, Andreas G. Chiocchetti <sup>14</sup>, Jasmin K. Hefendehl <sup>1</sup>\*
 
 ## Affiliations
 
